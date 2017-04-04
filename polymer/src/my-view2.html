@@ -11,6 +11,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="shared-styles.html">
 -->
+<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+<link rel="import" href="../bower_components/iron-elements/iron-elements.html">
+<link rel="import" href="../bower_components/paper-elements/paper-elements.html">
 
 <dom-module id="my-view2">
   <template>
@@ -29,14 +32,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		}
     </style>
     <div class="card">
-    	<iron-swipable-container swipe-style="curve">
-	      <paper-card heading="Swipable!"></paper-card>
-		</iron-swipable-container>
-		
-		<button class="dropdown-trigger">Basic</button>
-		<iron-dropdown horizontal-align="right" vertical-align="top">
-		  <div class="dropdown-content">Hello!</div>
-		</iron-dropdown>
+    	<iron-swipeable-container swipe-style="curve">
+	      <paper-card class="swipe" heading="Swipable!"></paper-card>
+	      <paper-card class="swipe" heading="Swipable!"></paper-card>
+	      <paper-card class="swipe" heading="Swipable!"></paper-card>
+	      <paper-card class="swipe" heading="Swipable!"></paper-card>
+	      <paper-card class="swipe" heading="Swipable!"></paper-card>
+	      <paper-card class="swipe" heading="Swipable!"></paper-card>
+		</iron-swipeable-container>
+
     </div>
   </template>
 
