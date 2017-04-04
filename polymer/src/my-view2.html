@@ -20,13 +20,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         padding: 10px;
       }
+      .swipe {
+		  -moz-user-select: none;
+		  -ms-user-select: none;
+		  -webkit-user-select: none;
+		  user-select: none;
+		  cursor: default;
+		}
     </style>
-
     <div class="card">
-      <div class="circle">2</div>
-      <h1>View Two</h1>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-      <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
+    	<iron-swipable-container swipe-style="curve">
+	      <paper-card heading="Swipable!"></paper-card>
+		</iron-swipable-container>
+		
+		<button class="dropdown-trigger">Basic</button>
+		<iron-dropdown horizontal-align="right" vertical-align="top">
+		  <div class="dropdown-content">Hello!</div>
+		</iron-dropdown>
     </div>
   </template>
 
