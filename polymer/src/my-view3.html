@@ -24,10 +24,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <div class="card">
-      <div class="circle">3</div>
-      <h1>View Three</h1>
-      <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro saepe pertinax ei, ad pri animal labores suscipiantur.</p>
+      <h1>Registreren</h1>
+
+            <iron-grid>
+                <div class="s12 l6">
+                    <form is="iron-form" id="form" method="post" action="">
+                        <paper-dropdown-menu class="s1 l12" label="Ziektebeeld">
+                            <paper-listbox class="dropdown-content" selected="1">
+                                <paper-item>allosaurus</paper-item>
+                                <paper-item>brontosaurus</paper-item>
+                                <paper-item>carcharodontosaurus</paper-item>
+                                <paper-item>diplodocus</paper-item>
+                            </paper-listbox>
+                        </paper-dropdown-menu>
+                        <paper-input class="s10 l6" name="Voornaam" label="Voornaam"></paper-input>
+                        <paper-input class="s10 l6" name="Achternaam" label="Achternaam"></paper-input>
+                        <paper-input class="s10 l12" name="Gebruikersnaam" label="Gebruikersnaam"></paper-input>
+                        <paper-input class="s10 l6" name="Email" label="Email"></paper-input>
+                        <paper-input class="s10 l6" name="EmailConfirm" label="Email bevestigen"></paper-input>
+                        <paper-input class="s10 l6" name="Wachtwoord" label="Wachtwoord"></paper-input>
+                        <paper-input class="s10 l6" name="WachtwoordConfirm" label="Wachtwoord bevestigen"></paper-input>
+                        <paper-radio-group class="s10 l12">
+                            <paper-radio-button name="male">Man</paper-radio-button>
+                            <paper-radio-button name="female">Vrouw</paper-radio-button>
+                            <paper-radio-button name="unknown">Zeg ik liever niet</paper-radio-button>
+                        </paper-radio-group>
+                        <paper-input class="s10 l12" name="Leeftijd" label="Leeftijd"></paper-input>
+                    </form>
+                </div>
+            </iron-grid>
     </div>
   </template>
 
