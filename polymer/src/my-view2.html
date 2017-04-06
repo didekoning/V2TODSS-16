@@ -7,14 +7,8 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<!--
-<link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="shared-styles.html">
--->
-<!-- <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-<link rel="import" href="../bower_components/iron-elements/iron-elements.html">
-<link rel="import" href="../bower_components/paper-elements/paper-elements.html"> -->
-
+<link rel="import" href="../custom_components/tys-match/tys-match.html">
+<link rel="import" href="../bower_components/iron-swipeable-container/iron-swipeable-container.html">
 <dom-module id="my-view2">
   <template>
     <style include="shared-styles">
@@ -32,21 +26,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		}
     </style>
     <div class="card">
-    	<iron-swipeable-container>
-	      <paper-card class="swipe" heading="Swipable!"></paper-card>
-	      <paper-card class="swipe" heading="Swipable!"></paper-card>
-	      <paper-card class="swipe" heading="Swipable!"></paper-card>
-	      <paper-card class="swipe" heading="Swipable!"></paper-card>
-	      <paper-card class="swipe" heading="Swipable!"></paper-card>
-	      <paper-card class="swipe" heading="Swipable!"></paper-card>
-		</iron-swipeable-container>
-
+      <iron-swipeable-container>
+        <template is="dom-repeat" items="{{ matches }}">
+            <tys-match first-name="{{item.name}}"></tys-match> 
+        </template>
+  		</iron-swipeable-container>
     </div>
   </template>
 
   <script>
     Polymer({
       is: 'my-view2',
+      ready: function(){
+        this.matches = [
+          {
+            name: "Chris",
+            ziekte: "aids",
+          }, 
+          {
+            name: "Kelvin",
+            ziekte: "aids",
+          },
+
+        ]
+      }
     });
   </script>
 </dom-module>
