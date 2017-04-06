@@ -1,0 +1,109 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!--
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+-->
+
+<dom-module id="my-preferences">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+    </style>
+
+    <div class="card">
+      <h1>Voorkeuren instellen</h1>
+            <iron-grid>
+                <div class="s12 l6">
+                    <form is="iron-form" id="form" method="post" action="">
+                        <paper-dropdown-menu class="s1 l12" label="Eerste interesse">
+                            <paper-listbox class="dropdown-content" selected="0">
+                                <paper-item>allosaurus</paper-item>
+                                <paper-item>brontosaurus</paper-item>
+                                <paper-item>carcharodontosaurus</paper-item>
+                                <paper-item>diplodocus</paper-item>
+                            </paper-listbox>
+                        </paper-dropdown-menu>
+
+                        <paper-dropdown-menu class="s1 l12" label="Tweede interesse">
+                            <paper-listbox class="dropdown-content" selected="1">
+                                <paper-item>allosaurus</paper-item>
+                                <paper-item>brontosaurus</paper-item>
+                                <paper-item>carcharodontosaurus</paper-item>
+                                <paper-item>diplodocus</paper-item>
+                            </paper-listbox>
+                        </paper-dropdown-menu>
+
+
+                        <paper-dropdown-menu class="s1 l12" label="Derde interesse">
+                            <paper-listbox class="dropdown-content" selected="">
+                                <paper-item>allosaurus</paper-item>
+                                <paper-item>brontosaurus</paper-item>
+                                <paper-item>carcharodontosaurus</paper-item>
+                                <paper-item>diplodocus</paper-item>
+                            </paper-listbox>
+                        </paper-dropdown-menu>
+
+
+
+                        <paper-input class="s10 l6" name="Stad" label="Stad"></paper-input>
+                        <paper-input class="s10 l6" name="Instelling" label="Naam Instelling"></paper-input>
+
+                        <div>
+                            <paper-input class="s1 l12" id="Minleeftijd" name="Minleeftijd" label="Minimale leeftijd" min="18" max="120" disabled$="{{disablemin}}"></paper-input>
+                            <paper-checkbox id="minleeftijdnull" on-click="changeMin">Leeftijd is niet relevant</paper-checkbox>
+                            <paper-input class="s1 l12" name="Maxleeftijd" label="Maximale leeftijd" min="18" max="120" disabled$="{{disablemax}}"></paper-input>
+                            <paper-checkbox id="maxleeftijdnull" on-click="changeMax">Leeftijd is niet relevant</paper-checkbox><br>
+                        </div>
+                        <br>
+                        <div>    
+                            Wat vindt u het belangrijkst tijdens het matchen?<br>
+                            <paper-radio-group class="s10 l12">
+                                <paper-radio-button name="Ziektebeeld">Ziektebeeld</paper-radio-button>
+                                <paper-radio-button name="Hobby">Hobby</paper-radio-button>
+                                <paper-radio-button name="Locatie">Locatie</paper-radio-button>
+                                <paper-radio-button name="Leeftijd">Leeftijd</paper-radio-button>
+                            </paper-radio-group>
+                        </div>
+                    </form>
+                </div>
+            </iron-grid>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'my-preferences',
+       properties: {
+                disablemin: {
+                    type: Boolean,
+                    value: false // init the value to true so it will be hidden on page load
+                },
+                disablemax: {
+                    type: Boolean,
+                    value: false // init the value to true so it will be hidden on page load
+                }
+            },
+            changeMin: function() {
+                this.disablemin = !this.disablemin
+            },
+            changeMax: function() {
+                this.disablemax = !this.disablemax
+            }
+    });
+
+
+  </script>
+</dom-module>
