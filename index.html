@@ -105,5 +105,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <body>
     <my-app></my-app>
     <!-- Built with love using Polymer Starter Kit -->
+    <script type="text/javascript">
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js');
+      }
+    </script>
   </body>
 </html>
