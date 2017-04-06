@@ -9,6 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 <link rel="import" href="../custom_components/tys-match/tys-match.html">
 <link rel="import" href="../bower_components/iron-swipeable-container/iron-swipeable-container.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <dom-module id="my-view2">
   <template>
     <style include="shared-styles">
@@ -24,31 +25,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		  user-select: none;
 		  cursor: default;
 		}
+    paper-fab {
+        position: fixed;
+        right: 25px;
+        bottom: 30px;          
+    }
     </style>
     <div class="card">
-      <iron-swipeable-container>
-        <template is="dom-repeat" items="{{ matches }}">
-            <tys-match first-name="{{item.name}}"></tys-match> 
+    <iron-swipeable-container>
+      <template is="dom-repeat" items="{{matches}}">
+            <tys-match first-name="{{item.id}}"></tys-match> 
         </template>
-  		</iron-swipeable-container>
-    </div>
+    </iron-swipeable-container>
+
+    <paper-fab icon="refresh" on-tap="refresh"></paper-fab>
+        <iron-ajax
+            id="requestMatch"
+            url="https://jsonplaceholder.typicode.com/posts"
+            handle-as="json"
+            on-response="handleResponse">
+        </iron-ajax>
   </template>
 
   <script>
     Polymer({
       is: 'my-view2',
-      ready: function(){
-        this.matches = [
-          {
-            name: "Chris",
-            ziekte: "aids",
-          }, 
-          {
-            name: "Kelvin",
-            ziekte: "aids",
-          },
-
-        ]
+        properties: {
+          matches: {
+              type: Array
+          }
+      },
+      ready: function () {
+          this.$.requestMatch.generateRequest();
+      },
+      handleResponse: function (data) {
+          this.matches = data.detail.response;
+      },
+      refresh: function(){
+        this.matches = [];
+        this.$.requestMatch.generateRequest();
       }
     });
   </script>

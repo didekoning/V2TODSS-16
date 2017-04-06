@@ -9,7 +9,12 @@
     "app-route": "PolymerElements/app-route#^0.9.0",
     "polymer": "Polymer/polymer#^1.6.0",
     "paper-elements": "PolymerElements/paper-elements#^1.0.7",
-    "layout-elements": "PolymerElements/layout-elements"
+    "layout-elements": "PolymerElements/layout-elements",
+    "iron-ajax": "polymerElements/iron-ajax#^1.4.3",
+    "iron-swipeable-container": "polymerElements/iron-swipeable-container#^1.0.3",
+    "iron-pages": "polymerElements/iron-pages#^1.0.8",
+    "iron-icons": "polymerElements/iron-icons#^1.2.0",
+    "iron-selector": "polymerElements/iron-selector#^1.5.2"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
