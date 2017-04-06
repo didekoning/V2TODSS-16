@@ -34,7 +34,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="card">
     <iron-swipeable-container>
       <template is="dom-repeat" items="{{matches}}">
-            <tys-match first-name="{{item.id}}"></tys-match> 
+            <tys-match first-name="{{item.id}}" url="https://api.tys-chat.nl/persoon/1"></tys-match> 
         </template>
     </iron-swipeable-container>
 
@@ -51,7 +51,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     Polymer({
       is: 'my-view2',
-        properties: {
+      properties: {
           matches: {
               type: Array
           }

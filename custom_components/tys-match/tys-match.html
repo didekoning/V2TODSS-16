@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 
 <dom-module id="tys-match">
 	<template>
@@ -15,7 +16,14 @@
 			<iron-icon icon="icons:check-circle"></iron-icon>
 		</div>
 		<div class="name">{{firstName}}</div>
+		<div class="id">{{person.id}}</div>
 	</paper-card>
+	 <iron-ajax
+            id="requestPerson"
+            url="{{url}}"
+            handle-as="json"
+            on-response="handleResponse">
+        </iron-ajax>
 	</template>
 	<script>
 	Polymer({	    
@@ -25,16 +33,19 @@
 	    		type: String,
 	    		value: 'Henk',
 	    	},
-	    	lastName: {
+	    	url: {
 	    		type: String,
-	    		value: 'Vriep',
 	    	},
-	    	fullName: {
-	    		type: String,
-	    		computed: 'computeFullName(firstName, lastName)',
-	    	},
+	    	person: {
+	            type: Object
+	        }
 	    },
-
+		ready: function () {
+		  this.$.requestPerson.generateRequest();
+		},
+		handleResponse: function (data) {
+		  this.person = data.detail.response;
+		},
 	    computeFullName: function(firstName, lastName) {
 	    	return firstName + ' ' + lastName;
 	    }
