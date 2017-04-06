@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../custom_components/tys-match/tys-match.html">
 <link rel="import" href="../bower_components/iron-swipeable-container/iron-swipeable-container.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
-<dom-module id="my-view2">
+<dom-module id="my-matchen">
   <template>
     <style include="shared-styles">
       :host {
@@ -34,7 +34,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="card">
     <iron-swipeable-container>
       <template is="dom-repeat" items="{{matches}}">
-            <tys-match first-name="{{item.id}}" url="https://api.tys-chat.nl/persoon/1"></tys-match> 
+            <tys-match percentage="{{item.id}}" url="https://api.tys-chat.nl/persoon/1"></tys-match> 
         </template>
     </iron-swipeable-container>
 
@@ -50,7 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
     Polymer({
-      is: 'my-view2',
+      is: 'my-matchen',
       properties: {
           matches: {
               type: Array

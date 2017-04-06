@@ -13,6 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-grid/app-grid-style.html">
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
@@ -20,6 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
@@ -27,7 +29,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-swipeable-container/iron-swipeable-container.html">
 <link rel="import" href="../bower_components/paper-elements/paper-elements.html">
 
-<link rel="import" href="shared-styles.html">
+<link rel="import" href="shared-styles.html" include="iron-flex">
 <link rel="import" href="my-icons.html">
 
 
@@ -84,7 +86,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="view1" href="/view1">View One</a>
-          <a name="view2" href="/view2">View Two</a>
+          <a name="matchen" href="/matchen">Matchen</a>
           <a name="view3" href="/view3">View Three</a>
           <a name="login" href="/login">Login</a>
           <a name="preferences" href="/preferences">Voorkeuren</a>
@@ -107,7 +109,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             fallback-selection="view404"
             role="main">
           <my-view1 name="view1"></my-view1>
-          <my-view2 name="view2"></my-view2>
+          <my-matchen name="matchen"></my-matchen>
           <my-view3 name="view3"></my-view3>
           <my-login name="login"></my-login>
           <my-preferences name="preferences"></my-preferences>
