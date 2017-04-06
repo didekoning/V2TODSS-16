@@ -16,7 +16,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
     <title>My App</title>
-    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <meta name="description" content="My App description">
 
     <link rel="icon" href="/images/favicon.ico">
@@ -87,12 +86,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       })();
 
-      // Load pre-caching Service Worker
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/service-worker.js');
-        });
-      }
+
+      
     </script>
 
     <link rel="import" href="/src/my-app.html">
