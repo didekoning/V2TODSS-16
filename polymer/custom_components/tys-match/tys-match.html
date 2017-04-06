@@ -1,0 +1,39 @@
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+
+<dom-module id="tys-match">
+	<template>
+	<style include="shared-styles">
+	 :host {
+        display: inline-block;
+        width: 100%;
+      }
+      paper-card{width: 100%;}
+	</style>
+	<paper-card>
+		<div class="name">{{firstName}}</div>
+	</paper-card>
+	</template>
+	<script>
+	Polymer({	    
+	    is: 'tys-match',
+	    properties: {
+	    	firstName: {
+	    		type: String,
+	    		value: 'Henk',
+	    	},
+	    	lastName: {
+	    		type: String,
+	    		value: 'Vriep',
+	    	},
+	    	fullName: {
+	    		type: String,
+	    		computed: 'computeFullName(firstName, lastName)',
+	    	},
+	    },
+
+	    computeFullName: function(firstName, lastName) {
+	    	return firstName + ' ' + lastName;
+	    }
+	});
+	</script>
+</dom-module>
