@@ -2,65 +2,65 @@
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../tys-percentage/tys-percentage.html">
 <dom-module id="tys-match">
-	<template>
-	<style include="app-grid-style">
-		:host {
-	        display: inline-block;
-	        width: 100%;
-	        --app-grid-columns: 3;
-	      	--app-grid-item-height: 80px;
-	     }
-	    ul {
-	      padding: 0;
-	      list-style: none;
-	    }
-	    paper-card{width: 100%;}
-	    .confirm iron-icon{float: left; color: green; padding: 20px;}
-	    tys-percentage{float: right;}
-	</style>
-	<paper-card>
-	<ul class="app-grid">
-		<li class="item confirm"><iron-icon icon="icons:check-circle"></iron-icon></li>
-		<li class="item">
-			<div class="basic"><span class="name">{{fullname}}</span> - <span class="bday">{{person.gbdatum.year}}</span> - <span class="sex">{{person.geslacht}}</span></div>
-		</li>
-		<li class="item"><tys-percentage percentage="{{percentage}}"></tys-percentage></span></li>
-	</ul>
-	</paper-card>
-	 <iron-ajax
-            id="requestPerson"
-            url="{{url}}"
-            handle-as="json"
-            on-response="handleResponse">
+    <template>
+        <style include="app-grid-style">
+            :host {
+                display: inline-block;
+                width: 100%;
+                --app-grid-columns: 3;
+                --app-grid-item-height: 80px;
+            }
+            ul {
+                padding: 0;
+                list-style: none;
+            }
+            paper-card{width: 100%;}
+            .confirm iron-icon{float: left; color: green; padding: 20px;}
+            tys-percentage{float: right;}
+        </style>
+        <paper-card>
+            <ul class="app-grid">
+                <li class="item confirm"><iron-icon icon="icons:check-circle"></iron-icon></li>
+                <li class="item">
+                    <div class="basic"><span class="name">{{fullname}}</span> - <span class="bday">{{person.gbdatum.year}}</span> - <span class="sex">{{person.geslacht}}</span></div>
+                </li>
+                <li class="item"><tys-percentage percentage="{{percentage}}"></tys-percentage></li>
+            </ul>
+        </paper-card>
+        <iron-ajax
+                   id="requestPerson"
+                   url="{{url}}"
+                   handle-as="json"
+                   on-response="handleResponse">
         </iron-ajax>
-	</template>
-	<script>
-	Polymer({	    
-	    is: 'tys-match',
-	    properties: {
-	    	percentage: {
-	    		type: String,
-	    	},
-	    	url: {
-	    		type: String,
-	    	},
-	    	person: {
-	            type: Object
-	        },
-	        fullname: {
-	        	type: String,
-	        	computed: 'computeFullName(person.voornaam, person.achternaam)'
-	        },
-	    },
-		ready: function () {
-		  this.$.requestPerson.generateRequest();
-		},
-		handleResponse: function (data) {
-		  this.person = data.detail.response;
-		},
-	    computeFullName: function(firstName, lastName) {
-	    	return firstName + ' ' + lastName;
-	    }
-	});
-	</script>
+    </template>
+    <script>
+        Polymer({	    
+            is: 'tys-match',
+            properties: {
+                percentage: {
+                    type: String,
+                },
+                url: {
+                    type: String,
+                },
+                person: {
+                    type: Object
+                },
+                fullname: {
+                    type: String,
+                    computed: 'computeFullName(person.voornaam, person.achternaam)'
+                },
+            },
+            ready: function () {
+                this.$.requestPerson.generateRequest();
+            },
+            handleResponse: function (data) {
+                this.person = data.detail.response;
+            },
+            computeFullName: function(firstName, lastName) {
+                return firstName + ' ' + lastName;
+            }
+        });
+    </script>
 </dom-module>

@@ -85,11 +85,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-drawer id="drawer">
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="view1" href="/view1">View One</a>
+          <a name="view1" href="/view1">Login</a>
           <a name="matchen" href="/matchen">Matchen</a>
-          <a name="view3" href="/view3">View Three</a>
-          <a name="login" href="/login">Login</a>
+          <a name="view3" href="/view3">Registreren</a>
           <a name="preferences" href="/preferences">Voorkeuren</a>
+          <a name="matches" href="/matches">Mijn matches</a>
         </iron-selector>
       </app-drawer>
 
@@ -114,6 +114,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <my-login name="login"></my-login>
           <my-preferences name="preferences"></my-preferences>
           <my-view404 name="view404"></my-view404>
+          <my-matches name="matches"></my-matches>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
