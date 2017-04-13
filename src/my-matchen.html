@@ -14,8 +14,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             :host {
                 display: block;
 
-                padding: 10px;
+
             }
+            .card{padding: 10px;}
             .swipe {
                 -moz-user-select: none;
                 -ms-user-select: none;
@@ -26,10 +27,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             paper-fab {
                 position: fixed;
                 right: 25px;
-                bottom: 30px;          
+                bottom: 20px;         
+            }
+            .card[mobile-layout] {
+                margin: 0px;
+                padding: 0px;
             }
         </style>
-        <div class="card" style="overflow-x : auto;">
+        <div class="card" style="overflow-x : auto;" mobile-layout$="[[isMobilePhone]]">
             <template is="dom-repeat" items="{{matches}}">
                 <swipeable-container>
                     <tys-match percentage="{{item.kwaliteitspercentage}}" url="https://api.tys-chat.nl/persoon/{{item.id}}"></tys-match> 
@@ -43,6 +48,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                        handle-as="json"
                        on-response="handleResponse">
             </iron-ajax>
+            <iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
         </div>
     </template>
 

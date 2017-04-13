@@ -1,0 +1,3 @@
+[submodule "dist"]
+	path = dist
+	url = ssh://git@app.tys-chat.nl:/home/git/app.git
