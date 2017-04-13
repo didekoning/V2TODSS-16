@@ -35,6 +35,13 @@ gulp.task('copy-js', function(){
 	.pipe(gulp.dest('dist/bower_components/webcomponentsjs'));
 });
 
+gulp.task('copy-images', function(){
+	return gulp.src([
+		'images/*',
+		])
+	.pipe(gulp.dest('dist/images/'));
+});
+
 gulp.task('vulcanize', function() {
   return gulp.src('src/elements.html')
      .pipe(vulcanize({
@@ -44,7 +51,8 @@ gulp.task('vulcanize', function() {
     }))
     .pipe(gulp.dest('dist/src'));
 });
+
 // gulp.task('default', ['clean']);
 gulp.task('default', ['clean'], function(){
-	gulp.start(['copy-components', 'copy-root', 'copy-js', 'vulcanize']);
+	gulp.start(['copy-components', 'copy-root', 'copy-js', 'copy-images', 'vulcanize']);
 });
