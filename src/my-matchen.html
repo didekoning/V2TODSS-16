@@ -9,61 +9,61 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <dom-module id="my-matchen">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
 
-        padding: 10px;
-      }
-      .swipe {
-		  -moz-user-select: none;
-		  -ms-user-select: none;
-		  -webkit-user-select: none;
-		  user-select: none;
-		  cursor: default;
-		}
-    paper-fab {
-        position: fixed;
-        right: 25px;
-        bottom: 30px;          
-    }
-    </style>
-    <div class="card" style="overflow-x : auto;">
-    <iron-swipeable-container>
-      <template is="dom-repeat" items="{{matches}}">
-            <tys-match percentage="{{item.kwaliteitspercentage}}" url="https://api.tys-chat.nl/persoon/{{item.id}}"></tys-match> 
-        </template>
-    </iron-swipeable-container>
+                padding: 10px;
+            }
+            .swipe {
+                -moz-user-select: none;
+                -ms-user-select: none;
+                -webkit-user-select: none;
+                user-select: none;
+                cursor: default;
+            }
+            paper-fab {
+                position: fixed;
+                right: 25px;
+                bottom: 30px;          
+            }
+        </style>
+        <div class="card" style="overflow-x : auto;">
+            <template is="dom-repeat" items="{{matches}}">
+                <swipeable-container>
+                    <tys-match percentage="{{item.kwaliteitspercentage}}" url="https://api.tys-chat.nl/persoon/{{item.id}}"></tys-match> 
+                </swipeable-container>
 
-    <paper-fab icon="refresh" on-tap="refresh"></paper-fab>
-        <iron-ajax
-            id="requestMatch"
-            url="https://api.tys-chat.nl/matching/zoek/2"
-            handle-as="json"
-            on-response="handleResponse">
-        </iron-ajax>
-    </div>
-  </template>
+            </template>
+            <paper-fab icon="refresh" on-tap="refresh"></paper-fab>
+            <iron-ajax
+                       id="requestMatch"
+                       url="https://api.tys-chat.nl/matching/zoek/2"
+                       handle-as="json"
+                       on-response="handleResponse">
+            </iron-ajax>
+        </div>
+    </template>
 
-  <script>
-    Polymer({
-      is: 'my-matchen',
-      properties: {
-          matches: {
-              type: Array
-          }
-      },
-      ready: function () {
-          this.$.requestMatch.generateRequest();
-      },
-      handleResponse: function (data) {
-          this.matches = data.detail.response;
-      },
-      refresh: function(){
-        this.matches = [];
-        this.$.requestMatch.generateRequest();
-      }
-    });
-  </script>
+    <script>
+        Polymer({
+            is: 'my-matchen',
+            properties: {
+                matches: {
+                    type: Array
+                }
+            },
+            ready: function () {
+                this.$.requestMatch.generateRequest();
+            },
+            handleResponse: function (data) {
+                this.matches = data.detail.response;
+            },
+            refresh: function(){
+                this.matches = [];
+                this.$.requestMatch.generateRequest();
+            }
+        });
+    </script>
 </dom-module>
