@@ -15,7 +15,7 @@
                 list-style: none;
             }
             paper-card{width: 100%;}
-            .confirm iron-icon{float: left; color: green; padding: 20px;}
+            .confirm iron-icon{float: left; color: green; padding: 20px; width: 50px; height: 50px; }
             tys-percentage{float: right;}
             paper-button{width:49%; display: inline-block; float:left; text-align: center;}
             paper-button.red{background-color: var(--paper-red-200);}
@@ -23,7 +23,7 @@
         </style>
         <paper-card style="padding-top: 10px;">
             <ul class="app-grid">
-                <li class="item confirm"><iron-icon icon="icons:check-circle"></iron-icon></li>
+                <li class="item confirm"><iron-icon icon="icons:check-circle" on-tap="select_match"></iron-icon></li>
                 <li class="item">
                     <div class="basic"><span class="name">{{fullname}}</span> - <span class="bday">{{person.gbdatum.year}}</span> - <span class="sex">{{person.geslacht}}</span></div>
                 </li>
@@ -42,6 +42,7 @@
                    handle-as="json"
                    on-response="handleResponse">
         </iron-ajax>
+
     </template>
     <script>
         Polymer({	    
@@ -69,6 +70,9 @@
             },
             computeFullName: function(firstName, lastName) {
                 return firstName + ' ' + lastName;
+            },
+            select_match: function(){
+                alert(this.fullname);
             }
         });
     </script>

@@ -34,6 +34,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       app-header paper-icon-button {
         --paper-icon-button-ink-color: white;
+        margin-left: -16px;
+        padding-left: 16px; 
+        width: 50px;
+        height: 50px;
       }
 
       .drawer-list {
@@ -59,6 +63,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         max-height: 45px;
         margin-top: 5px;
       }
+      .logo_container{text-align: center;}
     </style>
 
     <app-location route="{{route}}"></app-location>
@@ -86,7 +91,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-header condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
-            <div main-title><img src="../images/logo_white.svg" class="logo"></div>
+            <div main-title class="logo_container"><img src="../images/logo_white.svg" class="logo"></div>
           </app-toolbar>
         </app-header>
 
