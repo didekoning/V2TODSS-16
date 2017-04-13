@@ -17,15 +17,24 @@
             paper-card{width: 100%;}
             .confirm iron-icon{float: left; color: green; padding: 20px;}
             tys-percentage{float: right;}
+            paper-button{width:49%; display: inline-block; float:left; text-align: center;}
+            paper-button.red{background-color: var(--paper-red-200);}
+            paper-button.green{background-color: var(--paper-green-200);}
         </style>
-        <paper-card>
+        <paper-card style="padding-top: 10px;">
             <ul class="app-grid">
                 <li class="item confirm"><iron-icon icon="icons:check-circle"></iron-icon></li>
                 <li class="item">
                     <div class="basic"><span class="name">{{fullname}}</span> - <span class="bday">{{person.gbdatum.year}}</span> - <span class="sex">{{person.geslacht}}</span></div>
                 </li>
                 <li class="item"><tys-percentage percentage="{{percentage}}"></tys-percentage></li>
-            </ul>
+            </ul><br>
+<!--            <div class="card-actions">-->
+            <div>
+                <paper-button raised class=red><iron-icon icon="close"></iron-icon></paper-button>
+                <paper-button raised class=green><iron-icon icon="favorite"></iron-icon></paper-button>
+            </div>
+            
         </paper-card>
         <iron-ajax
                    id="requestPerson"
