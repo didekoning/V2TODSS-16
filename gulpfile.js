@@ -8,15 +8,7 @@ gulp.task('clean', function () {
 });
 
 gulp.task('copy-components', function(){
-	return gulp.src([
-		'src/my-login.html',
-		'src/my-matchen.html',
-		'src/my-matches.html',
-		'src/my-preferences.html',
-		'src/my-404.html',
-		'src/shared-styles.html',
-		'src/my-icons.html',
-		'src/my-app.html'
+	return gulp.src(['src/*.html', 'src/!elements.html'
 		])
 	.pipe(gulp.dest('dist/src'));
 });
