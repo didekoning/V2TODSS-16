@@ -32,7 +32,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       	 <div class="error" hidden$="[[!message]]">[[message]]</div>
 		<form on-submit="signInWithEmailAndPassword">
           <paper-input value="{{email}}" type="email" placeholder="Email"></paper-input>
+          <paper-input value="{{username}}" type="text" placeholder="Weergave naam"></paper-input>
           <paper-input value="{{password}}" type="password" placeholder="Password"></paper-input>
+          <paper-input value="{{birthday}}" type="date" placeholder="Geboortedatum"></paper-input>
           <paper-button raised on-tap="createUserWithEmailAndPassword">Sign Up</paper-button>
         </form>
          <div hidden$="[[!user]]">
