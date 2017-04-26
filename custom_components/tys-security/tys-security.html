@@ -1,0 +1,22 @@
+<dom-module id="tys-security">
+
+    <template>
+        <template is="dom-if" if="[[show(user, access)]]">
+            <p>You have the right access level</p>
+            <p>User : {{user}}</p>
+            <p>access : {{access}}</p>
+        </template>
+    </template>
+    <script>
+        Polymer({
+            is: 'tys-security',
+            properties: {
+                user: Number,
+                access: Number, 
+            },
+            show: function (u, a) {
+                return u == a;
+            }            
+        });
+    </script>              
+</dom-module>
