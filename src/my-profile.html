@@ -1,0 +1,121 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!--
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+-->
+
+<!-- <script src="../auth/auth.js"></script> -->
+
+<dom-module id="my-profile">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+      .personal{width: 49%; display: inline-block; margin-bottom: 20px;}
+      .personal[mobile-layout] {width: 100%; margin-bottom: 0px;}
+      .location{width: 49%; display: inline-block; float: right; margin-bottom: 20px;}
+      .location[mobile-layout] {width: 100%;}
+      paper-button{width: 100%; color: #FFF;}
+    </style>
+
+	  <firebase-auth id="auth" user="{{user}}" on-error="handleError" status-known="{{statusKnown}}">
+
+    <div class="card">
+      	 <div class="error" hidden$="[[!message]]">[[message]]</div>
+		<form on-submit="signInWithEmailAndPassword">
+			<div class="personal"  mobile-layout$="[[isMobilePhone]]">
+				<h2>Algemeen</h2>
+				<paper-input value="{{firstname}}" type="text" placeholder="Voornaam"></paper-input>
+	          	<paper-input value="{{lastname}}" type="text" placeholder="Achternaam"></paper-input>
+	          		<label>Geslacht:</label><br>
+		          	<paper-radio-group>
+						<paper-radio-button name="man">Man</paper-radio-button>
+						<paper-radio-button name="vrouw">Vrouw</paper-radio-button>
+						<paper-radio-button name="overig">Overig</paper-radio-button>
+					</paper-radio-group>
+	          	
+			</div>
+			<div class="location" mobile-layout$="[[isMobilePhone]]">
+				<h2>Verblijf</h2>
+	          	<paper-input value="{{city}}" type="text" placeholder="Woonplaats"></paper-input>
+	          	<paper-checkbox name="hospital" id="reval-chk" on-click="showHospital">Ziekenhuis</paper-checkbox>
+				<paper-checkbox name="revalidation" id="reval-chk" on-click="showRevalidation">Revalidatiecentrum</paper-checkbox>
+				<paper-checkbox name="home">Thuis</paper-checkbox>
+				<div id="autoUpdate" class="autoUpdate" hidden$="{{hospital}}">
+					<paper-dropdown-menu label="Ziekenhuizen">
+					  <paper-listbox class="dropdown-content">
+					    <paper-item>UMCU</paper-item>
+					    <paper-item>AMC</paper-item>
+					    <paper-item>LMC</paper-item>
+					    <paper-item>Mart</paper-item>
+					  </paper-listbox>
+					</paper-dropdown-menu>
+				</div>
+				<div id="autoUpdate" class="autoUpdate" hidden$="{{revalidation}}">
+					<paper-dropdown-menu label="Revalidatiecentrum">
+					  <paper-listbox class="dropdown-content">
+					    <paper-item>De Hoogstraat</paper-item>
+					    <paper-item>Gomez</paper-item>
+					    <paper-item>Zusje</paper-item>
+					    <paper-item>Mart</paper-item>
+					  </paper-listbox>
+					</paper-dropdown-menu>
+				</div>
+			</div>
+
+
+          <paper-button raised on-tap="createUserWithEmailAndPassword">Volgende stap</paper-button>
+        </form>
+        <iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
+
+    </div>
+  </template>
+
+	<script>
+	Polymer({
+		is: 'my-profile',
+		properties: {
+			message: {
+				type: String,
+				value: '',
+			},
+			user: {
+				type: Object,
+				notify: true,
+			},
+			firstname: String,
+			lastname: String,
+			hospital: {
+				type: Boolean,
+				value: true,
+			},
+			revalidation: {
+				type:Boolean,
+				value: true,
+			},
+		},
+
+	    handleError: function(e) {
+	      this.message = 'Error: ' + e.detail.message;
+		},
+		showHospital: function(){
+			this.hospital = !this.hospital
+		},
+		showRevalidation: function() {
+            this.revalidation = !this.revalidation
+        },
+	});
+	</script>
+</dom-module>
