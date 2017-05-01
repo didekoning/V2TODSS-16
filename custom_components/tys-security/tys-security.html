@@ -1,10 +1,8 @@
 <dom-module id="tys-security">
 
     <template>
-        <template is="dom-if" if="[[show(user, access)]]">
-            <p>You have the right access level</p>
-            <p>User : {{user}}</p>
-            <p>access : {{access}}</p>
+        <template is="dom-if" if="[[show(user, access)]]">            
+            <content></content>
         </template>
     </template>
     <script>
