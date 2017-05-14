@@ -85,17 +85,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <app-drawer-layout fullbleed>
       <!-- Drawer content -->
-      <template is="dom-if" if="{{user}}">
+      <!-- <template is="dom-if" if="{{user}}"> -->
       <app-drawer id="drawer">
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="matchen" href="/matchen">Matchen</a>
           <a name="preferences" href="/preferences">Voorkeuren</a>
+          <a name="profile" href="/profile">Profiel</a>
           <a name="matches" href="/matches">Mijn matches</a>
           <a name="logout" on-tap="logout" href="/login">Logout</a>
         </iron-selector>
       </app-drawer>
-      </template>
+      <!-- </template> -->
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
 
@@ -118,13 +119,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             role="main">
           <!-- Only when user is logged in -->
             <my-matchen name="matchen"></my-matchen>
-            <my-preferences name="preferences"></my-preferences>
+            <my-preferences name="preferences" custom="{{custom}}"></my-preferences>
             <my-view404 name="view404"></my-view404>
             <my-matches name="matches"></my-matches>
           <!-- end only when user logged in -->
           <my-login name="login" user="{{user}}"></my-login>
-          <my-register name="register" user="{{user}}"></my-register>
-          <my-profile name="profile" user="{{user}}"></my-profile>
+          <my-register name="register" id="register" user="{{user}}" custom="{{custom}}"></my-register>
+          <my-profile name="profile" user="{{user}}" custom="{{custom}}"></my-profile>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
@@ -145,6 +146,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           notify: true,
           observer: '_loginChanged',
         },
+        custom: {
+          type: Object,
+          value: {},
+          notify: true,
+          readOnly: false,
+        },
       },
 
       observers: [
@@ -159,6 +166,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         }
 
+      },
+
+      ready: function(){
+        this.custom.status = 0;
       },
 
       _pageChanged: function(page) {

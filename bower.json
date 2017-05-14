@@ -18,7 +18,8 @@
     "iron-flex-layout": "polymerElements/iron-flex-layout#^1.3.2",
     "iron-media-query": "PolymerElements/iron-media-query#^1.0.8",
     "polymerfire": "firebase/polymerfire#^0.11.0",
-    "iron-location": "PolymerElements/iron-location#^0.8.11"
+    "iron-location": "PolymerElements/iron-location#^0.8.11",
+    "global-var": "^0.1.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

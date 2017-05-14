@@ -31,14 +31,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
 	  <firebase-auth id="auth" user="{{user}}" on-error="handleError" status-known="{{statusKnown}}">
-
+	  	<iron-location id="ironLocation"></iron-location>
     <div class="card">
+    <!-- <tys-security user="{{user}}" access="1"> -->
+
       	 <div class="error" hidden$="[[!message]]">[[message]]</div>
 		<form on-submit="signInWithEmailAndPassword">
 			<div class="personal"  mobile-layout$="[[isMobilePhone]]">
 				<h2>Algemeen</h2>
 				<paper-input value="{{firstname}}" type="text" placeholder="Voornaam"></paper-input>
 	          	<paper-input value="{{lastname}}" type="text" placeholder="Achternaam"></paper-input>
+	          	<paper-input value="{{username}}" type="text" placeholder="Weergave naam"></paper-input>
+				<paper-input value="{{birthday}}" type="date" placeholder="Geboortedatum"></paper-input>
+
 	          		<label>Geslacht:</label><br>
 		          	<paper-radio-group>
 						<paper-radio-button name="man">Man</paper-radio-button>
@@ -76,11 +81,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			</div>
 
 
-          <paper-button raised on-tap="createUserWithEmailAndPassword">Volgende stap</paper-button>
-          <paper-button raised on-tap="test">Status</paper-button>
+          <paper-button raised on-tap="createUser">Volgende stap</paper-button>
         </form>
         <iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
-
+        <iron-ajax
+	       id="registerProfile"
+	       method="POST"
+	       url="https://demo3385117.mockable.io/persoon"
+	       handle-as="json"
+	       body="[[jsonUser]]"
+	       on-response="handleResponse">
+    <!-- </tys-security> -->
     </div>
   </template>
 
@@ -93,16 +104,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				value: '',
 			},
 			user: {
-				value: {
-					status: {
-						type: Number,
-						value: 0,
-					},
-					uid: String,
-					displayName: String,
-					email: String,
-					emailVerified: Boolean
-				},	
+				type: Object,
 				notify: true,
 			},
 			firstname: String,
@@ -115,19 +117,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				type:Boolean,
 				value: true,
 			},
+			jsonUser: {
+				type: String,
+				computed: '_stringifyUser()',
+			},
+			custom: {
+				type: Object,
+				notify: true,
+			},
 		},
-		test: function(){
-			console.log(this.user.status);
-		},
-
 	    handleError: function(e) {
 	      this.message = 'Error: ' + e.detail.message;
 		},
 		showHospital: function(){
-			this.hospital = !this.hospital
+			this.hospital = !this.hospital;
 		},
 		showRevalidation: function() {
-            this.revalidation = !this.revalidation
+            this.revalidation = !this.revalidation;
+        },
+        createUser: function(){
+        	this.$.registerProfile.generateRequest();
+        },
+        handleResponse: function (data) {
+        	if(data.detail.xhr.status == 200){
+        		this.custom.status = 2;
+        		this.$.ironLocation.set('path', '/preferences');
+        	}
+		},
+        _stringifyUser: function(){
+        	if(this.user){
+        		return JSON.stringify([this.user.uid, this.firstname, this.lastname]);
+        	} 
         },
 	});
 	</script>
