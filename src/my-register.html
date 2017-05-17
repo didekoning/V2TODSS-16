@@ -16,113 +16,90 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <!-- <script src="../auth/auth.js"></script> -->
 
 <dom-module id="my-register">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
+	<template>
+		<style include="shared-styles">
+			:host {
+			display: block;
 
-        padding: 10px;
-      }
-    </style>
+			padding: 10px;
+			}
+		</style>
 
-	  <firebase-auth id="auth" user="{{user}}" on-error="handleError" status-known="{{statusKnown}}">
+	<firebase-auth id="auth" user="{{user}}" on-error="handleError" status-known="{{statusKnown}}">
+	<iron-location id="ironLocation"></iron-location>
 
-    <div class="card">
-      <h1>Registreren</h1>
-      	 <div class="error" hidden$="[[!message]]">[[message]]</div>
+	<div class="card" id="register">
+		<h1>Registreren</h1>
+		<div class="error" hidden$="[[!message]]">[[message]]</div>
 		<form on-submit="signInWithEmailAndPassword">
-          <paper-input value="{{email}}" type="email" placeholder="Email"></paper-input>
-          <paper-input value="{{username}}" type="text" placeholder="Weergave naam"></paper-input>
-          <paper-input value="{{password}}" type="password" placeholder="Password"></paper-input>
-          <paper-input value="{{birthday}}" type="date" placeholder="Geboortedatum"></paper-input>
-          <paper-button raised on-tap="createUserWithEmailAndPassword">Sign Up</paper-button>
-        </form>
+			<paper-input value="{{email}}" type="email" placeholder="Email"></paper-input>
+			<paper-input value="{{password}}" type="password" placeholder="Password"></paper-input>
+			<paper-button raised on-tap="createUserWithEmailAndPassword">Sign Up</paper-button>
+		</form>
 
-      <div hidden$="[[!user]]">
-        <table>
-          <tr><th>uid</th> <td>[[user.uid]]</td></tr>
-          <tr><th>displayName</th> <td>[[user.displayName]]</td></tr>
-          <tr><th>email</th> <td>[[user.email]]</td></tr>
-          <tr><th>emailVerified</th> <td>[[user.emailVerified]]</td></tr>
-          <tr><th>status</th> <td>[[this.user.status]]</td></tr>
-        </table>
+		<div hidden$="[[!user]]">
+			<table>
+				<tr><th>uid</th> <td>[[user.uid]]</td></tr>
+				<tr><th>displayName</th> <td>[[user.displayName]]</td></tr>
+				<tr><th>email</th> <td>[[user.email]]</td></tr>
+				<tr><th>emailVerified</th> <td>[[user.emailVerified]]</td></tr>
+				<tr><th>status</th> <td>[[user.refreshToken]]</td></tr>
+			</table>
 
-        <button on-tap="signOut">Sign Out</button>
-      </div>
-
-	<iron-ajax
-	       id="registerProfile"
-	       method="POST"
-	       url="https://demo3385117.mockable.io/persoon"
-	       handle-as="json"
-	       body="[[user]]"
-	       on-response="handleResponse">
-	</iron-ajax>
-    </div>
-
-  </template>
+			<button on-tap="signOut">Sign Out</button>	
+		</div>	
+	</div>
+	</template>
 
 	<script>
-	Polymer({
-		is: 'my-register',
-		properties: {
-			message: {
-				type: String,
-				value: '',
+		Polymer({
+			is: 'my-register',
+			properties: {
+				message: {
+					type: String,
+					value: '',
+				},
+				email:{
+					type: String,
+					value: '',
+				},
+				password: {
+					type: String,
+					value: '',
+				},
+				user: {
+					type: Object,
+					notify: true,
+				},
+				custom: {
+					type: Object,	
+				},
 			},
-			email:{
-				type: String,
-				value: '',
+			loginSuccess: function(){
+				this.custom['status'] = 1;
+				if(this.custom['status'] == 1){
+					this.$.ironLocation.set('path', '/profile');
+				}
 			},
-			password: {
-				type: String,
-				value: '',
+			createUserWithEmailAndPassword: function() {
+				this.error = null;
+				this.$.auth.createUserWithEmailAndPassword(this.email, this.password) 
+					.then((response) => { 
+						this.loginSuccess(); 
+						console.log("success"); 
+					})
+					.catch((response) => {
+						console.log("error"); 
+					});
+				this.password = null;
 			},
-			user: {
-				value: {
-					status: {
-						type: Number,
-						value: 0,
-					},
-					uid: String,
-					displayName: String,
-					email: String,
-					emailVerified: Boolean
-				},	
-				observer: '_userCreated',
+			handleError: function(e) {
+				this.message = 'Error: ' + e.detail.message;
 			},
-			statusKnown:{
-				type: Boolean,
-			}
-		},
-		createUserWithEmailAndPassword: function() {
-			this.error = null;
-			this.$.auth.createUserWithEmailAndPassword(this.email, this.password) 
-				.then(function(response) {
-					console.log("aangemaakt");
-					
-				});
-				// .catch(function(error) {
-				// 	console.log("ERRORERRORERROR");
-				// });
-			this.password = null;
-		},
-		handleResponse: function (data) {
-            console.log(data.detail.response);
-        },
-	    handleError: function(e) {
-	      this.message = 'Error: ' + e.detail.message;
-		},
-		signOut: function() {
-          this.error = null;
-          this.$.auth.signOut();
-        },
-        _userCreated: function(){
-        	if(this.user){
-        		this.user.status = 0;
-        		this.$.registerProfile.generateRequest();
-        	}
-        },
-	});
+			signOut: function() {
+				this.error = null;
+				this.$.auth.signOut();
+			},	
+		});
 	</script>
 </dom-module>
