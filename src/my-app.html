@@ -129,6 +129,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
+
+    <iron-ajax
+         id="getUser"
+         method="GET"
+          headers='{{headers}}'
+         url="https://api.tys-chat.nl/persoon/1"
+         handle-as="json"
+         on-response="handleResponse" ></iron-ajax>
+        
   </template>
 
   <script>
@@ -152,6 +161,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           notify: true,
           readOnly: false,
         },
+        idToken: {
+          type: String,
+        },
       },
 
       observers: [
@@ -172,6 +184,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.custom.status = 0;
       },
 
+      handleResponse: function(data) {
+        console.log(data.detail.response);
+      },
+
       _pageChanged: function(page) {
         // Load page import on demand. Show 404 page if fails
         var resolvedPageUrl = this.resolveUrl('my-' + page + '.html');
@@ -179,12 +195,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       },
 
+
       _loginChanged: function(){
-        // if(this.user){
-        //   this.set('route.path', '/matchen');
-        // }else{
-        //   this.set('route.path', '/login');
-        // }
+        if(this.$.auth.user){
+          this.$.auth.user.getToken(true)
+          .then((idToken) => {
+            this.idToken = idToken;
+            console.log(idToken)
+            this.$.getUser.generateRequest();
+          }).catch(function(error){
+            console.log(error);
+          });
+        }
+
       },
 
       logout: function(){
