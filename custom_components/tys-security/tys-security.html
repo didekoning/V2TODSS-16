@@ -1,7 +1,7 @@
 <dom-module id="tys-security">
 
     <template>
-        <template is="dom-if" if="[[show(user, access)]]">            
+        <template is="dom-if" if="[[show(level, access)]]">            
             <content></content>
         </template>
     </template>
@@ -9,12 +9,19 @@
         Polymer({
             is: 'tys-security',
             properties: {
-                user: Number,
+                user: Object,
                 access: Number, 
+                level: Number
             },
             show: function (u, a) {
-                return u == a;
+                if(u == a) {
+                    return true;
+                };
+                else {
+                    window.location.href = "http://google.com"
+                    return false;
+                }
             }            
-        });
+        });       
     </script>              
 </dom-module>
