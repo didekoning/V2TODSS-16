@@ -12,71 +12,75 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="shared-styles.html">
 -->
+<link rel="import" href="../custom_components/tys-security/tys-security.html">
+
 
 <dom-module id="my-login">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
 
-        padding: 10px;
-      }
-      .inherit {
-        color: inherit;
-        background-color: inherit;
-        text-decoration: inherit;
-      }
-    </style>
+                padding: 10px;
+            }
+            .inherit {
+                color: inherit;
+                background-color: inherit;
+                text-decoration: inherit;
+            }
+        </style>
 
-    <firebase-auth id="auth" user="{{user}}" on-error="handleError" status-known="{{statusKnown}}">
-      <iron-location id="ironLocation"></iron-location>
+        <firebase-auth id="auth" user="{{user}}" on-error="handleError" status-known="{{statusKnown}}"></firebase-auth>
+        <iron-location id="ironLocation"></iron-location>
 
-    <div class="card">
-      <h1>Login</h1>
-         <div class="error" hidden$="[[!message]]">[[message]]</div>
-        <form on-submit="signInWithEmailAndPassword">
-          <paper-input value="{{email}}" type="email" placeholder="Email"></paper-input>
-          <paper-input value="{{password}}" type="password" placeholder="Password"></paper-input>
-          <paper-button raised on-tap="createUserWithEmailAndPassword">Inloggen</paper-button>
-          <a href="/register" class="inherit"><paper-button raised >Registreren</paper-button></a>
-        </form>
-    </div>
-  </template>
+        <div class="card">
+            <h1>Login</h1>
 
-  <script>
-  Polymer({
-    is: 'my-login',
-    properties: {
-      message: {
-        type: String,
-        value: '',
-      },
-      email:{
-        type: String,
-        value: '',
-      },
-      password: {
-        type: String,
-        value: '',
-      },
-      user: {
-        type: Object,
-        notify: true,
-      },
-      statusKnown:{
-        type: Boolean,
-      }
-    },
-    createUserWithEmailAndPassword: function() {
-      this.error = null;
-      this.$.auth.signInWithEmailAndPassword(this.email, this.password);
-      this.password = null;
-      this.$.ironLocation.set('path', '/matchen');      
-    },
+            <div class="error" hidden$="[[!message]]">[[message]]</div>
+            <form on-submit="signInWithEmailAndPassword">
+                <paper-input value="{{email}}" type="email" placeholder="Email"></paper-input>
+                <paper-input value="{{password}}" type="password" placeholder="Password"></paper-input>
+                <paper-button raised on-tap="createUserWithEmailAndPassword">Inloggen</paper-button>
+                <a href="/register" class="inherit"><paper-button raised >Registreren</paper-button></a>
 
-    handleError: function(e) {
-        this.message = 'Error: ' + e.detail.message;
-    },
-  });
-  </script>
+            </form>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'my-login',
+            properties: {
+                message: {
+                    type: String,
+                    value: '',
+                },
+                email:{
+                    type: String,
+                    value: '',
+                },
+                password: {
+                    type: String,
+                    value: '',
+                },
+                user: {
+                    type: Object,
+                    notify: true,
+                },
+                statusKnown:{
+                    type: Boolean,
+                }
+            },
+            createUserWithEmailAndPassword: function() {
+                this.error = null;
+                this.$.auth.signInWithEmailAndPassword(this.email, this.password);
+                this.password = null;
+                this.$.ironLocation.set('path', '/matchen');      
+            },
+
+            handleError: function(e) {
+                this.message = 'Error: ' + e.detail.message;
+            },
+        });
+    </script>
 </dom-module>

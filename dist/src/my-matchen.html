@@ -39,7 +39,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="card" mobile-layout$="[[isMobilePhone]]">
             <template is="dom-repeat" items="{{matches}}">
                 <swipeable-container>
-                    <tys-match percentage="{{item.kwaliteitspercentage}}" url="https://api.tys-chat.nl/persoon/{{item.id}}"></tys-match> 
+                    <tys-match percentage="{{item.percentage}}" url="https://api.tys-chat.nl/persoon/{{item.id}}"></tys-match> 
                 </swipeable-container>
                 <br>
             </template>
@@ -51,6 +51,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                        on-response="handleResponse">
             </iron-ajax>
             <iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
+            <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
         </div>
     </template>
 
@@ -60,17 +61,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             properties: {
                 matches: {
                     type: Array
-                }
+                },
+                idToken:{
+                    type: String,
+                    observer: '_getMatches',
+                },
             },
-            ready: function () {
-                this.$.requestMatch.generateRequest();
+            _getMatches: function(){
+                if(this.idToken != undefined){
+                    this.$.requestMatch.headers['authorization'] = this.idToken;
+                    this.$.requestMatch.generateRequest();
+                    console.log(this.idToken);
+                }
             },
             handleResponse: function (data) {
                 this.matches = data.detail.response;
             },
             refresh: function(){
                 this.matches = [];
-                this.$.requestMatch.generateRequest();
+                if(this.idToken != undefined){
+                    this.$.requestMatch.headers['authorization'] = this.idToken;
+                    this.$.requestMatch.generateRequest();
+                }
             }
         });
     </script>

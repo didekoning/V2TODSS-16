@@ -20,6 +20,13 @@ gulp.task('copy-root', function(){
 	.pipe(gulp.dest('dist'));
 });
 
+gulp.task('copy-serviceworker', function(){
+	return gulp.src([
+		'service-worker.js',
+		])
+	.pipe(gulp.dest('dist'));
+});
+
 gulp.task('copy-js', function(){
 	return gulp.src([
 		'bower_components/webcomponentsjs/webcomponents-lite.js',
@@ -46,5 +53,5 @@ gulp.task('vulcanize', function() {
 
 // gulp.task('default', ['clean']);
 gulp.task('default', ['clean'], function(){
-	gulp.start(['copy-components', 'copy-root', 'copy-js', 'copy-images', 'vulcanize']);
+	gulp.start(['copy-components', 'copy-root', 'copy-serviceworker', 'copy-js', 'copy-images', 'vulcanize']);
 });
