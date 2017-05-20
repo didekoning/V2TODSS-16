@@ -68,7 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
      <firebase-app
-    auth-domain="tys-chat.firebaseapp.com""
+    auth-domain="tys-chat.firebaseapp.com"
     database-url="https://tys-chat.firebaseio.com"
     api-key="AIzaSyA3J-3K6qRJuvE5U1X1sk4D3-J6aJLxYRA"
     storage-bucket="tys-chat.appspot.com"
@@ -107,7 +107,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </template>
             <div main-title class="logo_container"><img src="../images/logo_white.svg" class="logo"></div>
             <template is="dom-if" if="{{user}}">
-              <div>hallo {{user.email}}</div>
+              <div>hallo {{custom.voornaam}}</div>
             </template>
           </app-toolbar>
         </app-header>
@@ -133,11 +133,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <iron-ajax
          id="getUser"
          method="GET"
-          headers='{{headers}}'
+         headers="[[headers]]"
          url="https://api.tys-chat.nl/persoon/1"
          handle-as="json"
+         with-credentials="true"
          on-response="handleResponse" ></iron-ajax>
-        
+      <iron-meta id="meta" key="token" value="{{idToken}}"></iron-meta>
   </template>
 
   <script>
@@ -163,6 +164,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         idToken: {
           type: String,
+          notify: true,
+        },
+        headers: {
+            type: Object,
+            value: function() { return {}; }
         },
       },
 
@@ -185,7 +191,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       handleResponse: function(data) {
-        console.log(data.detail.response);
+        this.custom = data.detail.response;
       },
 
       _pageChanged: function(page) {
@@ -201,7 +207,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.auth.user.getToken(true)
           .then((idToken) => {
             this.idToken = idToken;
-            console.log(idToken)
+            this.headers['Authorization'] = idToken;
+            console.log(this.$.getUser.headers);
+
             this.$.getUser.generateRequest();
           }).catch(function(error){
             console.log(error);

@@ -25,7 +25,8 @@
             <ul class="app-grid">
                 <li class="item confirm"><iron-icon icon="icons:check-circle" on-tap="select_match"></iron-icon></li>
                 <li class="item">
-                    <div class="basic"><span class="name">{{fullname}}</span> - <span class="bday">{{person.gbdatum.year}}</span> - <span class="sex">{{person.geslacht}}</span></div>
+                    <div class="basic"><span class="name">{{fullname}}</span> - <span class="bday">{{age}} Jaar</span> - <span class="sex">{{person.geslacht}}</span></div>
+                    <div class="description">{{person.profiel.bio}}</div>
                 </li>
                 <li class="item"><tys-percentage percentage="{{percentage}}"></tys-percentage></li>
             </ul><br>
@@ -34,7 +35,7 @@
                 <paper-button raised class=red><iron-icon icon="close"></iron-icon></paper-button>
                 <paper-button raised class=green><iron-icon icon="favorite"></iron-icon></paper-button>
             </div>
-            
+            <!-- <iron-meta id="token"></iron-meta> -->
         </paper-card>
         <iron-ajax
                    id="requestPerson"
@@ -42,7 +43,7 @@
                    handle-as="json"
                    on-response="handleResponse">
         </iron-ajax>
-
+         <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
     </template>
     <script>
         Polymer({	    
@@ -61,15 +62,29 @@
                     type: String,
                     computed: 'computeFullName(person.voornaam, person.achternaam)'
                 },
+                age: {
+                    type: Number,
+                    computed: 'computeAge(person.gbdatum)'
+                },
+                idToken: {
+                    type: String,
+                    observer: '_getMatch'
+                }
             },
-            ready: function () {
-                this.$.requestPerson.generateRequest();
+            _getMatch: function () {
+                if(this.idToken != undefined){
+                    this.$.requestPerson.headers['authorization'] = this.idToken;
+                    this.$.requestPerson.generateRequest();
+                }
             },
             handleResponse: function (data) {
                 this.person = data.detail.response;
             },
             computeFullName: function(firstName, lastName) {
                 return firstName + ' ' + lastName;
+            },
+            computeAge: function(age){
+                return new Date().getFullYear() - age.split("-")[0];
             },
             select_match: function(){
                 alert(this.fullname);
