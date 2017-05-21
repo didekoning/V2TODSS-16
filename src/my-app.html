@@ -158,7 +158,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         custom: {
           type: Object,
-          value: {},
+          value: {
+            status: {
+              type: Number,
+              value: 0,
+            },
+          },
           notify: true,
           readOnly: false,
         },
@@ -209,8 +214,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.idToken = idToken;
             this.headers['Authorization'] = idToken;
             console.log(this.$.getUser.headers);
-
-            this.$.getUser.generateRequest();
+            if(this.custom.status > 2){
+              this.$.getUser.generateRequest();
+            }
           }).catch(function(error){
             console.log(error);
           });
@@ -220,6 +226,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       logout: function(){
         this.$.auth.signOut();
+        this.custom = null;
         this.user = null;
         this.set('route.path', '/login');
       },

@@ -76,8 +76,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				},
 			},
 			loginSuccess: function(){
-				this.custom['status'] = 1;
-				if(this.custom['status'] == 1){
+				this.custom.status = 1;
+				if(this.custom.status == 1){
 					this.$.ironLocation.set('path', '/profile');
 				}
 			},
@@ -89,7 +89,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 						console.log("success"); 
 					})
 					.catch((response) => {
-						console.log("error"); 
+						console.log(response); 
 					});
 				this.password = null;
 			},
