@@ -42,7 +42,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-input value="{{password}}" type="password" placeholder="Password"></paper-input>
                 <paper-button raised on-tap="createUserWithEmailAndPassword">Inloggen</paper-button>
                 <a href="/register" class="inherit"><paper-button raised >Registreren</paper-button></a>
-
+                <div>{{custom.status}}</div>
             </form>
         </div>
     </template>
@@ -63,6 +63,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     type: String,
                     value: '',
                 },
+                custom:{
+                    type: Object,
+                },
                 user: {
                     type: Object,
                     notify: true,
@@ -75,7 +78,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.error = null;
                 this.$.auth.signInWithEmailAndPassword(this.email, this.password);
                 this.password = null;
-                this.$.ironLocation.set('path', '/matchen');      
+            
+    
+               
+                     
             },
 
             handleError: function(e) {

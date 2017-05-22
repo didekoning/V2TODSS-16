@@ -29,31 +29,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             .personal[mobile-layout] {width: 100%; margin-bottom: 0px;}
             .location{width: 49%; display: inline-block; float: right; margin-bottom: 20px;}
             .location[mobile-layout] {width: 100%;}
+            .spacer{display: block; height: 15px;}
             paper-button{width: 100%; color: #FFF;}
         </style>
 
         <firebase-auth id="auth" user="{{person}}" on-error="handleError" status-known="{{statusKnown}}"></firebase-auth>
-
+        <iron-location id="ironLocation"></iron-location>
+        
         <div class="card">
             <div class="error" hidden$="[[!message]]">[[message]]</div>
-            <form on-submit="signInWithEmailAndPassword">
+            <form is="iron-form" id="form">
                 <div class="personal"  mobile-layout$="[[isMobilePhone]]">
                     <h2>Algemeen</h2>
-                    <paper-input value="{{custom.voornaam}}" type="text" placeholder="Voornaam"></paper-input>
-                    <paper-input value="{{custom.achternaam}}" type="text" placeholder="Achternaam"></paper-input>
+                    <paper-input value="{{custom.voornaam}}" type="text" id="voornaam" placeholder="Voornaam" autoValidate="true" required error-message="needs some text!"></paper-input>
+                    <paper-input value="{{custom.achternaam}}" type="text" id="achternaam" placeholder="Achternaam" required error-message="needs some text!"></paper-input>
+                    <div class="spacer"></div>
                     <label>Geslacht:</label><br>
-                    <paper-radio-group>
-                        <paper-radio-button name="man">Man</paper-radio-button>
-                        <paper-radio-button name="vrouw">Vrouw</paper-radio-button>
-                        <paper-radio-button name="overig">Overig</paper-radio-button>
+                    <paper-radio-group selected="{{custom.geslacht}}" id="geslacht" fallback-selection="O" required>
+                        <paper-radio-button name="M">Man</paper-radio-button>
+                        <paper-radio-button name="V">Vrouw</paper-radio-button>
+                        <paper-radio-button name="O">Overig</paper-radio-button>
                     </paper-radio-group>
-                    <label>Geboortedatum:</label><br>
-                    <paper-date-picker date="{{custom.gbdate}}"></paper-date-picker>
+                    <paper-input value="{{ custom.gbdatum }}"  pattern="\d{4}-\d{1,2}-\d{1,2}" id="gbdatum" required error-message="needs some text!" type="text" placeholder="Geboortedatum (yyyy-mm-dd)"></paper-input>
                 </div>
 
                 <div class="location" mobile-layout$="[[isMobilePhone]]">
                     <h2>Verblijf</h2>
-                    <paper-input value="{{custom.woonplaats}}" type="text" placeholder="Woonplaats"></paper-input>
+                    <paper-input value="{{custom.woonplaats}}" type="text" id="woonplaats" required error-message="needs some text!" placeholder="Woonplaats"></paper-input>
+
+                    <div class="spacer"></div>
+
                     <paper-checkbox name="hospital" id="reval-chk" on-click="showHospital">Ziekenhuis</paper-checkbox>
                     <paper-checkbox name="revalidation" id="reval-chk" on-click="showRevalidation">Revalidatiecentrum</paper-checkbox>
                     <paper-checkbox name="home">Thuis</paper-checkbox>
@@ -79,7 +84,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </div>
                 </div>
 
-
+                <div>{{custom.status}}</div>
                 <paper-button raised on-tap="addProfile">Volgende stap</paper-button>
             </form>
             <iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
@@ -124,8 +129,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     type: String,
                 }
             },
+              listeners: {
+                'iron-form-submit': '_handleSubmit'
+              },
             handleError: function(e) {
                 this.message = 'Error: ' + e.detail.message;
+            },
+            validateFields: function(){
+                console.log(this.$.geslacht.selected);
+                if(this.$.form.validate()){
+                    return true;
+                }
+               
             },
             showHospital: function(){
                 console.log(this.custom.voornaam);
@@ -134,17 +149,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             showRevalidation: function() {
                 this.revalidation = !this.revalidation
             },
-            handleResponse: function(data) {
-                console.log(data.detail.response);
+            handleResponse: function(e) {
+                if(e.detail.xhr.status == 200){
+                    this.$.ironLocation.set('path', '/preferences');
+                }
             },
-            addProfile: function(){
-                if(this.idToken != undefined){
-                    this.custom.fuid = this.user.uid;
-                    this.custom.geslacht = "M";
-                    this.custom.gbdatum = "1996-10-01";
+            addProfile: function(e){
+                if(this.idToken != undefined && this.validateFields()){
                     this.$.addProfile.headers['authorization'] = this.idToken;
-                    // this.$.addProfile.headers['Content-Type'] = 'application/json';
                     console.log(JSON.stringify(this.custom));
+                    this.custom.status = 2;
                     this.$.addProfile.body = JSON.stringify(this.custom);
                     this.$.addProfile.generateRequest();
                 }
