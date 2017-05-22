@@ -1,0 +1,33 @@
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../tys-percentage/tys-percentage.html">
+<dom-module id="testcard">  
+    <template>
+        <style include="app-grid-style">
+            :host {
+                display: inline-block;
+                width: 100%;
+                --app-grid-columns: 3;
+                --app-grid-item-height: 80px;
+            }
+            ul {
+                padding: 0;
+                list-style: none;
+            }
+            paper-card{width: 100%;}
+            .confirm iron-icon{float: left; color: green; padding: 20px; width: 50px; height: 50px; }
+            tys-percentage{float: right;}
+            paper-button{width:49%; display: inline-block; float:left; text-align: center;}
+            paper-button.red{background-color: var(--paper-red-200);}
+            paper-button.green{background-color: var(--paper-green-200);}
+        </style>
+        <tys-match percentage="10" url="https://api.tys-chat.nl/persoon/{{item.id}}"></tys-match> 
+
+    </template>
+    </dom-module>
+
+    <script>
+        Polymer({	    
+            is: 'testcard'
+        });
+    </script>

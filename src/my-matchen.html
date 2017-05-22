@@ -38,9 +38,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
         <div class="card" mobile-layout$="[[isMobilePhone]]">
             <template is="dom-repeat" items="{{matches}}">
-                <swipeable-container>
+<!--                <swipeable-container>-->
                     <tys-match percentage="{{item.percentage}}" url="https://api.tys-chat.nl/persoon/{{item.id}}"></tys-match> 
-                </swipeable-container>
+<!--                </swipeable-container>-->
                 <br>
             </template>
             <paper-fab icon="refresh" on-tap="refresh"></paper-fab>
