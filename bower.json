@@ -21,7 +21,8 @@
     "polymerfire": "firebase/polymerfire#^0.11.0",
     "iron-location": "PolymerElements/iron-location#^0.8.11",
     "paper-radio-group": "PolymerElements/paper-radio-group#^2.0.0",
-    "global-var": "^0.1.0"
+    "global-var": "^0.1.0",
+    "iron-form": "PolymerElements/iron-form#^1.1.4"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
