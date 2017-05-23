@@ -14,14 +14,14 @@
                 padding: 0;
                 list-style: none;
             }
-            paper-card{width: 100%;}
+            paper-card{width: 100%; opacity: 1; transition: 300ms;}
             .confirm iron-icon{float: left; color: green; padding: 20px; width: 50px; height: 50px; }
             tys-percentage{float: right;}
             paper-button{width:49%; display: inline-block; float:left; text-align: center;}
             paper-button.red{background-color: var(--paper-red-200);}
             paper-button.green{background-color: var(--paper-green-200);}
         </style>
-        <paper-card style="padding-top: 10px;">
+        <paper-card id=card1 style="padding-top: 10px;">
             <ul class="app-grid">
                 <li class="item confirm"><iron-icon icon="icons:check-circle" on-tap="select_match"></iron-icon></li>
                 <li class="item">
@@ -30,10 +30,10 @@
                 </li>
                 <li class="item"><tys-percentage percentage="{{percentage}}"></tys-percentage></li>
             </ul><br>
-<!--            <div class="card-actions">-->
+            <!--            <div class="card-actions">-->
             <div>
-                <paper-button raised class=red><iron-icon icon="close"></iron-icon></paper-button>
-                <paper-button raised class=green><iron-icon icon="favorite"></iron-icon></paper-button>
+                <paper-button raised class=red on-tap=ignore_match><iron-icon icon="close"></iron-icon></paper-button>
+                <paper-button raised class=green on-tap=accept_match><iron-icon icon="favorite"></iron-icon></paper-button>
             </div>
             <!-- <iron-meta id="token"></iron-meta> -->
         </paper-card>
@@ -43,7 +43,7 @@
                    handle-as="json"
                    on-response="handleResponse">
         </iron-ajax>
-         <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
+        <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
     </template>
     <script>
         Polymer({	    
@@ -86,9 +86,22 @@
             computeAge: function(age){
                 return new Date().getFullYear() - age.split("-")[0];
             },
-            select_match: function(){
-                alert(this.fullname);
-            }
+            accept_match: function(){
+                var card = Polymer.dom(this.root).querySelector('#card1');
+                card.style.marginLeft = "100%";
+                card.style.opacity = "0";
+                setTimeout(function() {
+                    card.remove();
+                }, 500);
+            },
+            ignore_match: function(){
+            var card = Polymer.dom(this.root).querySelector('#card1');
+            card.style.marginLeft = "-100%";
+            card.style.opacity = "0";
+            setTimeout(function() {
+            card.remove();
+        }, 500);
+        }
         });
     </script>
 </dom-module>
