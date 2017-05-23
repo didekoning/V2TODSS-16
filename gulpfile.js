@@ -29,7 +29,7 @@ gulp.task('copy-serviceworker', function(){
 
 gulp.task('copy-js', function(){
 	return gulp.src([
-		'bower_components/webcomponentsjs/webcomponents-lite.js',
+		'bower_components/webcomponentsjs/webcomponents-lite.min.js',
 		])
 	.pipe(gulp.dest('dist/bower_components/webcomponentsjs'));
 });
