@@ -38,15 +38,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
         <div class="card" mobile-layout$="[[isMobilePhone]]">
             <template is="dom-repeat" items="{{matches}}">
-<!--                <swipeable-container>-->
-                    <tys-match percentage="{{item.percentage}}" url="https://api.tys-chat.nl/persoon/{{item.id}}"></tys-match> 
-<!--                </swipeable-container>-->
+                <tys-match percentage="{{item.percentage}}" url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-match> 
                 <br>
             </template>
             <paper-fab icon="refresh" on-tap="refresh"></paper-fab>
             <iron-ajax
                        id="requestMatch"
-                       url="https://api.tys-chat.nl/matching/zoek/2"
+                       url="https://api.tys-chat.nl/matching?type=open"
+                       handle-as="json"
+                       on-response="handleResponse">
+            </iron-ajax>
+            <iron-ajax
+                       id="requestRefresh"
+                       url="https://api.tys-chat.nl/matching/zoek"
                        handle-as="json"
                        on-response="handleResponse">
             </iron-ajax>
@@ -80,8 +84,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             refresh: function(){
                 this.matches = [];
                 if(this.idToken != undefined){
-                    this.$.requestMatch.headers['authorization'] = this.idToken;
-                    this.$.requestMatch.generateRequest();
+                    this.$.requestRefresh.headers['authorization'] = this.idToken;
+                    this.$.requestRefresh.generateRequest();
                 }
             }
         });
