@@ -1,0 +1,66 @@
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../tys-percentage/tys-percentage.html">
+<dom-module id="tys-mymatch">
+    <template>
+        <style include="app-grid-style">
+            :host {
+                display: inline-block;
+                width: 100%;
+                --app-grid-columns: 3;
+                --app-grid-item-height: 80px;
+            }
+            paper-card{width: 15%; opacity: 1; transition: 300ms;}
+            .name {
+                text-align: center;
+            }
+        </style>
+        <paper-card id=card1 style="padding-top: 10px;">
+            <div class="basic"><span class="name"><p>{{fullname}}</p></span></div>
+        </paper-card>
+        <iron-ajax
+                   id="getPerson"
+                   url="{{url}}"
+                   handle-as="json"
+                   on-response="handleResponse">
+        </iron-ajax>
+        <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
+    </template>
+    <script>
+        Polymer({	    
+            is: 'tys-mymatch',
+            properties: {
+                url: {
+                    type: String,
+                },
+                person: {
+                    type: Object
+                },
+                fullname: {
+                    type: String,
+                    computed: 'computeFullName(person.voornaam, person.achternaam)'
+                },
+                age: {
+                    type: Number,
+                    computed: 'computeAge(person.gbdatum)'
+                },
+                idToken: {
+                    type: String,
+                    observer: '_getMatch'
+                }
+            },
+            _getMatch: function () {
+                if(this.idToken != undefined){
+                    this.$.getPerson.headers['authorization'] = this.idToken;
+                    this.$.getPerson.generateRequest();
+                }
+            },
+            handleResponse: function (data) {
+                this.person = data.detail.response;
+            },
+            computeFullName: function(firstName, lastName) {
+                return firstName + ' ' + lastName;
+            }
+        });
+    </script>
+</dom-module>
