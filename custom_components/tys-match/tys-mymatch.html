@@ -40,10 +40,6 @@
                     type: String,
                     computed: 'computeFullName(person.voornaam, person.achternaam)'
                 },
-                age: {
-                    type: Number,
-                    computed: 'computeAge(person.gbdatum)'
-                },
                 idToken: {
                     type: String,
                     observer: '_getMatch'
