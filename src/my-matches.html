@@ -1,5 +1,5 @@
 <dom-module id="my-matches">
-     <template>
+    <template>
         <style include="shared-styles">
             :host {
                 display: block;
@@ -7,18 +7,42 @@
                 padding: 10px;
             }
         </style>
-         
-                             <tys-match percentage="10"></tys-match> 
-         
         <div class="card">
-            
-            
-         </div>
+            <template is="dom-repeat" items="{{matches}}">
+                <tys-mymatch url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-mymatch> 
+            </template>
+        </div>
+        <iron-ajax
+                   id="AcceptedMatches"
+                   url="https://api.tys-chat.nl/matching?type=accepted"
+                   handle-as="json"
+                   on-response="handleResponse">
+        </iron-ajax>
+        <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
     </template>
-    
-        <script>
+
+    <script>
         Polymer({
             is: 'my-matches',
+            properties: {
+                matches: {
+                    type: Array
+                },
+                idToken:{
+                    type: String,
+                    observer: '_getMatches',
+                },
+            },
+            _getMatches: function(){
+                if(this.idToken != undefined){
+                    this.$.AcceptedMatches.headers['authorization'] = this.idToken;
+                    this.$.AcceptedMatches.generateRequest();
+                    console.log(this.idToken);
+                }
+            },
+            handleResponse: function (data) {
+                this.matches = data.detail.response;
+            },
         });
     </script>
 </dom-module>
