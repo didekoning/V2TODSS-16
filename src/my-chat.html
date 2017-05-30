@@ -1,0 +1,101 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!--
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+-->
+<link rel="import" href="../custom_components/tys-security/tys-security.html">
+
+
+<dom-module id="my-chat">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+
+                padding: 10px;
+            }
+            .inherit {
+                color: inherit;
+                background-color: inherit;
+                text-decoration: inherit;
+            }
+        </style>
+
+        <firebase-auth id="auth" user="{{user}}" on-error="handleError" status-known="{{statusKnown}}"></firebase-auth>
+        <iron-location id="ironLocation"></iron-location>
+
+        <div class="card">
+            <h1>Chat</h1>
+
+           <tys-chat></tys-chat>
+          <!--<form id="image-form" action="#">
+            <input id="mediaCapture" type="file" accept="image/*,capture=camera">
+            <button id="submitImage" title="Add an image" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--amber-400 mdl-color-text--white">
+              <i class="material-icons">image</i>
+            </button>!-->
+          </form>
+        </div>
+      </div>
+
+      <div id="must-signin-snackbar" class="mdl-js-snackbar mdl-snackbar">
+        <div class="mdl-snackbar__text"></div>
+        <button class="mdl-snackbar__action" type="button"></button>
+      </div>
+      </dom-module>
+    </div>
+            
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'my-chat',
+            properties: {
+                message: {
+                    type: String,
+                    value: '',
+                },
+                email:{
+                    type: String,
+                    value: '',
+                },
+                password: {
+                    type: String,
+                    value: '',
+                },
+                custom:{
+                    type: Object,
+                },
+                user: {
+                    type: Object,
+                    notify: true,
+                },
+                statusKnown:{
+                    type: Boolean,
+                }
+            },
+            createUserWithEmailAndPassword: function() {
+                this.error = null;
+                this.$.auth.signInWithEmailAndPassword(this.email, this.password);
+                this.password = null;
+            
+    
+               
+                     
+            },
+
+            handleError: function(e) {
+                this.message = 'Error: ' + e.detail.message;
+            },
+        });
+    </script>
+</dom-module>

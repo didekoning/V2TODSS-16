@@ -93,6 +93,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <a name="preferences" href="/preferences">Voorkeuren</a>
           <a name="profile" href="/profile">Profiel</a>
           <a name="matches" href="/matches">Mijn matches</a>
+          <a name="chat" href="/chat">Chat</a>
           <a name="logout" on-tap="logout" href="/login">Logout</a>
         </iron-selector>
       </app-drawer>
@@ -122,6 +123,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <my-preferences name="preferences" custom="{{custom}}"></my-preferences>
             <my-view404 name="view404"></my-view404>
             <my-matches name="matches"></my-matches>
+            <my-chat name="chat"></my-chat>
           <!-- end only when user logged in -->
           <my-login name="login" user="{{user}}" custom="{{custom}}"></my-login>
           <my-register name="register" id="register" user="{{user}}" custom="{{custom}}"></my-register>
