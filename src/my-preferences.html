@@ -31,10 +31,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <form is="iron-form" id="form">
             <div class="disease"  mobile-layout$="[[isMobilePhone]]">
                 <h2>Ziekte</h2>
-                <paper-dropdown-menu label="Ziekte">
+                <paper-dropdown-menu label="Ziekte" id="ziekte">
                     <paper-listbox class="dropdown-content">
                          <template is="dom-repeat" items="{{ziektes}}">
-                            <paper-item>{{item.naam}}</paper-item>
+                            <paper-item value="{{item.root}}" kenmerk="{{item.kenmerkID}}">{{item.naam}}</paper-item>
                         </template>
                     </paper-listbox>
                 </paper-dropdown-menu>
@@ -42,15 +42,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                        
             <div class="hobby" mobile-layout$="[[isMobilePhone]]">
                 <h2>Hobbies</h2>
-                <paper-dropdown-menu label="Hobbies">
+                <paper-dropdown-menu label="Hobbies" id="hobby">
                     <paper-listbox class="dropdown-content">
-                         <template is="dom-repeat" items="{{hobby}}">
-                            <paper-item>{{item.naam}}</paper-item>
+                         <template is="dom-repeat" items="{{hobbies}}">
+                            <paper-item value="{{item.root}}" kenmerk="{{item.kenmerkID}}">{{item.naam}}</paper-item>
                         </template>
                     </paper-listbox>
                 </paper-dropdown-menu>
             </div>
-            <paper-button raised on-tap="addProfile">Volgende stap</paper-button>
+            <paper-button raised on-tap="addAttributes">Volgende stap</paper-button>
         </form>
     </div>
     <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
@@ -90,15 +90,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             ziektes: {
                 type: Array,
             },
-            hobby: {
+            hobbies: {
                 type: Array,
             },
+            kenmerken: {
+              type: Array,
+              value: {
+                type: Object,
+              },
+            },
+            selectedItems: {
+              type: Object,
+              value: {},
+            }
         },
         handleZiekteResponse: function(data){
             this.ziektes = data.detail.response;
         },
         handleHobbiesResponse: function(data){
-            this.hobby = data.detail.response;
+            this.hobbies = data.detail.response;
         },
         fillLists: function(){
             if(this.idToken != undefined){
@@ -108,6 +118,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.getHobbies.generateRequest();
 
             }
+        },
+        addAttributes: function(){
+          // console.log(this.$.ziekte.selectedItem.kenmerk);
+          var ziekte = this.$.ziekte.selectedItem.kenmerk;
+          this.kenmerken = [
+          {"kenmerkID": this.$.ziekte.selectedItem.kenmerk, "root": this.$.ziekte.selectedItem.value },
+          {"kenmerkID": this.$.hobby.selectedItem.kenmerk, "root": this.$.hobby.selectedItem.kenmerk }];
+          console.log(JSON.stringify(this.kenmerken));
         },
     });
   </script>
