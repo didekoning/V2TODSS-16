@@ -72,7 +72,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     database-url="https://tys-chat.firebaseio.com"
     api-key="AIzaSyA3J-3K6qRJuvE5U1X1sk4D3-J6aJLxYRA"
     storage-bucket="tys-chat.appspot.com"
-    messaging-sender-id="126492128053">
+    messaging-sender-id="126492128053"></firebase-app>
+
 
     <firebase-auth id="auth" user="{{user}}" on-error="handleError" status-known="{{statusKnown}}" signedIn="{{signedIn}}">
 
@@ -214,12 +215,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       
       _statusObserver: function(){
         console.log(this.custom.status);
-        if(this.custom.status == 1){
-          this.set('route.path', '/profile');
+        if(this.custom.status == 3){
+          this.set('route.path', '/matchen');
         }else if(this.custom.status == 2){
           this.set('route.path', '/preferences');          
-        }else if(this.custom.status == 3){
-        this.set('route.path', '/matchen');          
+        }else if(this.custom.status == 1){
+        this.set('route.path', '/profile');          
         }
       },
 

@@ -12,7 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="shared-styles.html">
 -->
-
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <dom-module id="my-preferences">
   <template>
     <style include="shared-styles">
@@ -20,98 +20,95 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
 
         padding: 10px;
+
       }
+      .disease{width: 49%; display: inline-block; margin-bottom: 20px;}
+      .hobby{width: 49%; display: inline-block; margin-bottom: 20px;}
     </style>
 
     <div class="card">
-    <tys-security user="{{custom.status}}" access="2">
       <h1>Voorkeuren instellen</h1>
-            <iron-grid>
-                <div class="s12 l6">
-                    <form is="iron-form" id="form" method="post" action="">
-                        <paper-dropdown-menu class="s1 l12" label="Eerste interesse">
-                            <paper-listbox class="dropdown-content" selected="0">
-                                <paper-item>allosaurus</paper-item>
-                                <paper-item>brontosaurus</paper-item>
-                                <paper-item>carcharodontosaurus</paper-item>
-                                <paper-item>diplodocus</paper-item>
-                            </paper-listbox>
-                        </paper-dropdown-menu>
-
-                        <paper-dropdown-menu class="s1 l12" label="Tweede interesse">
-                            <paper-listbox class="dropdown-content" selected="1">
-                                <paper-item>allosaurus</paper-item>
-                                <paper-item>brontosaurus</paper-item>
-                                <paper-item>carcharodontosaurus</paper-item>
-                                <paper-item>diplodocus</paper-item>
-                            </paper-listbox>
-                        </paper-dropdown-menu>
-
-
-                        <paper-dropdown-menu class="s1 l12" label="Derde interesse">
-                            <paper-listbox class="dropdown-content" selected="">
-                                <paper-item>allosaurus</paper-item>
-                                <paper-item>brontosaurus</paper-item>
-                                <paper-item>carcharodontosaurus</paper-item>
-                                <paper-item>diplodocus</paper-item>
-                            </paper-listbox>
-                        </paper-dropdown-menu>
-
-
-
-                        <paper-input class="s10 l6" name="Stad" label="Stad"></paper-input>
-                        <paper-input class="s10 l6" name="Instelling" label="Naam Instelling"></paper-input>
-
-                        <div>
-                            <paper-input class="s1 l12" id="Minleeftijd" name="Minleeftijd" label="Minimale leeftijd" min="18" max="120" disabled$="{{disablemin}}"></paper-input>
-                            <paper-checkbox id="minleeftijdnull" on-click="changeMin">Leeftijd is niet relevant</paper-checkbox>
-                            <paper-input class="s1 l12" name="Maxleeftijd" label="Maximale leeftijd" min="18" max="120" disabled$="{{disablemax}}"></paper-input>
-                            <paper-checkbox id="maxleeftijdnull" on-click="changeMax">Leeftijd is niet relevant</paper-checkbox><br>
-                        </div>
-                        <br>
-                        <div>    
-                            Wat vindt u het belangrijkst tijdens het matchen?<br>
-                            <paper-radio-group class="s10 l12">
-                                <paper-radio-button name="Ziektebeeld">Ziektebeeld</paper-radio-button>
-                                <paper-radio-button name="Hobby">Hobby</paper-radio-button>
-                                <paper-radio-button name="Locatie">Locatie</paper-radio-button>
-                                <paper-radio-button name="Leeftijd">Leeftijd</paper-radio-button>
-                            </paper-radio-group>
-                        </div>
-
-                    </form>
-                </div>
-            </iron-grid>
-        </tys-security>
-        <div>{{custom.status}}</div>
+        <form is="iron-form" id="form">
+            <div class="disease"  mobile-layout$="[[isMobilePhone]]">
+                <h2>Ziekte</h2>
+                <paper-dropdown-menu label="Ziekte">
+                    <paper-listbox class="dropdown-content">
+                         <template is="dom-repeat" items="{{ziektes}}">
+                            <paper-item>{{item.naam}}</paper-item>
+                        </template>
+                    </paper-listbox>
+                </paper-dropdown-menu>
+            </div>
+                       
+            <div class="hobby" mobile-layout$="[[isMobilePhone]]">
+                <h2>Hobbies</h2>
+                <paper-dropdown-menu label="Hobbies">
+                    <paper-listbox class="dropdown-content">
+                         <template is="dom-repeat" items="{{hobby}}">
+                            <paper-item>{{item.naam}}</paper-item>
+                        </template>
+                    </paper-listbox>
+                </paper-dropdown-menu>
+            </div>
+            <paper-button raised on-tap="addProfile">Volgende stap</paper-button>
+        </form>
     </div>
+    <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
+
+    <iron-ajax
+       id="getZiektes"
+       method="GET"
+       url="https://api.tys-chat.nl/meta/kenmerken/0"
+       handle-as="json"
+       headers='{"Content-Type": "application/json;charset=utf-8"}' 
+       content-type="application/json"
+       on-response="handleZiekteResponse">
+    </iron-ajax>
+     <iron-ajax
+       id="getHobbies"
+       method="GET"
+       url="https://api.tys-chat.nl/meta/kenmerken/3000"
+       handle-as="json"
+       headers='{"Content-Type": "application/json;charset=utf-8"}' 
+       content-type="application/json"
+       on-response="handleHobbiesResponse">
+    </iron-ajax>
   </template>
 
   <script>
     Polymer({
-      is: 'my-preferences',
+       is: 'my-preferences',
        properties: {
-                disablemin: {
-                    type: Boolean,
-                    value: false // init the value to true so it will be hidden on page load
-                },
-                disablemax: {
-                    type: Boolean,
-                    value: false // init the value to true so it will be hidden on page load
-                },
-                custom: {
-                    type: Object,
-                    notify: true,
-                },
+            custom: {
+                type: Object,
+                notify: true,
             },
-            changeMin: function() {
-                this.disablemin = !this.disablemin
+            idToken: {
+                type: String,
+                observer: 'fillLists',
             },
-            changeMax: function() {
-                this.disablemax = !this.disablemax
+            ziektes: {
+                type: Array,
+            },
+            hobby: {
+                type: Array,
+            },
+        },
+        handleZiekteResponse: function(data){
+            this.ziektes = data.detail.response;
+        },
+        handleHobbiesResponse: function(data){
+            this.hobby = data.detail.response;
+        },
+        fillLists: function(){
+            if(this.idToken != undefined){
+                this.$.getZiektes.headers['authorization'] = this.idToken;
+                this.$.getHobbies.headers['authorization'] = this.idToken;
+                this.$.getZiektes.generateRequest();
+                this.$.getHobbies.generateRequest();
+
             }
+        },
     });
-
-
   </script>
 </dom-module>
