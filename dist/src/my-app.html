@@ -120,11 +120,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             fallback-selection="view404"
             role="main">
           <!-- Only when user is logged in -->
-            <my-matchen name="matchen"></my-matchen>
+            <my-matchen name="matchen" custom="{{custom}}"></my-matchen>
             <my-preferences name="preferences" custom="{{custom}}"></my-preferences>
             <my-view404 name="view404"></my-view404>
-            <my-matches name="matches"></my-matches>
-            <my-chat name="chat"></my-chat>
+            <my-matches name="matches" custom="{{custom}}"></my-matches>
+            <my-chat name="chat" custom="{{custom}}"></my-chat>
           <!-- end only when user logged in -->
           <my-login name="login" user="{{user}}" custom="{{custom}}"></my-login>
           <my-register name="register" id="register" user="{{user}}" custom="{{custom}}"></my-register>
@@ -214,18 +214,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       
       _statusObserver: function(){
-        console.log(this.custom.status);
         if(this.custom.status == 3){
           this.set('route.path', '/matchen');
         }else if(this.custom.status == 2){
           this.set('route.path', '/preferences');          
         }else if(this.custom.status == 1){
         this.set('route.path', '/profile');          
+        }else{
+          this.set('route.path', '/login');      
         }
       },
 
       _loginChanged: function(){
-        
         if(this.$.auth.user){
           this.custom['status'] = 1;
           this.notifyPath('custom.status');
@@ -247,13 +247,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       logout: function(){
         this.$.auth.signOut();
-        this.custom.status = 0;
         this.custom.id = null;
         this.custom.voornaam = null;
         this.custom.achternaam = null;
         this.custom.woonplaats = null;
         this.custom.geslacht = null;
-        this.user = null;
+        this.custom.status = 0;
         this.set('route.path', '/login');
       },
 

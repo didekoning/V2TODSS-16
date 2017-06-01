@@ -38553,6 +38553,7 @@ Z(Q.prototype,"ref",Q.prototype.na);Ib.STATE_CHANGED="state_changed";P.RUNNING="
 </dom-module><dom-module id="tys-security" assetpath="../custom_components/tys-security/">
 
     <template>
+        <iron-location id="ironLocation"></iron-location>
         <template is="dom-if" if="[[show(level, access)]]">            
             <content></content>
         </template>
@@ -38561,7 +38562,7 @@ Z(Q.prototype,"ref",Q.prototype.na);Ib.STATE_CHANGED="state_changed";P.RUNNING="
         Polymer({
             is: 'tys-security',
             properties: {
-                user: Object,
+                redirect: String,
                 access: Number, 
                 level: Number
             },
@@ -38569,10 +38570,10 @@ Z(Q.prototype,"ref",Q.prototype.na);Ib.STATE_CHANGED="state_changed";P.RUNNING="
                 if(u == a) {
                     return true;
                 }
-                // else {
-                //     window.location.href = "http://google.com"
-                //     return false;
-                // }
+                else {
+                    this.$.ironLocation.set('path', this.redirect);
+                    return false;
+                }
             }            
         });       
     </script>              
