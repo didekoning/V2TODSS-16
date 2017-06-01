@@ -20,98 +20,171 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
 
         padding: 10px;
+
       }
+      .disease{width: 49%; display: inline-block; margin-bottom: 20px;}
+      .hobby{width: 49%; display: inline-block; margin-bottom: 20px;}
     </style>
-
+     <iron-location id="ironLocation"></iron-location>
     <div class="card">
-    <tys-security user="{{custom.status}}" access="2">
       <h1>Voorkeuren instellen</h1>
-            <iron-grid>
-                <div class="s12 l6">
-                    <form is="iron-form" id="form" method="post" action="">
-                        <paper-dropdown-menu class="s1 l12" label="Eerste interesse">
-                            <paper-listbox class="dropdown-content" selected="0">
-                                <paper-item>allosaurus</paper-item>
-                                <paper-item>brontosaurus</paper-item>
-                                <paper-item>carcharodontosaurus</paper-item>
-                                <paper-item>diplodocus</paper-item>
-                            </paper-listbox>
-                        </paper-dropdown-menu>
-
-                        <paper-dropdown-menu class="s1 l12" label="Tweede interesse">
-                            <paper-listbox class="dropdown-content" selected="1">
-                                <paper-item>allosaurus</paper-item>
-                                <paper-item>brontosaurus</paper-item>
-                                <paper-item>carcharodontosaurus</paper-item>
-                                <paper-item>diplodocus</paper-item>
-                            </paper-listbox>
-                        </paper-dropdown-menu>
-
-
-                        <paper-dropdown-menu class="s1 l12" label="Derde interesse">
-                            <paper-listbox class="dropdown-content" selected="">
-                                <paper-item>allosaurus</paper-item>
-                                <paper-item>brontosaurus</paper-item>
-                                <paper-item>carcharodontosaurus</paper-item>
-                                <paper-item>diplodocus</paper-item>
-                            </paper-listbox>
-                        </paper-dropdown-menu>
-
-
-
-                        <paper-input class="s10 l6" name="Stad" label="Stad"></paper-input>
-                        <paper-input class="s10 l6" name="Instelling" label="Naam Instelling"></paper-input>
-
-                        <div>
-                            <paper-input class="s1 l12" id="Minleeftijd" name="Minleeftijd" label="Minimale leeftijd" min="18" max="120" disabled$="{{disablemin}}"></paper-input>
-                            <paper-checkbox id="minleeftijdnull" on-click="changeMin">Leeftijd is niet relevant</paper-checkbox>
-                            <paper-input class="s1 l12" name="Maxleeftijd" label="Maximale leeftijd" min="18" max="120" disabled$="{{disablemax}}"></paper-input>
-                            <paper-checkbox id="maxleeftijdnull" on-click="changeMax">Leeftijd is niet relevant</paper-checkbox><br>
-                        </div>
-                        <br>
-                        <div>    
-                            Wat vindt u het belangrijkst tijdens het matchen?<br>
-                            <paper-radio-group class="s10 l12">
-                                <paper-radio-button name="Ziektebeeld">Ziektebeeld</paper-radio-button>
-                                <paper-radio-button name="Hobby">Hobby</paper-radio-button>
-                                <paper-radio-button name="Locatie">Locatie</paper-radio-button>
-                                <paper-radio-button name="Leeftijd">Leeftijd</paper-radio-button>
-                            </paper-radio-group>
-                        </div>
-
-                    </form>
-                </div>
-            </iron-grid>
-        </tys-security>
-        <div>{{custom.status}}</div>
+        <form is="iron-form" id="form">
+            <div class="disease"  mobile-layout$="[[isMobilePhone]]">
+                <h2>Ziekte</h2>
+                <paper-dropdown-menu label="Ziekte" id="ziekte" on-iron-select="_itemSelected">
+                    <paper-listbox class="dropdown-content" attr-for-selected="item-name" selected="{{currentDisease}}">
+                         <template is="dom-repeat" items="{{ziektes}}">
+                            <paper-item value="{{item.root}}" item-name="{{item.naam}}" kenmerk="{{item.kenmerkID}}">{{item.naam}}</paper-item>
+                        </template>
+                         <paper-item value="{{item}}" kenmerk="{{item.kenmerkID}}" selected>test</paper-item>
+                    </paper-listbox>
+                </paper-dropdown-menu>
+            </div>
+                       
+            <div class="hobby" mobile-layout$="[[isMobilePhone]]">
+                <h2>Hobbies</h2>
+                <paper-dropdown-menu label="Hobbies" id="hobby" on-iron-select="_itemSelected">
+                    <paper-listbox class="dropdown-content" attr-for-selected="item-name" selected="{{currentHobby}}">
+                         <template is="dom-repeat" items="{{hobbies}}">
+                            <paper-item value="{{item.root}}" item-name="{{item.naam}}" kenmerk="{{item.kenmerkID}}">{{item.naam}}</paper-item>
+                        </template>
+                    </paper-listbox>
+                </paper-dropdown-menu>
+            </div>
+            <template is="dom-if" if="{{checkstatus(custom.status)}}">
+                <paper-button raised on-tap="addAttributes">Volgende stap</paper-button>
+            </template>
+        </form>
     </div>
+    <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
+
+    <iron-ajax
+       id="getZiektes"
+       method="GET"
+       url="https://api.tys-chat.nl/meta/kenmerken/0"
+       handle-as="json"
+       headers='{"Content-Type": "application/json;charset=utf-8"}' 
+       content-type="application/json"
+       on-response="handleZiekteResponse">
+    </iron-ajax>
+     <iron-ajax
+       id="getHobbies"
+       method="GET"
+       url="https://api.tys-chat.nl/meta/kenmerken/3000"
+       handle-as="json"
+       headers='{"Content-Type": "application/json;charset=utf-8"}' 
+       content-type="application/json"
+       on-response="handleHobbiesResponse">
+    </iron-ajax>
+     <iron-ajax
+       id="getUserAttributes"
+       method="GET"
+       url="https://api.tys-chat.nl/kenmerk"
+       handle-as="json"
+       headers='{"Content-Type": "application/json;charset=utf-8"}' 
+       content-type="application/json"
+       on-response="handleUserAttributes">
+    </iron-ajax>
+    <iron-ajax
+       id="addPreference"
+       method="PUT"
+       url="https://api.tys-chat.nl/kenmerk"
+       handle-as="json"
+       headers='{"Content-Type": "application/json;charset=utf-8"}' 
+       content-type="application/json">
+    </iron-ajax>
+        <iron-ajax
+       id="updateStatus"
+       method="PUT"
+       url="https://api.tys-chat.nl/persoon/status"
+       handle-as="json"
+       headers='{"Content-Type": "application/json;charset=utf-8"}' 
+       content-type="application/json"
+       on-response="statusResponse">
+    </iron-ajax>
   </template>
 
   <script>
     Polymer({
-      is: 'my-preferences',
+       is: 'my-preferences',
        properties: {
-                disablemin: {
-                    type: Boolean,
-                    value: false // init the value to true so it will be hidden on page load
-                },
-                disablemax: {
-                    type: Boolean,
-                    value: false // init the value to true so it will be hidden on page load
-                },
-                custom: {
-                    type: Object,
-                    notify: true,
-                },
+            custom: {
+                type: Object,
+                notify: true,
             },
-            changeMin: function() {
-                this.disablemin = !this.disablemin
+            idToken: {
+                type: String,
+                observer: 'fillLists',
             },
-            changeMax: function() {
-                this.disablemax = !this.disablemax
+            ziektes: {
+                type: Array,
+            },
+            hobbies: {
+                type: Array,
+            },
+            currentDisease: String,
+            currentHobby: String,
+        },
+        _itemSelected : function(e) {
+            var selectedItem = e.target.selectedItem;
+            if (selectedItem) {
+                var kenmerken = {"kenmerkID": selectedItem.value.kenmerkID, "root": selectedItem.value.root};
+                this.$.addPreference.headers['authorization'] = this.idToken;
+                this.$.addPreference.body = JSON.stringify(kenmerken);
+                console.log(JSON.stringify(kenmerken));
+                this.$.addPreference.generateRequest();
             }
+          },
+        statusResponse: function(e){
+            if(e.detail.xhr.status == 200){
+                this.custom.status = 3;
+                 this.$.ironLocation.set('path', '/matchen');
+            }
+            
+        },
+        handleZiekteResponse: function(data){
+            this.ziektes = data.detail.response;
+        },
+        handleZiekteResponse: function(data){
+            this.ziektes = data.detail.response;
+        },
+        handleHobbiesResponse: function(data){
+            this.hobbies = data.detail.response;
+        },
+        handleUserAttributes: function(data){
+            console.log(data.detail.response);
+            for (var key in data.detail.response) {
+                switch(data.detail.response[key].root){
+                    case 0:
+                        this.currentDisease = data.detail.response[key].naam;
+                        break;
+                    case 3000: 
+                        this.currentHobby = data.detail.response[key].naam;
+                        break
+                }
+            }
+
+        },
+        fillLists: function(){
+            if(this.idToken != undefined){
+                this.$.getZiektes.headers['authorization'] = this.idToken;
+                this.$.getHobbies.headers['authorization'] = this.idToken;
+                this.$.getUserAttributes.headers['authorization'] = this.idToken;
+                this.$.getZiektes.generateRequest();
+                this.$.getHobbies.generateRequest();
+                this.$.getUserAttributes.generateRequest();
+            }
+        },
+        addAttributes: function(){
+          if(this.idToken != undefined){
+            this.$.updateStatus.headers['authorization'] = this.idToken;
+            this.$.updateStatus.body = JSON.stringify({"status": 3});
+            this.$.updateStatus.generateRequest();
+          }
+        },
+        checkstatus: function(status){
+            return status < 3;
+        }
     });
-
-
   </script>
 </dom-module>
