@@ -37,17 +37,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			<paper-button raised on-tap="createUserWithEmailAndPassword">Sign Up</paper-button>
 		</form>
 
-		<div hidden$="[[!user]]">
-			<table>
-				<tr><th>uid</th> <td>[[user.uid]]</td></tr>
-				<tr><th>displayName</th> <td>[[user.displayName]]</td></tr>
-				<tr><th>email</th> <td>[[user.email]]</td></tr>
-				<tr><th>emailVerified</th> <td>[[user.emailVerified]]</td></tr>
-				<tr><th>status</th> <td>[[user.refreshToken]]</td></tr>
-			</table>
-
-			<button on-tap="signOut">Sign Out</button>	
-		</div>	
 	</div>
 	</template>
 

@@ -55,6 +55,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-button raised on-tap="addAttributes">Volgende stap</paper-button>
             </template>
         </form>
+
     </div>
     <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
 
@@ -128,7 +129,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         _itemSelected : function(e) {
             var selectedItem = e.target.selectedItem;
             if (selectedItem) {
-                var kenmerken = {"kenmerkID": selectedItem.value.kenmerkID, "root": selectedItem.value.root};
+                var kenmerken = {"kenmerkID": selectedItem.kenmerk, "root": selectedItem.value};
                 this.$.addPreference.headers['authorization'] = this.idToken;
                 this.$.addPreference.body = JSON.stringify(kenmerken);
                 console.log(JSON.stringify(kenmerken));

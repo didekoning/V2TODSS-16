@@ -29,12 +29,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             .location[mobile-layout] {width: 100%;}
             .spacer{display: block; height: 15px;}
             paper-button{width: 100%; color: #FFF;}
+            .number{display: inline-block;}
+            .small-number{width: 24%;}
+            .large-number{width: 49%;}
         </style>
 
         <firebase-auth id="auth" user="{{person}}" on-error="handleError" status-known="{{statusKnown}}"></firebase-auth>
         <iron-location id="ironLocation"></iron-location>
         
         <div class="card">
+         <tys-security access="{{custom.status}}" level="1" redirect="/register">
             <div class="error" hidden$="[[!message]]">[[message]]</div>
             <form is="iron-form" id="form">
                 <div class="personal"  mobile-layout$="[[isMobilePhone]]">
@@ -48,45 +52,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <paper-radio-button name="V">Vrouw</paper-radio-button>
                         <paper-radio-button name="O">Overig</paper-radio-button>
                     </paper-radio-group>
-                    <paper-input value="{{ custom.gbdatum }}"  pattern="\d{4}-\d{1,2}-\d{1,2}" id="gbdatum" required error-message="needs some text!" type="text" placeholder="Geboortedatum (yyyy-mm-dd)"></paper-input>
                 </div>
 
                 <div class="location" mobile-layout$="[[isMobilePhone]]">
                     <h2>Verblijf</h2>
+                    <paper-input class="small-number number" type="string" auto-validate pattern="(0[1-9]|[12]\d|3[01])" placeholder="Dag" type="string" maxlength="2" required error-message="Onjuiste dag" value="{{day}}"></paper-input>
+                    <paper-input class="small-number number" type="string" auto-validate pattern="(0[1-9]|1[0-2])" placeholder="Maand" type="string" maxlength="2" required error-message="Onjuiste maand" value="{{month}}"></paper-input>
+                    <paper-input class="large-number number" type="string" auto-validate pattern="\d{4}" placeholder="Jaar" type="string" maxlength="4" required error-message="Onjuist jaar" value="{{year}}"></paper-input>
                     <paper-input value="{{custom.woonplaats}}" type="text" id="woonplaats" required error-message="needs some text!" placeholder="Woonplaats"></paper-input>
-
-                    <div class="spacer"></div>
-
-                    <paper-checkbox name="hospital" id="reval-chk" on-click="showHospital">Ziekenhuis</paper-checkbox>
-                    <paper-checkbox name="revalidation" id="reval-chk" on-click="showRevalidation">Revalidatiecentrum</paper-checkbox>
-                    <paper-checkbox name="home">Thuis</paper-checkbox>
-                    <div id="autoUpdate" class="autoUpdate" hidden$="{{hospital}}">
-                        <paper-dropdown-menu label="Ziekenhuizen">
-                            <paper-listbox class="dropdown-content">
-                                <paper-item>UMCU</paper-item>
-                                <paper-item>AMC</paper-item>
-                                <paper-item>LMC</paper-item>
-                                <paper-item>Mart</paper-item>
-                            </paper-listbox>
-                        </paper-dropdown-menu>
-                    </div>
-                    <div id="autoUpdate" class="autoUpdate" hidden$="{{revalidation}}">
-                        <paper-dropdown-menu label="Revalidatiecentrum">
-                            <paper-listbox class="dropdown-content">
-                                <paper-item>De Hoogstraat</paper-item>
-                                <paper-item>Gomez</paper-item>
-                                <paper-item>Zusje</paper-item>
-                                <paper-item>Mart</paper-item>
-                            </paper-listbox>
-                        </paper-dropdown-menu>
-                    </div>
+                    <paper-textarea label="Bio" value="{{custom.profiel.bio}}"></paper-textarea>
                 </div>
-
-                <div>{{custom.status}}</div>
                 <paper-button raised on-tap="addProfile">Volgende stap</paper-button>
             </form>
             <iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
-
+        </tys-security>
         </div>
 
         <iron-ajax
@@ -122,16 +101,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 },
                 custom:{
                     type: Object,
+                    observer: '_splitDate',
                 },
                 jsonUser: {
                     type: String,
-                }
+                },
+                date: {
+                    type: String,
+                    computed: '_computeDate(day, month, year)',
+                },
+                day: {
+                    type: String,
+                },
+                month: String,
+                year: String,
             },
               listeners: {
                 'iron-form-submit': '_handleSubmit'
               },
             handleError: function(e) {
                 this.message = 'Error: ' + e.detail.message;
+            },
+            _splitDate: function(){
+                if(this.custom.gbdatum != undefined){
+                    var arr = this.custom.gbdatum.split("-");
+                    this.day = arr[2];
+                    this.month = arr[1];
+                    this.year = arr[0];
+                }
+
+            },
+            _computeDate: function(day, month, year){
+                return year+"-"+month+"-"+day;
             },
             validateFields: function(){
                 console.log(this.$.geslacht.selected);
@@ -154,6 +155,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             addProfile: function(e){
                 if(this.idToken != undefined && this.validateFields()){
+                    this.custom.gbdatum = this.date;
                     if(this.custom.status >= 3){
                         this.$.addProfile.method = 'PUT';
                     }else{

@@ -35,12 +35,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <h1>Login</h1>
 
             <div class="error" hidden$="[[!message]]">[[message]]</div>
-            <form on-submit="signInWithEmailAndPassword">
-                <paper-input value="{{email}}" type="email" placeholder="Email"></paper-input>
-                <paper-input value="{{password}}" type="password" placeholder="Password"></paper-input>
-                <paper-button raised on-tap="createUserWithEmailAndPassword">Inloggen</paper-button>
-                <a href="/register" class="inherit"><paper-button raised >Registreren</paper-button></a>
-                <div>{{custom.status}}</div>
+            <form is="iron-form" on-submit="signInWithEmailAndPassword">
+                <paper-input value="{{email}}" type="email" placeholder="Email" tabindex="1"></paper-input>
+                <paper-input value="{{password}}" type="password" placeholder="Password" tabindex="2"></paper-input>
+                <paper-button raised on-tap="createUserWithEmailAndPassword" tabindex="3">Inloggen</paper-button>
+              <paper-button raised on-tap="register" tabindex="4">Registreren</paper-button>
             </form>
         </div>
     </template>
@@ -75,13 +74,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             createUserWithEmailAndPassword: function() {
                 this.error = null;
                 this.$.auth.signInWithEmailAndPassword(this.email, this.password);
-                this.password = null;
-            
-    
-               
-                     
+                this.password = null;        
             },
-
+            register: function(){
+                 this.$.ironLocation.set('path', '/register');
+            },
             handleError: function(e) {
                 this.message = 'Error: ' + e.detail.message;
             },

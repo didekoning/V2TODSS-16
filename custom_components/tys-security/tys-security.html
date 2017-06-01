@@ -1,6 +1,7 @@
 <dom-module id="tys-security">
 
     <template>
+        <iron-location id="ironLocation"></iron-location>
         <template is="dom-if" if="[[show(level, access)]]">            
             <content></content>
         </template>
@@ -9,7 +10,7 @@
         Polymer({
             is: 'tys-security',
             properties: {
-                user: Object,
+                redirect: String,
                 access: Number, 
                 level: Number
             },
@@ -17,10 +18,10 @@
                 if(u == a) {
                     return true;
                 }
-                // else {
-                //     window.location.href = "http://google.com"
-                //     return false;
-                // }
+                else {
+                    this.$.ironLocation.set('path', this.redirect);
+                    return false;
+                }
             }            
         });       
     </script>              

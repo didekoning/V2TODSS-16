@@ -8,9 +8,11 @@
             }
         </style>
         <div class="card">
+         <tys-security access="{{custom.status}}" level="3" redirect="/login">
             <template is="dom-repeat" items="{{matches}}">
                 <tys-mymatch url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-mymatch> 
             </template>
+         <tys-security access="{{custom.status}}" level="3" redirect="/login">
         </div>
         <iron-ajax
                    id="AcceptedMatches"
@@ -31,6 +33,9 @@
                 idToken:{
                     type: String,
                     observer: '_getMatches',
+                },
+                custom:{
+                    type: Object,
                 },
             },
             _getMatches: function(){
