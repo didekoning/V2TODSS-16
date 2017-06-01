@@ -84,10 +84,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
-    <app-drawer-layout fullbleed>
+    <app-drawer-layout fullbleed force-narrow$="[[!user]]">
       <!-- Drawer content -->
       <!-- <template is="dom-if" if="{{user}}"> -->
-      <app-drawer id="drawer">
+      <app-drawer id="drawer" >
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="matchen" href="/matchen">Matchen</a>
@@ -100,7 +100,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </app-drawer>
       <!-- </template> -->
       <!-- Main content -->
-      <app-header-layout has-scrolling-region>
+      <app-header-layout has-scrolling-region >
 
         <app-header condenses reveals effects="waterfall">
           <app-toolbar>
@@ -247,7 +247,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       logout: function(){
         this.$.auth.signOut();
-        this.custom = null;
+        this.custom.status = 0;
+        this.custom.id = null;
+        this.custom.voornaam = null;
+        this.custom.achternaam = null;
+        this.custom.woonplaats = null;
+        this.custom.geslacht = null;
         this.user = null;
         this.set('route.path', '/login');
       },
