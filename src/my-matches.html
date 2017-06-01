@@ -10,7 +10,7 @@
         <div class="card">
          <tys-security access="{{custom.status}}" level="3" redirect="/login">
             <template is="dom-repeat" items="{{matches}}">
-                <tys-mymatch url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-mymatch> 
+                <tys-mymatch url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-mymatch> <br><br>
             </template>
          <tys-security access="{{custom.status}}" level="3" redirect="/login">
         </div>
