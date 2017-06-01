@@ -25,24 +25,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .disease{width: 49%; display: inline-block; margin-bottom: 20px;}
       .hobby{width: 49%; display: inline-block; margin-bottom: 20px;}
     </style>
-
+     <iron-location id="ironLocation"></iron-location>
     <div class="card">
       <h1>Voorkeuren instellen</h1>
         <form is="iron-form" id="form">
             <div class="disease"  mobile-layout$="[[isMobilePhone]]">
                 <h2>Ziekte</h2>
-                <paper-dropdown-menu label="Ziekte" id="ziekte">
-                    <paper-listbox class="dropdown-content">
+                <paper-dropdown-menu label="Ziekte" id="ziekte" on-iron-select="_itemSelected">
+                    <paper-listbox class="dropdown-content" selected="1">
                          <template is="dom-repeat" items="{{ziektes}}">
                             <paper-item value="{{item.root}}" kenmerk="{{item.kenmerkID}}">{{item.naam}}</paper-item>
                         </template>
+                         <paper-item value="{{item.root}}" kenmerk="{{item.kenmerkID}}" selected>test</paper-item>
                     </paper-listbox>
                 </paper-dropdown-menu>
             </div>
                        
             <div class="hobby" mobile-layout$="[[isMobilePhone]]">
                 <h2>Hobbies</h2>
-                <paper-dropdown-menu label="Hobbies" id="hobby">
+                <paper-dropdown-menu label="Hobbies" id="hobby" on-iron-select="_itemSelected">
                     <paper-listbox class="dropdown-content">
                          <template is="dom-repeat" items="{{hobbies}}">
                             <paper-item value="{{item.root}}" kenmerk="{{item.kenmerkID}}">{{item.naam}}</paper-item>
@@ -50,7 +51,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </paper-listbox>
                 </paper-dropdown-menu>
             </div>
-            <paper-button raised on-tap="addAttributes">Volgende stap</paper-button>
+            <template is="dom-if" if="{{checkstatus(custom.status)}}">
+                <paper-button raised on-tap="addAttributes">Volgende stap</paper-button>
+            </template>
         </form>
     </div>
     <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
@@ -73,6 +76,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        content-type="application/json"
        on-response="handleHobbiesResponse">
     </iron-ajax>
+    <iron-ajax
+       id="addPreference"
+       method="PUT"
+       url="https://api.tys-chat.nl/kenmerk"
+       handle-as="json"
+       headers='{"Content-Type": "application/json;charset=utf-8"}' 
+       content-type="application/json">
+    </iron-ajax>
+        <iron-ajax
+       id="updateStatus"
+       method="PUT"
+       url="https://api.tys-chat.nl/persoon/status"
+       handle-as="json"
+       headers='{"Content-Type": "application/json;charset=utf-8"}' 
+       content-type="application/json"
+       on-response="statusResponse">
+    </iron-ajax>
   </template>
 
   <script>
@@ -93,16 +113,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             hobbies: {
                 type: Array,
             },
-            kenmerken: {
-              type: Array,
-              value: {
-                type: Object,
-              },
-            },
-            selectedItems: {
-              type: Object,
-              value: {},
+        },
+        _itemSelected : function(e) {
+            var selectedItem = e.target.selectedItem;
+            if (selectedItem) {
+                var kenmerken = {"kenmerkID": selectedItem.kenmerk, "root": selectedItem.value};
+                this.$.addPreference.headers['authorization'] = this.idToken;
+                this.$.addPreference.body = JSON.stringify(kenmerken);
+                console.log(JSON.stringify(kenmerken));
+                this.$.addPreference.generateRequest();
             }
+          },
+        statusResponse: function(e){
+            if(e.detail.xhr.status == 200){
+                this.custom.status = 3;
+                 this.$.ironLocation.set('path', '/matchen');
+            }
+            
+        },
+        handleZiekteResponse: function(data){
+            this.ziektes = data.detail.response;
         },
         handleZiekteResponse: function(data){
             this.ziektes = data.detail.response;
@@ -116,17 +146,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.$.getHobbies.headers['authorization'] = this.idToken;
                 this.$.getZiektes.generateRequest();
                 this.$.getHobbies.generateRequest();
-
             }
         },
         addAttributes: function(){
-          // console.log(this.$.ziekte.selectedItem.kenmerk);
-          var ziekte = this.$.ziekte.selectedItem.kenmerk;
-          this.kenmerken = [
-          {"kenmerkID": this.$.ziekte.selectedItem.kenmerk, "root": this.$.ziekte.selectedItem.value },
-          {"kenmerkID": this.$.hobby.selectedItem.kenmerk, "root": this.$.hobby.selectedItem.kenmerk }];
-          console.log(JSON.stringify(this.kenmerken));
+          if(this.idToken != undefined){
+            this.$.updateStatus.headers['authorization'] = this.idToken;
+            this.$.updateStatus.body = JSON.stringify({"status": 3});
+            this.$.updateStatus.generateRequest();
+          }
         },
+        checkstatus: function(status){
+            return status < 3;
+        }
     });
   </script>
 </dom-module>

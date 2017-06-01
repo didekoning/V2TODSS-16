@@ -148,15 +148,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.revalidation = !this.revalidation
             },
             handleResponse: function(e) {
-                if(e.detail.xhr.status == 200){
+                if(e.detail.xhr.status == 200 && this.custom.status < 3){
                     this.$.ironLocation.set('path', '/preferences');
                 }
             },
             addProfile: function(e){
                 if(this.idToken != undefined && this.validateFields()){
+                    if(this.custom.status >= 3){
+                        this.$.addProfile.method = 'PUT';
+                    }else{
+                        this.custom.status = 2;
+                    }
                     this.$.addProfile.headers['authorization'] = this.idToken;
                     console.log(JSON.stringify(this.custom));
-                    this.custom.status = 2;
                     this.$.addProfile.body = JSON.stringify(this.custom);
                     this.$.addProfile.generateRequest();
                 }
