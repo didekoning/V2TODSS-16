@@ -27,28 +27,28 @@ function FriendlyChat() {
   this.submitImageButton = document.getElementById('submitImage');
   this.imageForm = document.getElementById('image-form');
   this.mediaCapture = document.getElementById('mediaCapture');
-  this.userPic = document.getElementById('user-pic');
+  //this.userPic = document.getElementById('user-pic');
   this.userName = document.getElementById('user-name');
-  this.signInButton = document.getElementById('sign-in');
-  this.signOutButton = document.getElementById('sign-out');
-  this.signInSnackbar = document.getElementById('must-signin-snackbar');
+  //this.signInButton = document.getElementById('sign-in');
+  //this.signOutButton = document.getElementById('sign-out');
+  //this.signInSnackbar = document.getElementById('must-signin-snackbar');
 
   // Saves message on form submit.
-  this.messageForm.addEventListener('submit', this.saveMessage.bind(this));
-  this.signOutButton.addEventListener('click', this.signOut.bind(this));
-  this.signInButton.addEventListener('click', this.signIn.bind(this));
+  // this.messageForm.addEventListener('submit', this.saveMessage.bind(this));
+  // this.signOutButton.addEventListener('click', this.signOut.bind(this));
+  // this.signInButton.addEventListener('click', this.signIn.bind(this));
 
   // Toggle for the button.
   var buttonTogglingHandler = this.toggleButton.bind(this);
-  this.messageInput.addEventListener('keyup', buttonTogglingHandler);
-  this.messageInput.addEventListener('change', buttonTogglingHandler);
+  //this.messageInput.addEventListener('keyup', buttonTogglingHandler);
+  //this.messageInput.addEventListener('change', buttonTogglingHandler);
 
   // Events for image upload.
-  this.submitImageButton.addEventListener('click', function(e) {
-    e.preventDefault();
-    this.mediaCapture.click();
-  }.bind(this));
-  this.mediaCapture.addEventListener('change', this.saveImageMessage.bind(this));
+  // this.submitImageButton.addEventListener('click', function(e) {
+  //   e.preventDefault();
+  //   this.mediaCapture.click();
+  // }.bind(this));
+  // this.mediaCapture.addEventListener('change', this.saveImageMessage.bind(this));
 
   this.initFirebase();
 }
@@ -58,7 +58,10 @@ FriendlyChat.prototype.initFirebase = function() {
   // Shortcuts to Firebase SDK features.
   this.auth = firebase.auth();
   this.database = firebase.database();
+  console.log(this.database);
   this.storage = firebase.storage();
+  this.loadMessages();
+  console.log(loadMessages);
   // Initiates Firebase auth and listen to auth state changes.
   this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
 };
@@ -69,6 +72,7 @@ FriendlyChat.prototype.loadMessages = function() {
   this.messagesRef = this.database.ref('chat/messages_p1_p2');
   // Make sure we remove all previous listeners.
   this.messagesRef.off();
+
 
   // Loads the last 12 messages and listen for new ones.
   var setMessage = function(data) {
@@ -156,14 +160,14 @@ FriendlyChat.prototype.saveImageMessage = function(event) {
 };
 
 // Signs-in Friendly Chat.
-FriendlyChat.prototype.signIn = function(user) {
+/*FriendlyChat.prototype.signIn = function(user) {
   // Sign in Firebase using popup auth and Google as the identity provider.
   //var provider = new firebase.auth.GoogleAuthProvider();
  
-  this.auth.signInWithEmailAndPassword("test@test.nl", "testtest");
+  this.auth.signInWithEmailAndPassword("chattest@test.nl", "testtest");
  //signInWithEmailAndPassword(email, password)
   //this.auth.signInWithPopup(provider);
-};
+};*/
 
 // Signs-out of Friendly Chat.
 FriendlyChat.prototype.signOut = function() {
@@ -179,16 +183,16 @@ FriendlyChat.prototype.onAuthStateChanged = function(user) {
     var userName = this.userName;   // Only change these two lines!
 
     // Set the user's profile pic and name.
-    this.userPic.style.backgroundImage = 'url(' + profilePicUrl + ')';
-    this.userName.textContent = userName;
+    // this.userPic.style.backgroundImage = 'url(' + profilePicUrl + ')';
+    // this.userName.textContent = userName;
 
     // Show user's profile and sign-out button.
-    this.userName.removeAttribute('hidden');
-    this.userPic.removeAttribute('hidden');
-    this.signOutButton.removeAttribute('hidden');
+    // this.userName.removeAttribute('hidden');
+    // this.userPic.removeAttribute('hidden');
+    // this.signOutButton.removeAttribute('hidden');
 
     // Hide sign-in button.
-    this.signInButton.setAttribute('hidden', 'true');
+    // this.signInButton.setAttribute('hidden', 'true');
 
     // We load currently existing chant messages.
     this.loadMessages();

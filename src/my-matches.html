@@ -8,46 +8,67 @@
             }
         </style>
         <div class="card">
-         <tys-security access="{{custom.status}}" level="3" redirect="/login">
+           <tys-security access="{{custom.status}}" level="3" redirect="/login">
             <template is="dom-repeat" items="{{matches}}">
                 <tys-mymatch url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-mymatch> <br><br>
             </template>
-         <tys-security access="{{custom.status}}" level="3" redirect="/login">
-        </div>
-        <iron-ajax
-                   id="AcceptedMatches"
-                   url="https://api.tys-chat.nl/matching?type=accepted"
-                   handle-as="json"
-                   on-response="handleResponse">
-        </iron-ajax>
-        <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
-    </template>
+            <tys-security access="{{custom.status}}" level="3" redirect="/login">
 
-    <script>
-        Polymer({
-            is: 'my-matches',
-            properties: {
-                matches: {
-                    type: Array
-                },
-                idToken:{
-                    type: String,
-                    observer: '_getMatches',
-                },
-                custom:{
-                    type: Object,
-                },
+
+                
+                <firebase-auth id="auth" user="{{user}}" on-error="handleError" status-known="{{statusKnown}}"></firebase-auth>
+                <iron-location id="ironLocation"></iron-location>
+
+                <div class="card">
+                   <tys-security access="{{custom.status}}" level="3" redirect="/login">
+                    <h1>Chat</h1>
+
+                    <tys-chat></tys-chat>
+                </tys-security>
+            </div>
+
+            
+            
+        </div>
+
+
+
+
+    </div>
+    <iron-ajax
+    id="AcceptedMatches"
+    url="https://api.tys-chat.nl/matching?type=accepted"
+    handle-as="json"
+    on-response="handleResponse">
+</iron-ajax>
+<iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
+</template>
+
+<script>
+    Polymer({
+        is: 'my-matches',
+        properties: {
+            matches: {
+                type: Array
             },
-            _getMatches: function(){
-                if(this.idToken != undefined){
-                    this.$.AcceptedMatches.headers['authorization'] = this.idToken;
-                    this.$.AcceptedMatches.generateRequest();
-                    console.log(this.idToken);
-                }
+            idToken:{
+                type: String,
+                observer: '_getMatches',
             },
-            handleResponse: function (data) {
-                this.matches = data.detail.response;
+            custom:{
+                type: Object,
             },
-        });
-    </script>
+        },
+        _getMatches: function(){
+            if(this.idToken != undefined){
+                this.$.AcceptedMatches.headers['authorization'] = this.idToken;
+                this.$.AcceptedMatches.generateRequest();
+                console.log(this.idToken);
+            }
+        },
+        handleResponse: function (data) {
+            this.matches = data.detail.response;
+        },
+    });
+</script>
 </dom-module>
