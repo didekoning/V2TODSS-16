@@ -42,18 +42,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <tys-match percentage="{{item.percentage}}" url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-match> 
                 <br>
             </template>
+            <template is="dom-if" if="{{error}}">
+                {{error}}
+            </template>
             <paper-fab icon="refresh" on-tap="refresh"></paper-fab>
             <iron-ajax
                        id="requestMatch"
                        url="https://api.tys-chat.nl/matching?type=open"
                        handle-as="json"
-                       on-response="handleResponse">
+                       on-response="handleResponse"
+                       on-error="handleError">
             </iron-ajax>
             <iron-ajax
                        id="requestRefresh"
                        url="https://api.tys-chat.nl/matching/zoek"
                        handle-as="json"
-                       on-response="handleResponse">
+                       on-response="handleResponse"
+                       on-error="handleError">
             </iron-ajax>
             <iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
             <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
@@ -71,6 +76,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 custom: {
                     type: Object,
                 },
+                error: String,
                 idToken:{
                     type: String,
                     observer: '_getMatches',
@@ -85,6 +91,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             handleResponse: function (data) {
                 this.matches = data.detail.response;
+                
+            },
+            handleError: function (){
+                this.error = "Er zijn geen matches beschikbaar";
+                
             },
             refresh: function(){
                 this.matches = [];

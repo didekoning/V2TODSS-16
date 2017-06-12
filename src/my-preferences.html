@@ -24,39 +24,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       .disease{width: 49%; display: inline-block; margin-bottom: 20px;}
       .hobby{width: 49%; display: inline-block; margin-bottom: 20px;}
+      paper-button{width: 100%; color: #FFF;}
+      h1{color: var(--app-primary-color); text-align: center; margin-top: 50px;}
+      .wrapper{padding: 0px 10%;}
     </style>
      <iron-location id="ironLocation"></iron-location>
-    <div class="card">
-      <h1>Voorkeuren instellen</h1>
-        <form is="iron-form" id="form">
-            <div class="disease"  mobile-layout$="[[isMobilePhone]]">
-                <h2>Ziekte</h2>
-                <paper-dropdown-menu label="Ziekte" id="ziekte" on-iron-select="_itemSelected">
-                    <paper-listbox class="dropdown-content" attr-for-selected="item-name" selected="{{currentDisease}}">
-                         <template is="dom-repeat" items="{{ziektes}}">
-                            <paper-item value="{{item.root}}" item-name="{{item.naam}}" kenmerk="{{item.kenmerkID}}">{{item.naam}}</paper-item>
-                        </template>
-                         <paper-item value="{{item}}" kenmerk="{{item.kenmerkID}}" selected>test</paper-item>
-                    </paper-listbox>
-                </paper-dropdown-menu>
-            </div>
-                       
-            <div class="hobby" mobile-layout$="[[isMobilePhone]]">
-                <h2>Hobbies</h2>
-                <paper-dropdown-menu label="Hobbies" id="hobby" on-iron-select="_itemSelected">
-                    <paper-listbox class="dropdown-content" attr-for-selected="item-name" selected="{{currentHobby}}">
-                         <template is="dom-repeat" items="{{hobbies}}">
-                            <paper-item value="{{item.root}}" item-name="{{item.naam}}" kenmerk="{{item.kenmerkID}}">{{item.naam}}</paper-item>
-                        </template>
-                    </paper-listbox>
-                </paper-dropdown-menu>
-            </div>
-            <template is="dom-if" if="{{checkstatus(custom.status)}}">
-                <paper-button raised on-tap="addAttributes">Volgende stap</paper-button>
-            </template>
-        </form>
+    <div class="wrapper">
+       <div class="form-wrap">
+        <h1>Voorkeuren</h1>
+          <form is="iron-form" id="form">
+              <div class="disease"  mobile-layout$="[[isMobilePhone]]">
+                  <h2>Ziekte</h2>
+                  <paper-dropdown-menu label="Ziekte" id="ziekte" on-iron-select="_itemSelected">
+                      <paper-listbox class="dropdown-content" attr-for-selected="item-name" selected="{{currentDisease}}">
+                           <template is="dom-repeat" items="{{ziektes}}">
+                              <paper-item value="{{item.root}}" item-name="{{item.naam}}" kenmerk="{{item.kenmerkID}}">{{item.naam}}</paper-item>
+                          </template>
+                      </paper-listbox>
+                  </paper-dropdown-menu>
+              </div>
+                         
+              <div class="hobby" mobile-layout$="[[isMobilePhone]]">
+                  <h2>Hobbies</h2>
+                  <paper-dropdown-menu label="Hobbies" id="hobby" on-iron-select="_itemSelected">
+                      <paper-listbox class="dropdown-content" attr-for-selected="item-name" selected="{{currentHobby}}">
+                           <template is="dom-repeat" items="{{hobbies}}">
+                              <paper-item value="{{item.root}}" item-name="{{item.naam}}" kenmerk="{{item.kenmerkID}}">{{item.naam}}</paper-item>
+                          </template>
+                      </paper-listbox>
+                  </paper-dropdown-menu>
+              </div>
+              <template is="dom-if" if="{{checkstatus(custom.status)}}">
+                  <paper-button raised on-tap="addAttributes">Volgende stap</paper-button>
+              </template>
+          </form>
 
+      </div>
     </div>
+   
     <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
 
     <iron-ajax
@@ -139,6 +144,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         statusResponse: function(e){
             if(e.detail.xhr.status == 200){
                 this.custom.status = 3;
+                this.notifyPath('custom.status');
                  this.$.ironLocation.set('path', '/matchen');
             }
             
