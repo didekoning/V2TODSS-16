@@ -10,7 +10,7 @@
         <div class="card">
            <tys-security access="{{custom.status}}" level="3" redirect="/login">
             <template is="dom-repeat" items="{{matches}}">
-                <div><tys-mymatch url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-mymatch> <br><div>
+                <div><a href="#" name="chatbutton_{{item.partner}}" value="{{item.partner}}" onclick="alert ('1');"><tys-mymatch url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-mymatch></a> <br><div>
             </template>
             <tys-security access="{{custom.status}}" level="3" redirect="/login">
 
@@ -23,7 +23,7 @@
                    <tys-security access="{{custom.status}}" level="3" redirect="/login">
                     <h1>Chat</h1>
 
-                    <tys-chat></tys-chat>
+                    <tys-chat chatid=""></tys-chat>
                 </tys-security>
             </div>
 
@@ -63,11 +63,13 @@
             if(this.idToken != undefined){
                 this.$.AcceptedMatches.headers['authorization'] = this.idToken;
                 this.$.AcceptedMatches.generateRequest();
-                console.log(this.idToken);
             }
         },
         handleResponse: function (data) {
             this.matches = data.detail.response;
+        },
+        handleChat: function (value){
+            alert("test" + value);
         },
     });
 </script>
