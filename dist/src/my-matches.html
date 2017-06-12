@@ -8,11 +8,23 @@
             }
         </style>
         <div class="card">
-         <tys-security access="{{custom.status}}" level="3" redirect="/login">
-            <template is="dom-repeat" items="{{matches}}">
-                <tys-mymatch url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-mymatch> 
-            </template>
-         <tys-security access="{{custom.status}}" level="3" redirect="/login">
+            <tys-security access="{{custom.status}}" level="3" redirect="/login">
+                <template is="dom-repeat" items="{{matches}}">
+                    <div><a href="#" name="{{item.partner}}" value="{{item.partner}}" onclick="return handleChat(this.name);"><tys-mymatch url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-mymatch></a></div>
+                </template>
+            </tys-security>
+            <tys-security access="{{custom.status}}" level="3" redirect="/login"></tys-security>
+
+            <firebase-auth id="auth" user="{{user}}" on-error="handleError" status-known="{{statusKnown}}"></firebase-auth>
+            <iron-location id="ironLocation"></iron-location>
+
+            <div class="card">
+                <tys-security access="{{custom.status}}" level="3" redirect="/login">
+                    <h1>Chat</h1>
+
+                    <tys-chat chatid=""></tys-chat>
+                </tys-security>
+            </div>
         </div>
         <iron-ajax
                    id="AcceptedMatches"
@@ -22,7 +34,16 @@
         </iron-ajax>
         <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
     </template>
-
+    <script type=text/javascript>
+        function handleChat(value) {
+            if(value < user.uid) {
+                alert("chat_id" + value + "_id" + user.uid);
+            }
+            else {
+                alert("chat_id" + user.uid + "_id" + value);
+            }
+        }
+    </script>
     <script>
         Polymer({
             is: 'my-matches',
@@ -42,7 +63,6 @@
                 if(this.idToken != undefined){
                     this.$.AcceptedMatches.headers['authorization'] = this.idToken;
                     this.$.AcceptedMatches.generateRequest();
-                    console.log(this.idToken);
                 }
             },
             handleResponse: function (data) {

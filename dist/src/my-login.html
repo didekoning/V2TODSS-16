@@ -18,7 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <style include="shared-styles">
             :host {
                 display: block;
-
+                
                 padding: 10px;
             }
             .inherit {
@@ -26,22 +26,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 background-color: inherit;
                 text-decoration: inherit;
             }
+            .wrapper{position: absolute; padding: 10%; top: 0; bottom: 0; left: 0; right: 0;background-color: var(--app-primary-color);}
+            .wrapper .form-wrap{max-width: 800px; margin: auto;}
+            .wrapper .logo{max-width: 800px; margin: auto; display: block;}
+            .wrapper[mobile-layout] .form-wrap{ padding: 10%; color: #FFF; border-radius: 5px; position: absolute; bottom: 0px; left: 0px; right: 0px; margin: 24px auto; }
+            .wrapper[mobile-layout] .form-wrap paper-input{color: #fff;}
+            .wrapper[mobile-layout] .logo{max-width: 100%; height: auto; }
+            .wrapper .form-wrap form paper-input{ --paper-input-container-input-color: #FFF; --paper-input-container-color: #FFF; --paper-input-container-focus-color: #437596;}
+            .wrapper .form-wrap form paper-button{ color: var(--app-primary-color); background: #FFF; display: block; margin-top: 5%; text-align: center;}
+            .wrapper .form-wrap .password_reset { text-align: right; }
+            .wrapper .form-wrap .password_reset a{ color: #FFF;}
+            .wrapper .form-wrap .password_reset a:hover{text-decoration: none;}
         </style>
 
         <firebase-auth id="auth" user="{{user}}" on-error="handleError" status-known="{{statusKnown}}"></firebase-auth>
         <iron-location id="ironLocation"></iron-location>
-
-        <div class="card">
-            <h1>Login</h1>
-
-            <div class="error" hidden$="[[!message]]">[[message]]</div>
-            <form is="iron-form" on-submit="signInWithEmailAndPassword">
-                <paper-input value="{{email}}" type="email" placeholder="Email" tabindex="1"></paper-input>
-                <paper-input value="{{password}}" type="password" placeholder="Password" tabindex="2"></paper-input>
-                <paper-button raised on-tap="createUserWithEmailAndPassword" tabindex="3">Inloggen</paper-button>
-              <paper-button raised on-tap="register" tabindex="4">Registreren</paper-button>
-            </form>
+        <div class="wrapper" mobile-layout$="[[isMobilePhone]]">
+            <img src="../images/logo_white.svg" class="logo">
+             <div class="form-wrap">
+                <div class="error" hidden$="[[!message]]">[[message]]</div>
+                <form is="iron-form" on-submit="signInWithEmailAndPassword">
+                    <paper-input value="{{email}}" type="email" placeholder="Email" tabindex="1"></paper-input>
+                    <paper-input value="{{password}}" type="password" placeholder="Password" tabindex="2"></paper-input>
+                    <div class="password_reset"><a href="#">Wachtwoord vergeten?</a></div>
+                    <paper-button raised on-tap="createUserWithEmailAndPassword" tabindex="3">Inloggen</paper-button>
+                    <paper-button raised on-tap="register" tabindex="4">Registreren</paper-button>
+                </form>
+            </div>
         </div>
+
+        <iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
     </template>
 
     <script>
