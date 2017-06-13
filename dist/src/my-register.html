@@ -23,21 +23,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 			padding: 10px;
 			}
+			.wrapper{position: absolute; padding: 10%; top: 0; bottom: 0; left: 0; right: 0;background-color: var(--app-light-background);}
+			.wrapper .form-wrap{max-width: 800px; margin: auto;}
+			.wrapper .form-wrap h1{color: var(--app-primary-color); text-align: center; margin-top: 100px;}
+			.wrapper .topbar{background-color: var(--app-primary-color); position: absolute; top: 0; left: 0; right: 0; height: 100px;}
+            .wrapper .topbar .logo{max-height: 80px; padding-top: 10px; margin: auto; display: block;}
+            .wrapper[tablet-layout] .steps li span.step{display: none; }
+            .wrapper[tablet-layout] .steps li span.sep{display: none; }
+            .wrapper[mobile-layout] .steps li span.step{display: block; }
+            .wrapper[mobile-layout] .steps li span.text{display: none; }
+            .wrapper[tablet-layout] .steps li{padding: 5px 0px; width: 32%; }
+            .wrapper[mobile-layout] .steps li{font-size: 14px; padding: 6px 0px;}
+
+            .wrapper .form-wrap form paper-button{ color: #FFF; background: var(--app-primary-color); display: block; margin-top: 5%; text-align: center;}
 		</style>
 
 	<firebase-auth id="auth" user="{{user}}" on-error="handleError" status-known="{{statusKnown}}">
 	<iron-location id="ironLocation"></iron-location>
-
-	<div class="card" id="register">
-		<h1>Registreren</h1>
-		<div class="error" hidden$="[[!message]]">[[message]]</div>
-		<form on-submit="signInWithEmailAndPassword">
-			<paper-input value="{{email}}" type="email" placeholder="Email"></paper-input>
-			<paper-input value="{{password}}" type="password" placeholder="Password"></paper-input>
-			<paper-button raised on-tap="createUserWithEmailAndPassword">Sign Up</paper-button>
-		</form>
-
+	<div class="wrapper"  tablet-layout$="[[isTablet]]" mobile-layout$="[[isMobilePhone]]">
+		<div class="topbar"><img src="../images/logo_white.svg" class="logo"></div>
+		<div class="form-wrap" id="register">
+			<h1>Registreren</h1>
+			<div class="steps">
+				<ol class="list-inline">
+					<li class="active"><span class="step">Stap 1</span><span class="sep">: </span><span class="text">Account aanmaken</span></li>
+					<li><span class="step">Stap 2</span><span class="sep">: </span><span class="text">Profiel invullen</span></li>
+					<li><span class="step">Stap 3</span><span class="sep">: </span><span class="text">Voorkeuren invullen</span></li>
+				</ol>
+			</div>
+			<div class="error" hidden$="[[!message]]">[[message]]</div>
+			<form on-submit="signInWithEmailAndPassword">
+				<paper-input value="{{email}}" type="email" placeholder="Email"></paper-input>
+				<paper-input value="{{password}}" type="password" placeholder="Password"></paper-input>
+				<paper-button raised on-tap="createUserWithEmailAndPassword">Aanmelden</paper-button>
+			</form>
+		</div>
 	</div>
+	<iron-media-query query="(max-width:1040px)" query-matches="{{isTablet}}"></iron-media-query>
+    <iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
+
 	</template>
 
 	<script>

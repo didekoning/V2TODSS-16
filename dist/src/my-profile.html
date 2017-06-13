@@ -32,42 +32,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             .number{display: inline-block;}
             .small-number{width: 24%;}
             .large-number{width: 49%;}
+            h1{color: var(--app-primary-color); text-align: center; margin-top: 50px;}
+            .wrapper{padding: 0px 10%;}
         </style>
 
         <firebase-auth id="auth" user="{{person}}" on-error="handleError" status-known="{{statusKnown}}"></firebase-auth>
         <iron-location id="ironLocation"></iron-location>
-        
-        <div class="card">
-         <tys-security access="{{custom.status}}" level="1" redirect="/register">
-            <div class="error" hidden$="[[!message]]">[[message]]</div>
-            <form is="iron-form" id="form">
-                <div class="personal"  mobile-layout$="[[isMobilePhone]]">
-                    <h2>Algemeen</h2>
-                    <paper-input value="{{custom.voornaam}}" type="text" id="voornaam" placeholder="Voornaam" autoValidate="true" required error-message="needs some text!"></paper-input>
-                    <paper-input value="{{custom.achternaam}}" type="text" id="achternaam" placeholder="Achternaam" required error-message="needs some text!"></paper-input>
-                    <div class="spacer"></div>
-                    <label>Geslacht:</label><br>
-                    <paper-radio-group selected="{{custom.geslacht}}" id="geslacht" fallback-selection="O" required>
-                        <paper-radio-button name="M">Man</paper-radio-button>
-                        <paper-radio-button name="V">Vrouw</paper-radio-button>
-                        <paper-radio-button name="O">Overig</paper-radio-button>
-                    </paper-radio-group>
-                </div>
+        <div class="wrapper">
+              <div class="form-wrap">
+                 <tys-security access="{{custom.status}}" level="1" redirect="/register">
+                    <div class="error" hidden$="[[!message]]">[[message]]</div>
+                    <form is="iron-form" id="form">
+                        <h1>Profiel</h1>
+                        <div class="personal"  mobile-layout$="[[isMobilePhone]]">
+                            <paper-input value="{{custom.voornaam}}" type="text" id="voornaam" placeholder="Voornaam" autoValidate="true" required error-message="needs some text!"></paper-input>
+                            <paper-input value="{{custom.achternaam}}" type="text" id="achternaam" placeholder="Achternaam" required error-message="needs some text!"></paper-input>
+                            <div class="spacer"></div>
+                            <label>Geslacht:</label><br>
+                            <paper-radio-group selected="{{custom.geslacht}}" id="geslacht" fallback-selection="O" required>
+                                <paper-radio-button name="M">Man</paper-radio-button>
+                                <paper-radio-button name="V">Vrouw</paper-radio-button>
+                                <paper-radio-button name="O">Overig</paper-radio-button>
+                            </paper-radio-group>
+                        </div>
 
-                <div class="location" mobile-layout$="[[isMobilePhone]]">
-                    <h2>Verblijf</h2>
-                    <paper-input class="small-number number" type="string" auto-validate pattern="(0[1-9]|[12]\d|3[01])" placeholder="Dag" type="string" maxlength="2" required error-message="Onjuiste dag" value="{{day}}"></paper-input>
-                    <paper-input class="small-number number" type="string" auto-validate pattern="(0[1-9]|1[0-2])" placeholder="Maand" type="string" maxlength="2" required error-message="Onjuiste maand" value="{{month}}"></paper-input>
-                    <paper-input class="large-number number" type="string" auto-validate pattern="\d{4}" placeholder="Jaar" type="string" maxlength="4" required error-message="Onjuist jaar" value="{{year}}"></paper-input>
-                    <paper-input value="{{custom.woonplaats}}" type="text" id="woonplaats" required error-message="needs some text!" placeholder="Woonplaats"></paper-input>
-                    <paper-textarea label="Bio" value="{{custom.profiel.bio}}"></paper-textarea>
-                </div>
-                <paper-button raised on-tap="addProfile">Volgende stap</paper-button>
-            </form>
-            <iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
-        </tys-security>
+                        <div class="location" mobile-layout$="[[isMobilePhone]]">
+                            <paper-input class="small-number number" type="string" auto-validate pattern="(0[1-9]|[12]\d|3[01])" placeholder="Dag" type="string" maxlength="2" required error-message="Onjuiste dag" value="{{day}}"></paper-input>
+                            <paper-input class="small-number number" type="string" auto-validate pattern="(0[1-9]|1[0-2])" placeholder="Maand" type="string" maxlength="2" required error-message="Onjuiste maand" value="{{month}}"></paper-input>
+                            <paper-input class="large-number number" type="string" auto-validate pattern="\d{4}" placeholder="Jaar" type="string" maxlength="4" required error-message="Onjuist jaar" value="{{year}}"></paper-input>
+                            <paper-input value="{{custom.woonplaats}}" type="text" id="woonplaats" required error-message="needs some text!" placeholder="Woonplaats"></paper-input>
+                            <paper-textarea label="Bio" value="{{custom.profiel.bio}}"></paper-textarea>
+                        </div>
+                        <paper-button raised on-tap="addProfile">Volgende stap</paper-button>
+                    </form>
+                    <iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
+                </tys-security>
+            </div>
+
         </div>
-
+      
         <iron-ajax
                    id="addProfile"
                    method="POST"

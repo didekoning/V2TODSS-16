@@ -23,7 +23,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
       :host {
         --app-primary-color: #194d70;
+        --app-primary-light-color: #80c0e5;
         --app-secondary-color: black;
+        --app-light-background: #f5f5f5;
 
         display: block;
       }
@@ -102,14 +104,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!-- Main content -->
       <app-header-layout has-scrolling-region >
 
-        <app-header condenses reveals effects="waterfall">
+        <app-header condenses reveals effects="waterfall" hidden$="[[!user]]">
           <app-toolbar>
             <template is="dom-if" if="{{user}}">
               <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
             </template>
             <div main-title class="logo_container"><img src="../images/logo_white.svg" class="logo"></div>
             <template is="dom-if" if="{{user}}">
-              <div>hallo {{custom.voornaam}}</div>
+              <div>{{custom.status}} hallo {{custom.voornaam}}</div>
             </template>
           </app-toolbar>
         </app-header>
@@ -214,6 +216,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
       
       _statusObserver: function(){
+        console.log(this.custom.status);
         if(this.custom.status == 3){
           this.set('route.path', '/matchen');
         }else if(this.custom.status == 2){

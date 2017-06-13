@@ -5,6 +5,9 @@
         <template is="dom-if" if="[[show(level, access)]]">            
             <content></content>
         </template>
+        <template is="dom-if" if="[[!show(level, access)]]">            
+            <div>Je hebt geen rechten voor deze pagina, klik hier om voorkeuren in te stellen.</div>
+        </template>
     </template>
     <script>
         Polymer({
@@ -19,7 +22,6 @@
                     return true;
                 }
                 else {
-                    this.$.ironLocation.set('path', this.redirect);
                     return false;
                 }
             }            

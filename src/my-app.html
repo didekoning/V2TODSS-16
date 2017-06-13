@@ -90,13 +90,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!-- Drawer content -->
       <!-- <template is="dom-if" if="{{user}}"> -->
       <app-drawer id="drawer" >
-        <app-toolbar>Menu</app-toolbar>
+        <app-toolbar>[[custom.voornaam]] [[custom.achternaam]]</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="matchen" href="/matchen">Matchen</a>
+          <a name="matchen" href="/matchen" hidden$="[[!showItem]]">Matchen</a>
           <a name="preferences" href="/preferences">Voorkeuren</a>
           <a name="profile" href="/profile">Profiel</a>
-          <a name="matches" href="/matches">Mijn matches</a>
-          <a name="chat" href="/chat">Chat</a>
+          <a name="matches" href="/matches" hidden$="[[!showItem]]">Mijn matches</a>
+          <a name="chat" href="/chat" hidden$="[[!showItem]]">Chat</a>
           <a name="logout" on-tap="logout" href="/login">Logout</a>
         </iron-selector>
       </app-drawer>
@@ -129,6 +129,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <my-chat name="chat" custom="{{custom}}"></my-chat>
           <!-- end only when user logged in -->
           <my-login name="login" user="{{user}}" custom="{{custom}}"></my-login>
+          <my-pwreset name="pwreset" user="{{user}}" custom="{{custom}}"></my-pwreset>
           <my-register name="register" id="register" user="{{user}}" custom="{{custom}}"></my-register>
           <my-profile name="profile" user="{{user}}" custom="{{custom}}"></my-profile>
         </iron-pages>
@@ -142,7 +143,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          url="https://api.tys-chat.nl/persoon"
          handle-as="json"
          with-credentials="true"
-         on-response="handleResponse" ></iron-ajax>
+         on-response="handleResponse"></iron-ajax>
       <iron-meta id="meta" key="token" value="{{idToken}}"></iron-meta>
   </template>
 
@@ -172,6 +173,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
           notify: true,
           readOnly: false,
+        },
+        showItem: {
+          type: Boolean,
+          value: false,
         },
         idToken: {
           type: String,
@@ -218,6 +223,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _statusObserver: function(){
         console.log(this.custom.status);
         if(this.custom.status == 3){
+          this.showItem = true;
           this.set('route.path', '/matchen');
         }else if(this.custom.status == 2){
           this.set('route.path', '/preferences');          
@@ -251,6 +257,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       logout: function(){
         this.$.auth.signOut();
         this.custom.id = null;
+        this.idToken = null;
         this.custom.voornaam = null;
         this.custom.achternaam = null;
         this.custom.woonplaats = null;
