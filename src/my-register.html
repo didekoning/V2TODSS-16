@@ -83,22 +83,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				user: {
 					type: Object,
 					notify: true,
+					observer: '_userChanged'
 				},
 				custom: {
 					type: Object,	
 				},
+				registered: {
+					type: Boolean,
+					value: false,
+				},
 			},
-			loginSuccess: function(){
-				this.custom['status'] = 1;
-				if(this.custom['status'] == 1){
-					this.$.ironLocation.set('path', '/profile');
+			_userChanged: function(){
+				if(this.user != undefined){
+					if(this.custom["status"] == 0 && this.registered == true){
+						console.log("test"+this.user.sendEmailVerification());
+					}
+					this.custom['status'] = 1;
+					if(this.custom['status'] == 1){
+						this.$.ironLocation.set('path', '/profile');
+					}
 				}
 			},
 			createUserWithEmailAndPassword: function() {
 				this.error = null;
 				this.$.auth.createUserWithEmailAndPassword(this.email, this.password) 
 					.then((response) => { 
-						this.loginSuccess(); 
+						this.registered = true;
 						console.log("success"); 
 					})
 					.catch((response) => {

@@ -38,12 +38,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
         <div class="card" mobile-layout$="[[isMobilePhone]]">
         <tys-security access="{{custom.status}}" level="3" redirect="/login">
+            <paper-progress indeterminate class="blue" hidden$="[[!showProgress]]"></paper-progress>
             <template is="dom-repeat" items="{{matches}}">
                 <tys-match percentage="{{item.percentage}}" url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-match> 
                 <br>
             </template>
-            <template is="dom-if" if="{{error}}">
-                {{error}}
+            <template is="dom-if" if="{{message}}">
+                {{message}}
             </template>
             <paper-fab icon="refresh" on-tap="refresh"></paper-fab>
             <iron-ajax
@@ -76,11 +77,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 custom: {
                     type: Object,
                 },
-                error: String,
+                message: String,
                 idToken:{
                     type: String,
                     observer: '_getMatches',
                 },
+                showProgress:{
+                    type: Boolean,
+                    value: false,
+                }
             },
             _getMatches: function(){
                 if(this.idToken != undefined){
@@ -90,15 +95,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             },
             handleResponse: function (data) {
+                this.showProgress = false;
                 this.matches = data.detail.response;
                 
             },
             handleError: function (){
-                this.error = "Er zijn geen matches beschikbaar";
+                this.message = "Er zijn geen matches beschikbaar";
                 
             },
             refresh: function(){
                 this.matches = [];
+                this.message = "Zoeken naar matches";
+                this.showProgress = true;
                 if(this.idToken != undefined){
                     this.$.requestRefresh.headers['authorization'] = this.idToken;
                     this.$.requestRefresh.generateRequest();
