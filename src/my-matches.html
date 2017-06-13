@@ -11,8 +11,8 @@
         <tys-security access="{{custom.status}}" level="3" redirect="/preferences">
                 <template is="dom-repeat" items="{{matches}}">
                     <div>
-                        <paper-button raised on-tap="handleChat" value="{{item.partner}}">
-                            <tys-mymatch url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-mymatch>
+                        <paper-button data-id="{{item.partner}}" id="{{item.partner}}" on-tap="handleChat">
+                            {{item.partner}}
                         </paper-button>
                     </div>
                 </template>
@@ -23,9 +23,8 @@
                 <iron-location id="ironLocation"></iron-location>
 
                 <div class="card">
-                    <
                     <h1>Chat</h1>
-
+                       <!--  <tys-mymatch url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-mymatch> -->
                     <tys-chat chatid=""></tys-chat>
 
                 </div>
@@ -53,6 +52,10 @@
             custom:{
                 type: Object,
             },
+            otherUID:{
+                type: String,
+                observer: '_OUIDChange'
+            }
         },
         _getMatches: function(){
             if(this.idToken != undefined){
@@ -63,13 +66,18 @@
         handleResponse: function (data) {
             this.matches = data.detail.response;
         },
-        handleChat: function(prtnrid) {
-            if(5 < this.user.uid) {
-                alert("chat_id-" + "5" + "_id-" + this.user.uid);
+        handleChat: function(e) {
+            var button = Polymer.dom(e).localTarget;
+            console.log(this.user.uid);
+            if(button.id < this.user.uid) {
+                alert("chat-" + button.id + "-" + this.user.uid);
             }
             else {
-                alert("chat_id-" + this.user.uid + "_id-" + "5");
+                alert("chat-" + this.user.uid + "-" + button.id);
             }
+        },
+        _OUIDChange: function(){
+            console.log(otherUID);
         }
     });
 </script>
