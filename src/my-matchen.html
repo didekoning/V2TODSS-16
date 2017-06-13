@@ -16,7 +16,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 padding: 10px;
 
             }
-            .card{padding: 10px;}
             .swipe {
                 -moz-user-select: none;
                 -ms-user-select: none;
@@ -30,21 +29,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 right: 25px;
                 bottom: 20px;         
             }
-            .card[mobile-layout] {
-                margin: 0px;
-                padding: 0px;
-                background-color: #FFF;
-            }
+            /*.wrapper[mobile-layout]{margin-top: 50px;}*/
+            .matchMessage{display: block; text-align: center; color: var(--app-primary-color); margin-top: 5px;}
         </style>
-        <div class="card" mobile-layout$="[[isMobilePhone]]">
+        <div class="wrapper" mobile-layout$="[[isMobilePhone]]">
         <tys-security access="{{custom.status}}" level="3" redirect="/login">
             <paper-progress indeterminate class="blue" hidden$="[[!showProgress]]"></paper-progress>
+            <template is="dom-if" if="{{message}}">
+                <div class="matchMessage">{{message}}</div>
+            </template>
             <template is="dom-repeat" items="{{matches}}">
                 <tys-match percentage="{{item.percentage}}" url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-match> 
-                <br>
-            </template>
-            <template is="dom-if" if="{{message}}">
-                {{message}}
             </template>
             <paper-fab icon="refresh" on-tap="refresh"></paper-fab>
             <iron-ajax
@@ -96,6 +91,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             handleResponse: function (data) {
                 this.showProgress = false;
+                this.message = "";
                 this.matches = data.detail.response;
                 
             },
