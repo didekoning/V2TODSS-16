@@ -25,7 +25,7 @@
                 <div class="card">
                     <h1>Chat</h1>
                       
-                    <tys-chat chatid="{{link}}"></tys-chat>
+                    <tys-chat chatid="{{link}}" custom="{{custom}}"></tys-chat>
 
                 </div>
             </div>
@@ -92,11 +92,9 @@
 
             if(this.otherUID < this.user.uid) {
                 this.link = "chat-" + this.otherUID + "-" + this.user.uid;
-                alert(this.link);
             }
             else {
                 this.link = "chat-" + this.user.uid + "-" + this.otherUID;
-                alert(this.link);
             }
         }
     });

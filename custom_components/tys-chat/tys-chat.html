@@ -117,14 +117,17 @@
 			},
 			custom:{
                     type: Object,
-                }
+                },
+            chatid:{
+            		type:String,
+            }
 		},
 		_observer: function(){
-			//console.log(this.data);
+			console.log(this.data);
 		},
 		_SendMessage: function(mssginpt) {
 			database = firebase.database();
-			messagesRef = database.ref('/chat/{{chatid}}/');
+			messagesRef = database.ref('/chat/'+ this.chatid + '/');
 			if(this.$.messagefield.value != ""){
 			messagesRef.push({
 		      name: this.custom.achternaam,
