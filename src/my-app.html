@@ -92,9 +92,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-drawer id="drawer" >
         <app-toolbar>[[custom.voornaam]] [[custom.achternaam]]</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="matchen" href="/matchen" hidden$="[[!showItem]]">Matchen</a>
           <a name="preferences" href="/preferences">Voorkeuren</a>
           <a name="profile" href="/profile">Profiel</a>
+          <a name="matchen" href="/matchen" hidden$="[[!showItem]]">Matchen</a>
           <a name="matches" href="/matches" hidden$="[[!showItem]]">Mijn matches</a>
           <a name="chat" href="/chat" hidden$="[[!showItem]]">Chat</a>
           <a name="logout" on-tap="logout" href="/login">Logout</a>
