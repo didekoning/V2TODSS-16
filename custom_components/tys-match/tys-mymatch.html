@@ -3,7 +3,7 @@
 <link rel="import" href="../tys-percentage/tys-percentage.html">
 <dom-module id="tys-mymatch">
     <template>
-        <style include="app-grid-style">
+        <!-- <style include="app-grid-style">
             :host {
                 display: inline-block;
                 width: 100%;
@@ -14,9 +14,9 @@
             .name {
                 text-align: center;
             }
-        </style>
-        <paper-card id=card1 style="padding-top: 10px;">
-            <div class="basic"><span class="name"><p>{{fullname}}</p></span></div>
+        </style> -->
+        <paper-card id=card1>
+            <div class="basic"><span class="name"><p style="color:black;">{{fullname}}</p></span></div>
         </paper-card>
         <iron-ajax
                    id="getPerson"
