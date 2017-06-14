@@ -107,11 +107,10 @@
             accept_match: function(){
                 this.$.AcceptMatch.headers['authorization'] = this.idToken;
                 this.$.AcceptMatch.generateRequest();
-                var card = Polymer.dom(this.root).querySelector('#card1');
+                var card = this;
                 card.style.marginLeft = "100%";
                 card.style.opacity = "0";
                 setTimeout(function() {
-                    card.style.display = "none";
                     card.remove();
                 }, 500);
             },
