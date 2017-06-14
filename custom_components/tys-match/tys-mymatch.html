@@ -4,25 +4,36 @@
 <dom-module id="tys-mymatch">
     <template>
         <!-- <style include="app-grid-style">
-            :host {
-                display: inline-block;
-                width: 100%;
-                --app-grid-columns: 3;
-                --app-grid-item-height: 80px;
-            }
-            paper-card{width: 15%; opacity: 1; transition: 300ms;}
-            .name {
-                text-align: center;
-            }
-        </style> -->
+:host {
+display: inline-block;
+width: 100%;
+--app-grid-columns: 3;
+--app-grid-item-height: 80px;
+}
+paper-card{width: 15%; opacity: 1; transition: 300ms;}
+.name {
+text-align: center;
+}
+</style> -->
+        <div>
         <paper-card id=card1>
             <div class="basic"><span class="name"><p style="color:black;">{{fullname}}</p></span></div>
         </paper-card>
-        <iron-ajax
+                    <paper-button data-id="{{item.partner}}" id="{{item.partner}}" on-tap="Delete">Verwijder match</paper-button>
+        </div>
+            <iron-ajax
                    id="getPerson"
                    url="{{url}}"
                    handle-as="json"
                    on-response="handleResponse">
+        </iron-ajax>
+        <iron-ajax
+                   id="DeclineMatch"
+                   method="put"
+                   content-type="application/json"
+                   url="https://api.tys-chat.nl/matching/status"
+                   body='{"action": "decline", "partner": {{personId}}}'
+                   handle-as="json">
         </iron-ajax>
         <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
     </template>
@@ -56,6 +67,18 @@
             },
             computeFullName: function(firstName, lastName) {
                 return firstName + ' ' + lastName;
+            },
+            Delete: function(e) {
+                var button = Polymer.dom(e).localTarget;
+                this.personId = button.id;
+                this.$.DeclineMatch.headers['authorization'] = this.idToken;
+                this.$.DeclineMatch.generateRequest();
+                var card = this;
+                card.style.marginLeft = "-100%";
+                card.style.opacity = "0";
+                setTimeout(function() {
+                    card.remove();
+                }, 500);
             }
         });
     </script>

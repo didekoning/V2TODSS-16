@@ -8,12 +8,13 @@
             }
         </style>
         <div class="card">
-        <tys-security access="{{custom.status}}" level="3" redirect="/preferences">
+            <tys-security access="{{custom.status}}" level="3" redirect="/preferences">
                 <template is="dom-repeat" items="{{matches}}">
                     <div>
                         <paper-button data-id="{{item.partner}}" id="{{item.partner}}" on-tap="handleChat">
-                             <tys-mymatch url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-mymatch>
+                            <tys-mymatch url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-mymatch>
                         </paper-button>
+                        
                     </div>
                 </template>
 
@@ -24,81 +25,81 @@
 
                 <div class="card">
                     <h1>Chat</h1>
-                      
+
                     <tys-chat chatid="{{link}}"></tys-chat>
 
                 </div>
-            </div>
+                </div>
             <iron-ajax
-            id="AcceptedMatches"
-            url="https://api.tys-chat.nl/matching?type=accepted"
-            handle-as="json"
-            on-response="handleResponse">
-        </iron-ajax>
-        <iron-ajax
-            id="getFUID"
-            url="https://api.tys-chat.nl/persoon/{{uid}}"
-            handle-as="json"
-            on-response="setFUID">
-        </iron-ajax>
-        <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
-    </tys-security>
-</template>
-<script>
-    Polymer({
-        is: 'my-matches',
-        properties: {
-            matches: {
-                type: Array
+                       id="AcceptedMatches"
+                       url="https://api.tys-chat.nl/matching?type=accepted"
+                       handle-as="json"
+                       on-response="handleResponse">
+            </iron-ajax>
+            <iron-ajax
+                       id="getFUID"
+                       url="https://api.tys-chat.nl/persoon/{{uid}}"
+                       handle-as="json"
+                       on-response="setFUID">
+            </iron-ajax>
+            <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
+            </tys-security>
+    </template>
+    <script>
+        Polymer({
+            is: 'my-matches',
+            properties: {
+                matches: {
+                    type: Array
+                },
+                idToken:{
+                    type: String,
+                    observer: '_getMatches',
+                },
+                custom:{
+                    type: Object,
+                },
+                otherUID:{
+                    type: String,
+                    observer: '_OUIDChange'
+                },
+                uid:{
+                    type: String
+                },
+                link:{
+                    type: String
+                }
             },
-            idToken:{
-                type: String,
-                observer: '_getMatches',
+            _getMatches: function(){
+                if(this.idToken != undefined){
+                    this.$.AcceptedMatches.headers['authorization'] = this.idToken;
+                    this.$.AcceptedMatches.generateRequest();
+                }
             },
-            custom:{
-                type: Object,
+            handleResponse: function (data) {
+                this.matches = data.detail.response;
             },
-            otherUID:{
-                type: String,
-                observer: '_OUIDChange'
+            setFUID: function(data){
+                this.otherUID = data.detail.response.fuid;
             },
-            uid:{
-                type: String
-            },
-            link:{
-                type: String
-            }
-        },
-        _getMatches: function(){
-            if(this.idToken != undefined){
-                this.$.AcceptedMatches.headers['authorization'] = this.idToken;
-                this.$.AcceptedMatches.generateRequest();
-            }
-        },
-        handleResponse: function (data) {
-            this.matches = data.detail.response;
-        },
-        setFUID: function(data){
-            this.otherUID = data.detail.response.fuid;
-        },
-        handleChat: function(e) {
-            var button = Polymer.dom(e).localTarget;
-            this.uid = button.id;
-            this.$.getFUID.headers['authorization'] = this.idToken;
-            this.$.getFUID.generateRequest();
-            
-        },
-        _OUIDChange: function(){
+            handleChat: function(e) {
+                var button = Polymer.dom(e).localTarget;
+                this.uid = button.id;
+                this.$.getFUID.headers['authorization'] = this.idToken;
+                this.$.getFUID.generateRequest();
 
-            if(this.otherUID < this.user.uid) {
-                this.link = "chat-" + this.otherUID + "-" + this.user.uid;
-                alert(this.link);
+            },
+            _OUIDChange: function(){
+
+                if(this.otherUID < this.user.uid) {
+                    this.link = "chat-" + this.otherUID + "-" + this.user.uid;
+                    alert(this.link);
+                }
+                else {
+                    this.link = "chat-" + this.user.uid + "-" + this.otherUID;
+                    alert(this.link);
+                }
             }
-            else {
-                this.link = "chat-" + this.user.uid + "-" + this.otherUID;
-                alert(this.link);
-            }
-        }
-    });
-</script>
+        });
+    </script>
 </dom-module>

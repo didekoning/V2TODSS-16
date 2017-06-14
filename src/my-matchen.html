@@ -32,32 +32,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             /*.wrapper[mobile-layout]{margin-top: 50px;}*/
             .matchMessage{display: block; text-align: center; color: var(--app-primary-color); margin-top: 5px;}
         </style>
+
+
         <div class="wrapper" mobile-layout$="[[isMobilePhone]]">
-        <tys-security access="{{custom.status}}" level="3" redirect="/login">
-            <paper-progress indeterminate class="blue" hidden$="[[!showProgress]]"></paper-progress>
-            <template is="dom-if" if="{{message}}">
-                <div class="matchMessage">{{message}}</div>
-            </template>
-            <template is="dom-repeat" items="{{matches}}">
-                <tys-match percentage="{{item.percentage}}" url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-match> 
-            </template>
-            <paper-fab icon="refresh" on-tap="refresh"></paper-fab>
-            <iron-ajax
-                       id="requestMatch"
-                       url="https://api.tys-chat.nl/matching?type=open"
-                       handle-as="json"
-                       on-response="handleResponse"
-                       on-error="handleError">
-            </iron-ajax>
-            <iron-ajax
-                       id="requestRefresh"
-                       url="https://api.tys-chat.nl/matching/zoek"
-                       handle-as="json"
-                       on-response="handleResponse"
-                       on-error="handleError">
-            </iron-ajax>
-            <iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
-            <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
+            <tys-security access="{{custom.status}}" level="3" redirect="/login">
+                <paper-progress indeterminate class="blue" hidden$="[[!showProgress]]"></paper-progress>
+                <template is="dom-if" if="{{message}}">
+                    <div class="matchMessage">{{message}}</div>
+                </template>
+                <template is="dom-repeat" items="{{matches}}">
+                    <tys-match percentage="{{item.percentage}}" url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-match> 
+                </template>
+                <paper-fab icon="refresh" on-tap="refresh" on-click="openToast"></paper-fab>
+
+                <iron-ajax
+                           id="requestMatch"
+                           url="https://api.tys-chat.nl/matching?type=open"
+                           handle-as="json"
+                           on-response="handleResponse"
+                           on-error="handleError">
+                </iron-ajax>
+                <iron-ajax
+                           id="requestRefresh"
+                           url="https://api.tys-chat.nl/matching/zoek"
+                           handle-as="json"
+                           on-response="handleResponse"
+                           on-error="handleError">
+                </iron-ajax>
+                <iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
+                <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
             </tys-security>
         </div>
     </template>
@@ -93,11 +96,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.showProgress = false;
                 this.message = "";
                 this.matches = data.detail.response;
-                
+
             },
             handleError: function (){
                 this.message = "Er zijn geen matches beschikbaar";
-                
+
             },
             refresh: function(){
                 this.matches = [];
