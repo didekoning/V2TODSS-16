@@ -12,7 +12,7 @@
                 <template is="dom-repeat" items="{{matches}}">
                     <div>
                         <paper-button data-id="{{item.partner}}" id="{{item.partner}}" on-tap="handleChat">
-                            {{item.partner}}
+                             <tys-mymatch url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-mymatch>
                         </paper-button>
                     </div>
                 </template>
@@ -24,8 +24,8 @@
 
                 <div class="card">
                     <h1>Chat</h1>
-                       <!--  <tys-mymatch url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-mymatch> -->
-                    <tys-chat chatid=""></tys-chat>
+                      
+                    <tys-chat chatid="{{link}}"></tys-chat>
 
                 </div>
             </div>
@@ -34,6 +34,12 @@
             url="https://api.tys-chat.nl/matching?type=accepted"
             handle-as="json"
             on-response="handleResponse">
+        </iron-ajax>
+        <iron-ajax
+            id="getFUID"
+            url="https://api.tys-chat.nl/persoon/{{uid}}"
+            handle-as="json"
+            on-response="setFUID">
         </iron-ajax>
         <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
     </tys-security>
@@ -55,6 +61,12 @@
             otherUID:{
                 type: String,
                 observer: '_OUIDChange'
+            },
+            uid:{
+                type: String
+            },
+            link:{
+                type: String
             }
         },
         _getMatches: function(){
@@ -66,18 +78,26 @@
         handleResponse: function (data) {
             this.matches = data.detail.response;
         },
+        setFUID: function(data){
+            this.otherUID = data.detail.response.fuid;
+        },
         handleChat: function(e) {
             var button = Polymer.dom(e).localTarget;
-            console.log(this.user.uid);
-            if(button.id < this.user.uid) {
-                alert("chat-" + button.id + "-" + this.user.uid);
-            }
-            else {
-                alert("chat-" + this.user.uid + "-" + button.id);
-            }
+            this.uid = button.id;
+            this.$.getFUID.headers['authorization'] = this.idToken;
+            this.$.getFUID.generateRequest();
+            
         },
         _OUIDChange: function(){
-            console.log(otherUID);
+
+            if(this.otherUID < this.user.uid) {
+                this.link = "chat-" + this.otherUID + "-" + this.user.uid;
+                alert(this.link);
+            }
+            else {
+                this.link = "chat-" + this.user.uid + "-" + this.otherUID;
+                alert(this.link);
+            }
         }
     });
 </script>
