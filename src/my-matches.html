@@ -6,32 +6,75 @@
 
                 padding: 10px;
             }
+
+            .card {
+
+                    display: block;
+    width: 100%;
+    max-width: 960px;
+    float: left;
+    padding: 0;
+    margin: 0;
+            }
             paper-button{padding-top: 0px; padding-bottom: 0px;}
+            .matches {
+                width: 48%;
+                float: left;
+                margin-left: 1%;
+                margin-top: 10px;
+            }
+
+            .chat {
+                width: 48%;
+                float: right;
+                margin-right: 1%;
+                margin-top: 10px;
+            }
+
+            .matches paper-button.person{
+                width: 45%;
+                float: left;
+                display: block;
+                height: 50px;
+                margin: 5px 0;
+            }
+            
+            .matches paper-button.delete 
+            {
+                float: right;
+                width: 45%;
+                display: block;
+                padding: 13px;
+                margin: 5px 0;
+                text-align: center;
+            }
+            .card {
+                display: block;
+            }
+
+            
+
         </style>
         <div class="card">
             <tys-security access="{{custom.status}}" level="3" redirect="/preferences">
+            <div class="matches">
                 <template is="dom-repeat" items="{{matches}}">
-                    <div id=match_{{item.partner}}>
-                        <paper-button data-id="{{item.partner}}" id="{{item.partner}}" on-tap="handleChat">
-                            <tys-mymatch url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-mymatch>
-                        </paper-button>
-                        <paper-button data-id="{{item.partner}}" id="{{item.partner}}" on-tap="Delete">Verwijder match {{person.Id}}</paper-button>
-
-                    </div>
-                </template>
-
-
-
-                <firebase-auth id="auth" user="{{user}}" on-error="handleError" status-known="{{statusKnown}}"></firebase-auth>
-                <iron-location id="ironLocation"></iron-location>
-
-                <div class="card">
-                    <h1>Chat</h1>
-
-                    <tys-chat chatid="{{link}}" custom="{{custom}}"></tys-chat>
-
+                
+                <div class="match" id=match_{{item.partner}}>
+                    <paper-button class="person" data-id="{{item.partner}}" id="{{item.partner}}" on-tap="handleChat">
+                        <tys-mymatch url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-mymatch>
+                    </paper-button>
+                    <paper-button class="delete" data-id="{{item.partner}}" id="{{item.partner}}" on-tap="Delete">Verwijder match {{person.Id}}</paper-button>
                 </div>
-                </div>
+            </template>
+            </div>
+            <firebase-auth id="auth" user="{{user}}" on-error="handleError" status-known="{{statusKnown}}"></firebase-auth>
+            <iron-location id="ironLocation"></iron-location>
+            <!-- <h1>Chat</h1> -->
+            <div class="chat">
+                <tys-chat chatid="{{link}}" custom="{{custom}}"></tys-chat>
+            </div>
+        </div>
             <iron-ajax
                        id="AcceptedMatches"
                        url="https://api.tys-chat.nl/matching?type=accepted"

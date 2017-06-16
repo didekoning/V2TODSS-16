@@ -14,7 +14,7 @@
 
 			}
 			.user-list {
-				padding: 16px;
+				/*padding: 16px;*/
 			}
 			.status {
 				position: absolute;
@@ -76,6 +76,8 @@
 			.avatar.orchid {
 				border-color: #ce6dbd;
 			}
+
+			
 		</style>
 
 		<firebase-query
@@ -83,22 +85,20 @@
 		path="/chat/{{chatid}}"
 		data="{{data}}">
 	</firebase-query>
-	<section class="user-list" layout horizontal>
+	<div id="wrapper">
+		<section class="user-list" layout horizontal>
 		<template is="dom-repeat" items="{{data}}">
 			<div flex>
 				<div class="username">{{item.name}}: </div>
 				<div class="text">{{item.text}}</div>
 			</div>
-
 		</section>
 	</template>
-
-
 	<div class="send-message" layout horizontal>
 		<paper-input flex label="Schrijf een bericht..." id="messagefield" value="{{mssginpt}}" style="width: 94%;float: left;"></paper-input>
 		<paper-fab icon="send" id="sendButton" mini on-tap="_SendMessage"></paper-fab>
 	</div>
-
+	</div>
 </template>
 <script>
 	Polymer({     
