@@ -2,22 +2,12 @@
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <dom-module id="tys-mymatch">
     <template>
-        <!-- <style include="app-grid-style">
-:host {
-display: inline-block;
-width: 100%;
---app-grid-columns: 3;
---app-grid-item-height: 80px;
-}
-paper-card{width: 15%; opacity: 1; transition: 300ms;}
-.name {
-text-align: center;
-}
-</style> -->
+                <style include="app-grid-style">
+        :host {  }
+        .name {text-align: center; color: #FFF; }
+        </style>
         <div>
-        <paper-card id=card1>
-            <div class="basic"><span class="name"><p style="color:black;">{{fullname}}</p></span></div>
-        </paper-card>
+            <div class="basic"><span class="name"><p>{{fullname}}</p></span></div>
         </div>
             <iron-ajax
                    id="getPerson"
