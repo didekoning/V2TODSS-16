@@ -169,6 +169,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     console.log(JSON.stringify(this.custom));
                     this.$.addProfile.body = JSON.stringify(this.custom);
                     this.$.addProfile.generateRequest();
+                    this.toast.show("Profiel aangemaakt");
                 }
             }
         });
