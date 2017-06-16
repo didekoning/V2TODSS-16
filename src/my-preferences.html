@@ -149,7 +149,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             console.log(this.currentHobby);
             console.log(this.currentDisease);
             console.log(selectedItem.naam+ " test");
-            if (selectedItem && this.count == 2) {
+            if (selectedItem) {
                 var kenmerken = {"kenmerkID": selectedItem.kenmerk, "root": selectedItem.value};
                 this.$.addPreference.headers['authorization'] = this.idToken;
                 this.$.addPreference.body = JSON.stringify(kenmerken);
