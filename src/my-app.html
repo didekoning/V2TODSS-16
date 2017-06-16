@@ -99,6 +99,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <a name="chat" href="/chat" hidden$="[[!showItem]]">Chat</a>
           <a name="logout" on-tap="logout" href="/login">Logout</a>
         </iron-selector>
+                <paper-toast  text="Hello world!" id="testToast" opened></paper-toast>
       </app-drawer>
       <!-- </template> -->
       <!-- Main content -->
@@ -145,6 +146,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
          with-credentials="true"
          on-response="handleResponse"></iron-ajax>
       <iron-meta id="meta" key="token" value="{{idToken}}"></iron-meta>
+      <iron-meta id="meta" key="toast" value="{{toast}}"></iron-meta>
   </template>
 
   <script>
@@ -182,6 +184,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: String,
           notify: true,
         },
+        toast: {
+          type: Object,
+          notify: true,
+        },
         headers: {
             type: Object,
             value: function() { return {}; }
@@ -205,6 +211,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       ready: function(){
         this.custom.status = 0;
+        this.toast = this.$.testToast;
       },
 
       handleResponse: function(data) {
