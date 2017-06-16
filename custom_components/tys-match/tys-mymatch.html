@@ -18,7 +18,6 @@ text-align: center;
         <paper-card id=card1>
             <div class="basic"><span class="name"><p style="color:black;">{{fullname}}</p></span></div>
         </paper-card>
-                    <paper-button data-id="{{item.partner}}" id="{{item.partner}}" on-tap="Delete">Verwijder match</paper-button>
         </div>
             <iron-ajax
                    id="getPerson"
@@ -26,14 +25,7 @@ text-align: center;
                    handle-as="json"
                    on-response="handleResponse">
         </iron-ajax>
-        <iron-ajax
-                   id="DeclineMatch"
-                   method="put"
-                   content-type="application/json"
-                   url="https://api.tys-chat.nl/matching/status"
-                   body='{"action": "decline", "partner": {{personId}}}'
-                   handle-as="json">
-        </iron-ajax>
+
         <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
     </template>
     <script>
@@ -41,7 +33,7 @@ text-align: center;
             is: 'tys-mymatch',
             properties: {
                 url: {
-                    type: String,
+                    type: String
                 },
                 person: {
                     type: Object
@@ -66,18 +58,6 @@ text-align: center;
             },
             computeFullName: function(firstName, lastName) {
                 return firstName + ' ' + lastName;
-            },
-            Delete: function(e) {
-                var button = Polymer.dom(e).localTarget;
-                this.personId = button.id;
-                this.$.DeclineMatch.headers['authorization'] = this.idToken;
-                this.$.DeclineMatch.generateRequest();
-                var card = this;
-                card.style.marginLeft = "-100%";
-                card.style.opacity = "0";
-                setTimeout(function() {
-                    card.remove();
-                }, 500);
             }
         });
     </script>
