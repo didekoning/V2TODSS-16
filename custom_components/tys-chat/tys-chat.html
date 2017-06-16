@@ -95,7 +95,7 @@
 		</section>
 	</template>
 	<div class="send-message" layout horizontal>
-		<paper-input flex label="Schrijf een bericht..." id="messagefield" value="{{mssginpt}}" style="width: 94%;float: left;"></paper-input>
+		<paper-input flex label="Schrijf een bericht..." id="messagefield" value="{{mssginpt}}" on-keydown="_SendMessageKB" style="width: 94%;float: left;"></paper-input>
 		<paper-fab icon="send" id="sendButton" mini on-tap="_SendMessage"></paper-fab>
 	</div>
 	</div>
@@ -116,11 +116,11 @@
 				observer: "_SendMessage"
 			},
 			custom:{
-                    type: Object,
-                },
-            chatid:{
-            		type:String,
-            }
+				type: Object,
+			},
+			chatid:{
+				type:String,
+			}
 		},
 		_observer: function(){
 			console.log(this.data);
@@ -129,13 +129,28 @@
 			database = firebase.database();
 			messagesRef = database.ref('/chat/'+ this.chatid + '/');
 			if(this.$.messagefield.value != ""){
-			messagesRef.push({
-		      name: this.custom.achternaam,
-		      text: this.$.messagefield.value
-		  });
-			this.$.messagefield.value = "";
-			this.$.document.initializeStoredValue();
-		};
+				messagesRef.push({
+					name: this.custom.achternaam,
+					text: this.$.messagefield.value
+				});
+				this.$.messagefield.value = "";
+				this.$.document.initializeStoredValue();
+			};
+		},
+		_SendMessageKB: function(e,mssginpt) {
+			
+			if (e.keyCode === 13) {
+				database = firebase.database();
+				messagesRef = database.ref('/chat/'+ this.chatid + '/');
+				if(this.$.messagefield.value != ""){
+					messagesRef.push({
+						name: this.custom.achternaam,
+						text: this.$.messagefield.value
+					});
+					this.$.messagefield.value = "";
+					this.$.document.initializeStoredValue();
+				}
+			};
 		}
 	});
 </script>
