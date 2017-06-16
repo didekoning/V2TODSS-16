@@ -116,6 +116,7 @@
                 this.$.DeclineMatch.headers['authorization'] = this.idToken;
                 this.$.DeclineMatch.generateRequest();
                 this.toast.show("Match verwijderd");
+                this.$.AcceptedMatches.generateRequest();
             }
         });
     </script>
