@@ -44,7 +44,6 @@
                 <li class="item" style="width: 20%; float:right;"><tys-percentage percentage="{{percentage}}"></tys-percentage></li>
             </ul>
             <div>
-                <button type="button" onClick="openToast">Click me</button>
                 <paper-button raised class=red on-tap=ignore_match onclick=openToast><iron-icon icon="close"></iron-icon></paper-button>
                 <paper-button raised class=green on-tap=accept_match><iron-icon icon="favorite"></iron-icon></paper-button>
             </div>
@@ -74,13 +73,8 @@
                    handle-as="json">
         </iron-ajax>
         <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
+        <iron-meta-query key="toast" id="meta" value="{{toast}}"></iron-meta-query>
     </template>
-
-    <script>
-        function openToast() {
-            this.$.test.open();
-        }
-    </script>
     <script>
         Polymer({	    
             is: 'tys-match',
@@ -101,6 +95,9 @@
                 age: {
                     type: Number,
                     computed: 'computeAge(person.gbdatum)'
+                },
+                toast: {
+                    type: Object,
                 },
                 idToken: {
                     type: String,
@@ -125,6 +122,7 @@
             accept_match: function(){
                 this.$.AcceptMatch.headers['authorization'] = this.idToken;
                 this.$.AcceptMatch.generateRequest();
+                this.toast.show("U heeft een nieuwe match!");
                 var card = this;
                 card.style.marginLeft = "100%";
                 card.style.opacity = "0";
@@ -135,6 +133,7 @@
             ignore_match: function(){
                 this.$.DeclineMatch.headers['authorization'] = this.idToken;
                 this.$.DeclineMatch.generateRequest();
+                this.toast.show("Match verwijderd");
                 var card = this;
                 card.style.marginLeft = "-100%";
                 card.style.opacity = "0";
