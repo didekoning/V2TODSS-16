@@ -180,6 +180,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     this.custom.status = 2;
                 }
                 this.$.addProfile.headers['authorization'] = this.idToken;
+                console.log(JSON.stringify(this.profile));
                 this.$.addProfile.body = JSON.stringify(this.profile);
                 this.$.addProfile.generateRequest();
             },
