@@ -13,7 +13,8 @@
                 <template is="dom-repeat" items="{{matches}}">
                     <div id=match_{{item.partner}}>
                         <paper-button data-id="{{item.partner}}" id="{{item.partner}}" on-tap="handleChat">
-                            <tys-mymatch url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-mymatch>
+                            <tys-mymatch id="{{item.partner}}" url="https://api.tys-chat.nl/persoon/{{item.partner}}">{{item.partner}}</tys-mymatch>
+                            
                         </paper-button>
                         <paper-button data-id="{{item.partner}}" id="{{item.partner}}" on-tap="Delete">Verwijder match {{person.Id}}</paper-button>
 
@@ -101,15 +102,14 @@
                 this.uid = button.id;
                 this.$.getFUID.headers['authorization'] = this.idToken;
                 this.$.getFUID.generateRequest();
-
             },
             _OUIDChange: function(){
                 if(this.otherUID < this.user.uid) {
                     this.link = "chat-" + this.otherUID + "-" + this.user.uid;
-                }
+                    }
                 else {
                     this.link = "chat-" + this.user.uid + "-" + this.otherUID;
-                }
+                    }
             },
             Delete: function(e) {
                 var button = Polymer.dom(e).localTarget;
