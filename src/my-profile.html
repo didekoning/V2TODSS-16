@@ -47,7 +47,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <div class="personal"  mobile-layout$="[[isMobilePhone]]">
                             <paper-input value="{{custom.voornaam}}" type="text" id="voornaam" placeholder="Voornaam" autoValidate="true" required error-message="needs some text!"></paper-input>
                             <paper-input value="{{custom.achternaam}}" type="text" id="achternaam" placeholder="Achternaam" required error-message="needs some text!"></paper-input>
-                            <paper-input value="{{custom.displayname}}" type="text" id="displayname" placeholder="Displayname" required error-message="needs some text!"></paper-input>
+                            <paper-input value="{{custom.bio.displayname}}" type="text" id="displayname" placeholder="Displayname" required error-message="needs some text!"></paper-input>
                             <div class="spacer"></div>
                             <label>Geslacht:</label><br>
                             <paper-radio-group selected="{{custom.geslacht}}" id="geslacht" fallback-selection="O" required>
@@ -88,7 +88,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
            handle-as="json"
             headers='{"Content-Type": "application/json;charset=utf-8"}' 
            content-type="application/json"
-           on-response="addBioResponse">
+           on-response="addBioResponse"
+           on-error="profileError">
         </iron-ajax>
         <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
     </template>    
@@ -147,6 +148,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     this.year = arr[0];
                 }
 
+            },
+            profileError: function(e){
+                this.message = "Er is iets fout gegaan, misschien is je weergave naam al in gebruik";
             },
             _computeDate: function(day, month, year){
                 return year+"-"+month+"-"+day;
