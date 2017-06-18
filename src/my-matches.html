@@ -1,59 +1,12 @@
 <dom-module id="my-matches">
     <template>
         <style include="shared-styles">
-            :host {
-                display: block;
-
-                padding: 10px;
-            }
-
-            .card {
-
-                    display: block;
-    width: 100%;
-    max-width: 960px;
-    float: left;
-    padding: 0;
-    margin: 0;
-            }
-            paper-button{padding-top: 0px; padding-bottom: 0px;}
-            .matches {
-                width: 48%;
-                float: left;
-                margin-left: 1%;
-                margin-top: 10px;
-            }
-
-            .chat {
-                width: 48%;
-                float: right;
-                margin-right: 1%;
-                margin-top: 10px;
-            }
-
-            .matches paper-button.person{
-                width: 45%;
-                float: left;
-                display: block;
-                height: 50px;
-                margin: 5px 0;
-            }
-            
-            .matches paper-button.delete 
-            {
-                float: right;
-                width: 45%;
-                display: block;
-                padding: 13px;
-                margin: 5px 0;
-                text-align: center;
-            }
-            .card {
-                display: block;
-            }
-
-            
-
+            :host {display: block; padding: 10px; }
+            .card {display: block; width: 100%; max-width: 960px; float: left; padding: 0; margin: 0; } paper-button{padding-top: 0px; padding-bottom: 0px;} 
+            .matches {width: 48%; float: left; margin-left: 1%; margin-top: 10px; }
+            .chat {width: 48%; float: right; margin-right: 1%; margin-top: 10px; }
+            .matches paper-button.person{width: 45%; float: left; display: block; height: 50px; margin: 5px 0; }
+            .matches paper-button.delete {float: right; width: 45%; display: block; padding: 13px; margin: 5px 0; text-align: center; }
         </style>
         <div class="card">
             <tys-security access="{{custom.status}}" level="3" redirect="/preferences">
@@ -144,15 +97,14 @@
                 this.uid = button.id;
                 this.$.getFUID.headers['authorization'] = this.idToken;
                 this.$.getFUID.generateRequest();
-
             },
             _OUIDChange: function(){
                 if(this.otherUID < this.user.uid) {
                     this.link = "chat-" + this.otherUID + "-" + this.user.uid;
-                }
+                    }
                 else {
                     this.link = "chat-" + this.user.uid + "-" + this.otherUID;
-                }
+                    }
             },
             Delete: function(e) {
                 var button = Polymer.dom(e).localTarget;

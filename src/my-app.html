@@ -92,9 +92,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-drawer id="drawer" >
         <app-toolbar>[[custom.voornaam]] [[custom.achternaam]]</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="preferences" href="/preferences">Voorkeuren</a>
           <a name="profile" href="/profile">Profiel</a>
           <a name="matchen" href="/matchen" hidden$="[[!showItem]]">Matchen</a>
+          <a name="preferences" href="/preferences" hidden$="[[!showPref]]">Voorkeuren</a>
           <a name="matches" href="/matches" hidden$="[[!showItem]]">Mijn matches</a>
           <a name="chat" href="/chat" hidden$="[[!showItem]]">Chat</a>
           <a name="logout" on-tap="logout" href="/login">Logout</a>
@@ -235,8 +235,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log(this.custom.status);
         if(this.custom.status == 3){
           this.showItem = true;
+          this.showPref = true;
           this.set('route.path', '/matchen');
         }else if(this.custom.status == 2){
+          this.showPref = true;
           this.set('route.path', '/preferences');          
         }else if(this.custom.status == 1){
         this.set('route.path', '/profile');          
@@ -269,6 +271,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.$.auth.signOut();
         this.custom.id = null;
         this.idToken = null;
+        this.user.fuid = null;
         this.custom.voornaam = null;
         this.custom.achternaam = null;
         this.custom.woonplaats = null;
