@@ -1,19 +1,36 @@
 <dom-module id="my-matches">
     <template>
         <style include="shared-styles">
-         :host {display: block; padding: 10px; }
-         .wrapper{position: absolute; padding: 10%; top: 0; bottom: 0; left: 0; right: 0;}
-         .card {display: block; width: 100%; max-width: 960px; float: left; padding: 0; margin: 0; } paper-button{padding-top: 0px; padding-bottom: 0px;} 
-         .matches {width: 48%; float: left; margin-left: 1%; margin-top: 10px; }
-         .chat {width: 48%; float: right; margin-right: 1%; margin-top: 10px; }
-         .matches paper-button.person{width: 80%; float: left; display: block; height: 50px; margin: 5px 0; }
-         .matches paper-button.delete {float: right; width: 15%; display: block; padding: 13px; margin: 5px 0; text-align: center; background: #e74c3c; }
+        :host {display: block; padding: 10px; }
+        .wrapper{position: absolute; padding: 10%; top: 0; bottom: 0; left: 0; right: 0;}
+        .card {display: block; width: 100%; max-width: 960px; float: left; padding: 0; margin: 0; } paper-button{padding-top: 0px; padding-bottom: 0px;} 
+        .matches {width: 30%; float: left; margin-left: 1%; margin-top: 10px; display: block;}
+        .chat {width: 65%; float: right; margin-right: 1%; margin-top: 10px; }
+        .matches paper-button.person{width: 51%; float: left; display: block; height: 50px; margin: 5px 0; color: #fff !important; }
+        .matches paper-button.delete {float: right; width: 10%; display: block; padding: 13px; margin: 3px 0; text-align: center; background: #e74c3c; }
+        
+        .wrapper #chatlist {
+            display: none;
+            width: 100%;
+         }
+
+        .wrapper [mobile-layout] #chatlist {
+            display: block;
+         }
+
+        .wrapper [mobile-layout] .matches {
+            display: none;
+         }
+
+        .wrapper [mobile-layout] .name {color: #fff; }
+            
+        .wrapper [mobile-layout] 
+
      </style>
-     <div class="card">
+     <div class="wrapper" mobile-layout$="[[isMobilePhone]]">
         <tys-security access="{{custom.status}}" level="3" redirect="/preferences">
             <div class="matches">
                 <template is="dom-repeat" items="{{matches}}">
-
                     <div class="match" id=match_{{item.partner}}>
                         <paper-button class="person" data-id="{{item.partner}}" id="{{item.partner}}" on-tap="handleChat">
                             <tys-mymatch id ="{{item.partner}}" url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-mymatch>
@@ -55,6 +72,7 @@
 <iron-ajax id="DeclineMatch" method="put" content-type="application/json" url="https://api.tys-chat.nl/matching/status" body='{"action": "decline", "partner": {{personId}}}' handle-as="json"></iron-ajax>
 <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
 <iron-meta-query key="toast" id="meta" value="{{toast}}"></iron-meta-query>
+<iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
 </tys-security>
 </template>
 <script>
