@@ -7,8 +7,6 @@ TYS-Chat is een platform waar mensen met een ziekte of beperking makkelijk op zo
 Om TYS-Chat lokaal goed te kunnen gebruiken zal na het pullen eerst bower update gedraait moeten worden. Hierna zal men polymer serve moeten gebruiken om de app daadwerkelijk te laten werken.
 
 
-```
-
 ## Deployment
 
 Voor deployment is GULP vereist
