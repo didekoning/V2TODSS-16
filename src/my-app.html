@@ -111,7 +111,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </template>
             <div main-title class="logo_container"><img src="../images/logo_white.svg" class="logo"></div>
             <template is="dom-if" if="{{user}}">
-              <div>{{custom.status}} hallo {{custom.voornaam}}</div>
+
             </template>
           </app-toolbar>
         </app-header>
@@ -190,10 +190,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         toast: {
           type: Object,
           notify: true,
-        },
-        headers: {
-            type: Object,
-            value: function() { return {}; }
         },
       },
 

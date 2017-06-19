@@ -52,14 +52,7 @@
     handle-as="json"
     on-response="setFUID">
 </iron-ajax>
-<iron-ajax
-id="DeclineMatch"
-method="put"
-content-type="application/json"
-url="https://api.tys-chat.nl/matching/status"
-body='{"action": "decline", "partner": {{personId}}}'
-handle-as="json">
-</iron-ajax>
+<iron-ajaxb id="DeclineMatch" method="put" content-type="application/json" url="https://api.tys-chat.nl/matching/status" body='{"action": "decline", "partner": {{personId}}}' handle-as="json"></iron-ajax>
 <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
 <iron-meta-query key="toast" id="meta" value="{{toast}}"></iron-meta-query>
 </tys-security>
