@@ -1,12 +1,13 @@
 <dom-module id="my-matches">
     <template>
         <style include="shared-styles">
-            :host {display: block; padding: 10px; }
+           :host {display: block; padding: 10px; }
+            .wrapper{position: absolute; padding: 10%; top: 0; bottom: 0; left: 0; right: 0;}
             .card {display: block; width: 100%; max-width: 960px; float: left; padding: 0; margin: 0; } paper-button{padding-top: 0px; padding-bottom: 0px;} 
             .matches {width: 48%; float: left; margin-left: 1%; margin-top: 10px; }
             .chat {width: 48%; float: right; margin-right: 1%; margin-top: 10px; }
-            .matches paper-button.person{width: 45%; float: left; display: block; height: 50px; margin: 5px 0; }
-            .matches paper-button.delete {float: right; width: 45%; display: block; padding: 13px; margin: 5px 0; text-align: center; }
+            .matches paper-button.person{width: 80%; float: left; display: block; height: 50px; margin: 5px 0; }
+            .matches paper-button.delete {float: right; width: 15%; display: block; padding: 13px; margin: 5px 0; text-align: center; background: #e74c3c; }
         </style>
         <div class="card">
             <tys-security access="{{custom.status}}" level="3" redirect="/preferences">
