@@ -3,14 +3,15 @@
 	<template>
 		<style>
 			:host {
-				display: inline-block;
+				display: block;
 				position: relative;
-				width: 100%;
-				border-bottom: 1px solid #e0e0e0;
+				background-color: #FFF;
 				font-size: 16px;
-				min-height: 700px;
-				max-height: 700px;
+				min-height: 200px;
+				border-radius: 4px;
 				z-index: 0;
+				padding: 20px;
+
 
 			}
 			.user-list {
@@ -34,49 +35,20 @@
 				font-weight: 500;
 				color: #919191;
 				line-height: 1.3em;
-				max-width: 90%;
+				max-width: 100%;
 				text-overflow: ellipsis;
 				overflow: hidden;
 				white-space: nowrap;
 			}
-			.timestamp {
-				font-size: 0.75em;
-				color: #919191;
-			}
-			.avatar {
-				border: solid 3px silver;
-			}
-			.avatar.navy {
-				border-color: #393b79;
-			}
-			.avatar.slate {
-				border-color: #6b6ecf;
-			}
-			.avatar.olive {
-				border-color: #637939;
-			}
-			.avatar.moss {
-				border-color: #b5cf6b;
-			}
-			.avatar.chocolate {
-				border-color: #8c6d31;
-			}
-			.avatar.buttercup {
-				border-color: #e7ba52;
-			}
-			.avatar.maroon {
-				border-color: #843c39;
-			}
-			.avatar.cerise {
-				border-color: #d6616b;
-			}
-			.avatar.plum {
-				border-color: #7b4173;
-			}
-			.avatar.orchid {
-				border-color: #ce6dbd;
-			}
 
+			.user-list{margin-bottom: 50px;}
+			.message{border-bottom: 1px solid #eee; margin-bottom: 5px;}
+			.message#me{text-align: right;}
+			.message-box{position: absolute; bottom: 15px; left: 20px; right: 20px;}
+			#messagefield{position: relative; width: 80%; display: inline-block;}
+			#sendButton{position: relative; display: inline-block;}
+
+			.wrapper[tablet-small-layout] .user-list{max-height: 60vh; overflow-x: scroll;}
 			
 		</style>
 
@@ -85,20 +57,24 @@
 		path="/chat/{{chatid}}"
 		data="{{data}}">
 	</firebase-query>
-	<div id="wrapper">
-		<section class="user-list" layout horizontal>
+	<div class="wrapper" tablet-small-layout$="[[isTabletSmall]]">
+		<section class="user-list" id="messages" layout horizontal>
 		<template is="dom-repeat" items="{{data}}">
-			<div flex>
+			<div class="message" id$="[[checkUser(item.name)]]" flex>
 				<div class="username">{{item.name}}: </div>
 				<div class="text">{{item.text}}</div>
 			</div>
 		</section>
 	</template>
-	<div class="send-message" layout horizontal>
-		<paper-input flex label="Schrijf een bericht..." id="messagefield" value="{{mssginpt}}" on-keydown="_SendMessageKB" style="width: 94%;float: left;"></paper-input>
-		<paper-fab icon="send" id="sendButton" mini on-tap="_SendMessage"></paper-fab>
+	<div class="message-box">
+		<div class="send-message">
+			<paper-input flex label="Schrijf een bericht..." id="messagefield" value="{{mssginpt}}" on-keydown="_SendMessageKB"></paper-input>
+			<paper-fab icon="send" id="sendButton" mini on-tap="_SendMessage"></paper-fab>
+		</div>
 	</div>
+
 	</div>
+	<iron-media-query query="(max-width:1000px)" query-matches="{{isTabletSmall}}"></iron-media-query>
 </template>
 <script>
 	Polymer({     
@@ -125,6 +101,10 @@
 		_observer: function(){
 			console.log(this.data);
 		},
+		ready: function(){
+			var objDiv = this.$.messages;
+			objDiv.scrollTop = objDiv.scrollHeight;
+		},
 		_SendMessage: function(mssginpt) {
 			database = firebase.database();
 			messagesRef = database.ref('/chat/'+ this.chatid + '/');
@@ -136,6 +116,11 @@
 				this.$.messagefield.value = "";
 				this.$.document.initializeStoredValue();
 			};
+		},
+		checkUser: function(userMessage){
+			if(this.custom.profiel.displayname == userMessage){
+				return "me";
+			}
 		},
 		_SendMessageKB: function(e,mssginpt) {
 			

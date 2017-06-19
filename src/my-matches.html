@@ -2,33 +2,27 @@
     <template>
         <style include="shared-styles">
         :host {display: block; padding: 10px; }
-        .wrapper{position: absolute; padding: 10%; top: 0; bottom: 0; left: 0; right: 0;}
+        .wrapper{position: absolute; padding: 100px 5% 5% 5%; top: 0; bottom: 0; left: 0; right: 0;}
         .card {display: block; width: 100%; max-width: 960px; float: left; padding: 0; margin: 0; } paper-button{padding-top: 0px; padding-bottom: 0px;} 
-        .matches {width: 30%; float: left; margin-left: 1%; margin-top: 10px; display: block;}
-        .chat {width: 65%; float: right; margin-right: 1%; margin-top: 10px; }
-        .matches paper-button.person{width: 51%; float: left; display: block; height: 50px; margin: 5px 0; color: #fff !important; }
-        .matches paper-button.delete {float: right; width: 10%; display: block; padding: 13px; margin: 3px 0; text-align: center; background: #e74c3c; }
+        .matches {width: 25%; display: inline-block; position: relative;}
+        .chat {width: 70%; display: inline-block; padding-left: 20px; float: right; }
+        .matches paper-button.person{color: #fff; width: 65%; margin: 0px; display: inline-block; height: 40px; line-height: 40px;}
+        .matches paper-button.delete {width: 15%; display: inline-block; margin: 0px; text-align: center; background: #e74c3c; height: 40px; line-height: 40px;}
         
-        .wrapper #chatlist {
-            display: none;
-            width: 100%;
-         }
+        .wrapper #chatlist {width: 100%; display: block; } 
+        .wrapper #chatlist paper-listbox{ --paper-listbox-color: #222 !important;}
 
-        .wrapper [mobile-layout] #chatlist {
-            display: block;
-         }
+         .wrapper[tablet-layout] .chat{width: 60%;}
+         .wrapper[tablet-layout] .matches{width: 35%;}
+         .wrapper[tablet-layout] paper-button{font-size: 14px !important;}
 
-        .wrapper [mobile-layout] .matches {
-            display: none;
-         }
-
-        .wrapper [mobile-layout] .name {color: #fff; }
-            
-        .wrapper [mobile-layout] 
+        .wrapper[tablet-small-layout] .chat{width: 100%; padding-left: 0px; float: left; display: block; }
+        .wrapper[tablet-small-layout] {position: relative; padding: 60px 10px 10px 10px; }
 
      </style>
-     <div class="wrapper" mobile-layout$="[[isMobilePhone]]">
+     <div class="wrapper" mobile-layout$="[[isMobilePhone]]" tablet-layout$="[[isTablet]]" tablet-small-layout$="[[isTabletSmall]]">
         <tys-security access="{{custom.status}}" level="3" redirect="/preferences">
+            <template is="dom-if" if="[[!isTabletSmall]]">
             <div class="matches">
                 <template is="dom-repeat" items="{{matches}}">
                     <div class="match" id=match_{{item.partner}}>
@@ -39,7 +33,9 @@
                     </div>
                 </template>
             </div>
+            </template>
 
+            <template is="dom-if" if="[[isTabletSmall]]">
             <paper-dropdown-menu label="Chat met..." id="chatlist" on-iron-select="_chatSelected">
                 <paper-listbox class="dropdown-content" attr-for-selected="item-name" >
                     <template is="dom-repeat" items="{{matches}}">
@@ -49,11 +45,12 @@
                     </template>
                 </paper-listbox>
             </paper-dropdown-menu>
+            </template>
 
             <firebase-auth id="auth" user="{{user}}" on-error="handleError" status-known="{{statusKnown}}"></firebase-auth>
             <iron-location id="ironLocation"></iron-location>
             <!-- <h1>Chat</h1> -->
-            <div class="chat">
+            <div class="chat" hidden$="[[checkLink(link)]]">
                 <tys-chat chatid="{{link}}" custom="{{custom}}"></tys-chat>
             </div>
         </div>
@@ -73,6 +70,8 @@
 <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
 <iron-meta-query key="toast" id="meta" value="{{toast}}"></iron-meta-query>
 <iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
+<iron-media-query query="(max-width:1400px)" query-matches="{{isTablet}}"></iron-media-query>
+<iron-media-query query="(max-width:1000px)" query-matches="{{isTabletSmall}}"></iron-media-query>
 </tys-security>
 </template>
 <script>
@@ -97,7 +96,8 @@
                 type: String
             },
             link:{
-                type: String
+                type: String,
+                value: "",
             },
             personId: {
                 type: String
@@ -107,6 +107,11 @@
             if(this.idToken != undefined){
                 this.$.AcceptedMatches.headers['authorization'] = this.idToken;
                 this.$.AcceptedMatches.generateRequest();
+            }
+        },
+        checkLink: function(link){
+            if(link == ""){
+                return true;
             }
         },
         handleResponse: function (data) {

@@ -5,11 +5,9 @@
                 <style include="app-grid-style">
         :host {  }
         .name {text-align: center; color: #fff; }
-        .name [mobile-layout] .name {color: #000; }
+        .name[tablet-small-layout]{color: #000;}
         </style>
-        <div>
-            <div class="basic"><span class="name"><p>{{person.profiel.displayname}}</p></span></div>
-        </div>
+        <div class="name"  tablet-small-layout$="[[isTabletSmall]]">{{person.profiel.displayname}}</div>
             <iron-ajax
                    id="getPerson"
                    url="{{url}}"
@@ -18,7 +16,7 @@
         </iron-ajax>
 
         <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
-        <iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
+            <iron-media-query query="(max-width:1000px)" query-matches="{{isTabletSmall}}"></iron-media-query>
     </template>
     <script>
         Polymer({	    
