@@ -40,14 +40,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-location id="ironLocation"></iron-location>
         <div class="wrapper">
               <div class="form-wrap">
-                 <tys-security access="{{custom.status}}" level="1" redirect="/register">
+                 <tys-security access="{{custom.status}}" level="1">
                     <div class="error" hidden$="[[!message]]">[[message]]</div>
                     <form is="iron-form" id="form">
                         <h1>Profiel</h1>
                         <div class="personal"  mobile-layout$="[[isMobilePhone]]">
                             <paper-input value="{{custom.voornaam}}" type="text" id="voornaam" placeholder="Voornaam" autoValidate="true" required error-message="needs some text!"></paper-input>
                             <paper-input value="{{custom.achternaam}}" type="text" id="achternaam" placeholder="Achternaam" required error-message="needs some text!"></paper-input>
-                            <paper-input value="{{custom.bio.displayname}}" type="text" id="displayname" placeholder="Displayname" required error-message="needs some text!"></paper-input>
+                            <paper-input value="{{custom.profiel.displayname}}" readonly$="[[checkstatus(custom.status)]]" type="text" id="displayname" placeholder="Displayname" required error-message="needs some text!"></paper-input>
                             <div class="spacer"></div>
                             <label>Geslacht:</label><br>
                             <paper-radio-group selected="{{custom.geslacht}}" id="geslacht" fallback-selection="O" required>
@@ -64,7 +64,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <paper-input value="{{custom.woonplaats}}" type="text" id="woonplaats" required error-message="needs some text!" placeholder="Woonplaats"></paper-input>
                             <paper-textarea label="Bio" minlength="5" id="bio" value="{{custom.profiel.bio}}"></paper-textarea>
                         </div>
-                        <paper-button raised on-tap="addProfile">Volgende stap</paper-button>
+                        <template is="dom-if" if="{{!checkstatus(custom.status)}}">
+                            <paper-button raised on-tap="addProfile">Volgende stap</paper-button>
+                        </template>
+                        <template is="dom-if" if="{{checkstatus(custom.status)}}">
+                            <paper-button raised on-tap="addProfile">Opslaan</paper-button>
+                        </template>
                     </form>
                     <iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
                 </tys-security>
@@ -92,6 +97,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
            on-error="profileError">
         </iron-ajax>
         <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
+        <iron-meta-query key="toast" id="meta" value="{{toast}}"></iron-meta-query>
     </template>    
 
     <script>
@@ -130,6 +136,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 },
                 day: {
                     type: String,
+                },
+                toast: {
+                  type: Object,
                 },
                 month: String,
                 year: String,
@@ -183,6 +192,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 console.log(JSON.stringify(this.profile));
                 this.$.addProfile.body = JSON.stringify(this.profile);
                 this.$.addProfile.generateRequest();
+                this.toast.show("Pofiel is bijgewerkt");
             },
             addProfile: function(e){
 
@@ -203,6 +213,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 if(e.detail.xhr.status == 200 && this.custom.status < 3){
                     this.$.ironLocation.set('path', '/preferences');
                 }
+            },
+            checkstatus: function(status){
+                return status >= 3;
             },
 
         });
