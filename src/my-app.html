@@ -96,7 +96,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <a name="matchen" href="/matchen" hidden$="[[!showItem]]">Matchen</a>
           <a name="preferences" href="/preferences" hidden$="[[!showPref]]">Voorkeuren</a>
           <a name="matches" href="/matches" hidden$="[[!showItem]]">Mijn matches</a>
-          <a name="chat" href="/chat" hidden$="[[!showItem]]">Chat</a>
           <a name="logout" on-tap="logout" href="/login">Logout</a>
         </iron-selector>
                 <paper-toast  text="Hello world!" id="testToast" opened></paper-toast>
@@ -111,9 +110,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
             </template>
             <div main-title class="logo_container"><img src="../images/logo_white.svg" class="logo"></div>
-            <template is="dom-if" if="{{user}}">
-              <div>{{custom.status}} hallo {{custom.voornaam}}</div>
-            </template>
           </app-toolbar>
         </app-header>
 
@@ -268,16 +264,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       logout: function(){
-        this.$.auth.signOut();
+        
         this.custom.id = null;
         this.idToken = null;
-        this.user.fuid = null;
         this.custom.voornaam = null;
         this.custom.achternaam = null;
         this.custom.woonplaats = null;
         this.custom.geslacht = null;
         this.custom.status = 0;
-        this.set('route.path', '/login');
+        this.$.auth.signOut();
+        location.reload();
       },
 
 

@@ -130,7 +130,7 @@
 			messagesRef = database.ref('/chat/'+ this.chatid + '/');
 			if(this.$.messagefield.value != ""){
 				messagesRef.push({
-					name: this.custom.achternaam,
+					name: this.custom.profiel.displayname,
 					text: this.$.messagefield.value
 				});
 				this.$.messagefield.value = "";
@@ -144,7 +144,7 @@
 				messagesRef = database.ref('/chat/'+ this.chatid + '/');
 				if(this.$.messagefield.value != ""){
 					messagesRef.push({
-						name: this.custom.achternaam,
+						name: this.custom.profiel.displayname,
 						text: this.$.messagefield.value
 					});
 					this.$.messagefield.value = "";
