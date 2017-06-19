@@ -268,16 +268,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       logout: function(){
-        this.$.auth.signOut();
+        
         this.custom.id = null;
         this.idToken = null;
-        this.user.fuid = null;
         this.custom.voornaam = null;
         this.custom.achternaam = null;
         this.custom.woonplaats = null;
         this.custom.geslacht = null;
         this.custom.status = 0;
-        this.set('route.path', '/login');
+        this.$.auth.signOut();
+        location.reload();
       },
 
 
