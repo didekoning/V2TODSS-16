@@ -38,7 +38,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <paper-dropdown-menu label="Ziekte" id="ziekte" on-iron-select="_itemSelected">
                       <paper-listbox class="dropdown-content" attr-for-selected="item-name" selected="{{currentDisease}}">
                            <template is="dom-repeat" items="{{ziektes}}">
-                              <paper-item value="{{item.root}}" item-name="{{item.naam}}" kenmerk="{{item.kenmerkID}}">{{item.naam}}</paper-item>
+                              <paper-item value="{{item.root}}" item-name="{{item.naam}}" naam="{{item.naam}}" kenmerk="{{item.kenmerkID}}">{{item.naam}}</paper-item>
                           </template>
                       </paper-listbox>
                   </paper-dropdown-menu>
@@ -49,7 +49,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <paper-dropdown-menu label="Hobbies" id="hobby" on-iron-select="_itemSelected">
                       <paper-listbox class="dropdown-content" attr-for-selected="item-name" selected="{{currentHobby}}">
                            <template is="dom-repeat" items="{{hobbies}}">
-                              <paper-item value="{{item.root}}" item-name="{{item.naam}}" kenmerk="{{item.kenmerkID}}">{{item.naam}}</paper-item>
+                              <paper-item value="{{item.root}}" item-name="{{item.naam}}" naam="{{item.naam}}" kenmerk="{{item.kenmerkID}}">{{item.naam}}</paper-item>
                           </template>
                       </paper-listbox>
                   </paper-dropdown-menu>
@@ -58,7 +58,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <paper-button raised on-tap="addAttributes">Volgende stap</paper-button>
               </template>
           </form>
-
+         
       </div>
     </div>
    
@@ -97,7 +97,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        url="https://api.tys-chat.nl/kenmerk"
        handle-as="json"
        headers='{"Content-Type": "application/json;charset=utf-8"}' 
-       content-type="application/json">
+       content-type="application/json"
+       on-response="test">
     </iron-ajax>
         <iron-ajax
        id="updateStatus"
@@ -108,6 +109,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        content-type="application/json"
        on-response="statusResponse">
     </iron-ajax>
+    <iron-meta-query key="toast" id="meta" value="{{toast}}"></iron-meta-query>
   </template>
 
   <script>
@@ -128,19 +130,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             hobbies: {
                 type: Array,
             },
+            toast: {
+              type: Object,
+            },
+            firstFill: {
+              type: Boolean,
+              value: true,
+            },
+            count: {
+              type: Number,
+              value: 0,
+            },
             currentDisease: String,
             currentHobby: String,
         },
         _itemSelected : function(e) {
             var selectedItem = e.target.selectedItem;
+            console.log(this.currentHobby);
+            console.log(this.currentDisease);
+            console.log(selectedItem.naam+ " test");
             if (selectedItem) {
                 var kenmerken = {"kenmerkID": selectedItem.kenmerk, "root": selectedItem.value};
                 this.$.addPreference.headers['authorization'] = this.idToken;
                 this.$.addPreference.body = JSON.stringify(kenmerken);
                 console.log(JSON.stringify(kenmerken));
                 this.$.addPreference.generateRequest();
+                //this.toast.show("Voorkeuren zijn bijgewerkt");
             }
           },
+
+        test: function(){
+          console.log(this.count);
+          if(this.count == 2){
+            this.toast.show("Voorkeuren zijn bijgewerkt");
+          }
+        },
         statusResponse: function(e){
             if(e.detail.xhr.status == 200){
                 this.custom.status = 3;
@@ -148,9 +172,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                  this.$.ironLocation.set('path', '/matchen');
             }
             
-        },
-        handleZiekteResponse: function(data){
-            this.ziektes = data.detail.response;
         },
         handleZiekteResponse: function(data){
             this.ziektes = data.detail.response;
@@ -164,9 +185,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 switch(data.detail.response[key].root){
                     case 0:
                         this.currentDisease = data.detail.response[key].naam;
+                        this.count++;
                         break;
                     case 3000: 
                         this.currentHobby = data.detail.response[key].naam;
+                        this.count++;
                         break
                 }
             }

@@ -1,0 +1,68 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!--
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+-->
+
+<!-- <script src="../auth/auth.js"></script> -->
+
+<dom-module id="my-pwreset">
+  <template>
+    <style include="shared-styles">
+      :host {display: block; padding: 10px;t } .error {text-align: center; color: #fff; background: #e74c3c; font-size: 20px; border-radius: 3px; font: inherit; text-transform: uppercase;; font-weight: lighter; width: 60%; margin: 20px auto; display: block; }
+      .wrapper{position: absolute; padding: 10%; top: 0; bottom: 0; left: 0; right: 0;background-color: var(--app-primary-color);}
+      .wrapper .logo{max-width: 800px; margin: auto; display: block; width: 60%;}
+      .wrapper h1 {text-align: center; font-weight: lighter; color: #fff; }
+      .wrapper paper-input, .wrapper input {text-align:center; color: #ffffff; --paper-input-container-color: #fff; --paper-input-container-focus-color: #fff; --paper-input-container-input-color: #fff; width: 60%; margin: 0 auto; }
+      .wrapper paper-button {background: #2ecc71; text-align: center; width: 60%; margin: 20px auto; display: block; }
+
+    </style>
+	<firebase-auth id="auth" user="{{user}}" on-error="handleError" status-known="{{statusKnown}}">
+  <div class="wrapper">
+  <img src="../images/logo_white.svg" class="logo">
+         <h1>Wachtwoord Resetten</h1>
+         <div class="error" hidden$="[[!message]]"><p>[[message]]</p></div>
+    <form on-submit="signInWithEmailAndPassword">
+          <paper-input value="{{email}}" type="email" placeholder="Email"></paper-input>
+          <paper-button raised on-tap="sendPasswordResetEmail">Reset</paper-button>
+    </form>
+         <div hidden$="[[!user]]">
+        <table>
+          <tr><th>email</th><td>[[user.email]]</td></tr>
+        </table>
+        <button on-tap="Send">Send</button>
+  </div>
+  </template>
+	<script>
+	Polymer({
+		is: 'my-pwreset',
+		properties: {
+			email:{
+				type: String,
+				value: '',
+			},
+		},
+		sendPasswordResetEmail: function() {
+			this.$.auth.sendPasswordResetEmail(this.email)
+      .then((response) => { 
+            console.log("Email is verstuurd"); 
+          })
+          .catch((response) => {
+            console.log(response); 
+          });
+		},
+	    handleError: function(e) {
+	      this.message = 'Error: ' + e.detail.message;
+		},  
+	});
+	</script>
+</dom-module>

@@ -16,7 +16,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 padding: 10px;
 
             }
-            .card{padding: 10px;}
             .swipe {
                 -moz-user-select: none;
                 -ms-user-select: none;
@@ -30,38 +29,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 right: 25px;
                 bottom: 20px;         
             }
-            .card[mobile-layout] {
-                margin: 0px;
-                padding: 0px;
-                background-color: #FFF;
-            }
+            /*.wrapper[mobile-layout]{margin-top: 50px;}*/
+            .matchMessage{display: block; text-align: center; color: var(--app-primary-color); margin-top: 5px;}
         </style>
-        <div class="card" mobile-layout$="[[isMobilePhone]]">
-        <tys-security access="{{custom.status}}" level="3" redirect="/login">
-            <template is="dom-repeat" items="{{matches}}">
-                <tys-match percentage="{{item.percentage}}" url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-match> 
-                <br>
-            </template>
-            <template is="dom-if" if="{{error}}">
-                {{error}}
-            </template>
-            <paper-fab icon="refresh" on-tap="refresh"></paper-fab>
-            <iron-ajax
-                       id="requestMatch"
-                       url="https://api.tys-chat.nl/matching?type=open"
-                       handle-as="json"
-                       on-response="handleResponse"
-                       on-error="handleError">
-            </iron-ajax>
-            <iron-ajax
-                       id="requestRefresh"
-                       url="https://api.tys-chat.nl/matching/zoek"
-                       handle-as="json"
-                       on-response="handleResponse"
-                       on-error="handleError">
-            </iron-ajax>
-            <iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
-            <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
+
+
+        <div class="wrapper" mobile-layout$="[[isMobilePhone]]">
+            <tys-security access="{{custom.status}}" level="3" redirect="/login">
+                <paper-progress indeterminate class="blue" hidden$="[[!showProgress]]"></paper-progress>
+                <template is="dom-if" if="{{message}}">
+                    <div class="matchMessage">{{message}}</div>
+                </template>
+                <template is="dom-repeat" items="{{matches}}">
+                    <tys-match percentage="{{item.percentage}}" url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-match> 
+                </template>
+                <paper-fab icon="refresh" on-tap="refresh" on-click="openToast"></paper-fab>
+
+                <iron-ajax
+                           id="requestMatch"
+                           url="https://api.tys-chat.nl/matching?type=open"
+                           handle-as="json"
+                           on-response="handleResponse"
+                           on-error="handleError">
+                </iron-ajax>
+                <iron-ajax
+                           id="requestRefresh"
+                           url="https://api.tys-chat.nl/matching/zoek"
+                           handle-as="json"
+                           on-response="handleResponse"
+                           on-error="handleError">
+                </iron-ajax>
+                <iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
+                <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
             </tys-security>
         </div>
     </template>
@@ -76,11 +75,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 custom: {
                     type: Object,
                 },
-                error: String,
+                message: String,
                 idToken:{
                     type: String,
                     observer: '_getMatches',
                 },
+                showProgress:{
+                    type: Boolean,
+                    value: false,
+                }
             },
             _getMatches: function(){
                 if(this.idToken != undefined){
@@ -90,15 +93,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             },
             handleResponse: function (data) {
+                this.showProgress = false;
+                this.message = "";
                 this.matches = data.detail.response;
-                
+
             },
             handleError: function (){
-                this.error = "Er zijn geen matches beschikbaar";
-                
+                this.message = "Er zijn geen matches beschikbaar";
+
             },
             refresh: function(){
                 this.matches = [];
+                this.message = "Zoeken naar matches";
+                this.showProgress = true;
                 if(this.idToken != undefined){
                     this.$.requestRefresh.headers['authorization'] = this.idToken;
                     this.$.requestRefresh.generateRequest();

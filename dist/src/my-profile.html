@@ -40,13 +40,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-location id="ironLocation"></iron-location>
         <div class="wrapper">
               <div class="form-wrap">
-                 <tys-security access="{{custom.status}}" level="1" redirect="/register">
+                 <tys-security access="{{custom.status}}" level="1">
                     <div class="error" hidden$="[[!message]]">[[message]]</div>
                     <form is="iron-form" id="form">
                         <h1>Profiel</h1>
                         <div class="personal"  mobile-layout$="[[isMobilePhone]]">
                             <paper-input value="{{custom.voornaam}}" type="text" id="voornaam" placeholder="Voornaam" autoValidate="true" required error-message="needs some text!"></paper-input>
                             <paper-input value="{{custom.achternaam}}" type="text" id="achternaam" placeholder="Achternaam" required error-message="needs some text!"></paper-input>
+                            <paper-input value="{{custom.profiel.displayname}}" readonly$="[[checkstatus(custom.status)]]" type="text" id="displayname" placeholder="Displayname" required error-message="needs some text!"></paper-input>
                             <div class="spacer"></div>
                             <label>Geslacht:</label><br>
                             <paper-radio-group selected="{{custom.geslacht}}" id="geslacht" fallback-selection="O" required>
@@ -61,9 +62,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <paper-input class="small-number number" type="string" auto-validate pattern="(0[1-9]|1[0-2])" placeholder="Maand" type="string" maxlength="2" required error-message="Onjuiste maand" value="{{month}}"></paper-input>
                             <paper-input class="large-number number" type="string" auto-validate pattern="\d{4}" placeholder="Jaar" type="string" maxlength="4" required error-message="Onjuist jaar" value="{{year}}"></paper-input>
                             <paper-input value="{{custom.woonplaats}}" type="text" id="woonplaats" required error-message="needs some text!" placeholder="Woonplaats"></paper-input>
-                            <paper-textarea label="Bio" value="{{custom.profiel.bio}}"></paper-textarea>
+                            <paper-textarea label="Bio" minlength="5" id="bio" value="{{custom.profiel.bio}}"></paper-textarea>
                         </div>
-                        <paper-button raised on-tap="addProfile">Volgende stap</paper-button>
+                        <template is="dom-if" if="{{!checkstatus(custom.status)}}">
+                            <paper-button raised on-tap="addProfile">Volgende stap</paper-button>
+                        </template>
+                        <template is="dom-if" if="{{checkstatus(custom.status)}}">
+                            <paper-button raised on-tap="addProfile">Opslaan</paper-button>
+                        </template>
                     </form>
                     <iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
                 </tys-security>
@@ -72,7 +78,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
       
         <iron-ajax
-                   id="addProfile"
+                   id="addPerson"
                    method="POST"
                    url="https://api.tys-chat.nl/persoon"
                    handle-as="json"
@@ -80,7 +86,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                    content-type="application/json"
                    on-response="handleResponse">
         </iron-ajax>
+        <iron-ajax
+           id="addProfile"
+           method="POST"
+           url="https://api.tys-chat.nl/profiel"
+           handle-as="json"
+            headers='{"Content-Type": "application/json;charset=utf-8"}' 
+           content-type="application/json"
+           on-response="addBioResponse"
+           on-error="profileError">
+        </iron-ajax>
         <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
+        <iron-meta-query key="toast" id="meta" value="{{toast}}"></iron-meta-query>
     </template>    
 
     <script>
@@ -109,12 +126,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 jsonUser: {
                     type: String,
                 },
+                profile: {
+                    type: Object,
+                    value: {},
+                },
                 date: {
                     type: String,
                     computed: '_computeDate(day, month, year)',
                 },
                 day: {
                     type: String,
+                },
+                toast: {
+                  type: Object,
                 },
                 month: String,
                 year: String,
@@ -134,6 +158,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
 
             },
+            profileError: function(e){
+                this.message = "Er is iets fout gegaan, misschien is je weergave naam al in gebruik";
+            },
             _computeDate: function(day, month, year){
                 return year+"-"+month+"-"+day;
             },
@@ -152,24 +179,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 this.revalidation = !this.revalidation
             },
             handleResponse: function(e) {
+                this.profile.bio = this.$.bio.value;
+                this.profile.displayname = this.$.displayname.value;
+                this.profile.laatstActief = new Date().getTime() / 1000;
+
+                if(this.custom.status >= 3){
+                    this.$.addProfile.method = 'PUT';
+                }else{
+                    this.custom.status = 2;
+                }
+                this.$.addProfile.headers['authorization'] = this.idToken;
+                console.log(JSON.stringify(this.profile));
+                this.$.addProfile.body = JSON.stringify(this.profile);
+                this.$.addProfile.generateRequest();
+                this.toast.show("Profiel is bijgewerkt");
+            },
+            addProfile: function(e){
+
+                if(this.idToken != undefined && this.validateFields()){
+                    this.custom.gbdatum = this.date;
+                    if(this.custom.status >= 3){
+                        this.$.addPerson.method = 'PUT';
+                    }else{
+                        this.custom.status = 2;
+                    }
+                    this.$.addPerson.headers['authorization'] = this.idToken;
+                    console.log(JSON.stringify(this.custom));
+                    this.$.addPerson.body = JSON.stringify(this.custom);
+                    this.$.addPerson.generateRequest();
+                }
+            },
+            addBioResponse: function(e){
                 if(e.detail.xhr.status == 200 && this.custom.status < 3){
                     this.$.ironLocation.set('path', '/preferences');
                 }
             },
-            addProfile: function(e){
-                if(this.idToken != undefined && this.validateFields()){
-                    this.custom.gbdatum = this.date;
-                    if(this.custom.status >= 3){
-                        this.$.addProfile.method = 'PUT';
-                    }else{
-                        this.custom.status = 2;
-                    }
-                    this.$.addProfile.headers['authorization'] = this.idToken;
-                    console.log(JSON.stringify(this.custom));
-                    this.$.addProfile.body = JSON.stringify(this.custom);
-                    this.$.addProfile.generateRequest();
-                }
-            }
+            checkstatus: function(status){
+                return status >= 3;
+            },
+
         });
     </script>
 </dom-module>
