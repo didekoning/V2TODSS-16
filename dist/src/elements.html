@@ -38471,20 +38471,21 @@ Z(Q.prototype,"ref",Q.prototype.na);Ib.STATE_CHANGED="state_changed";P.RUNNING="
             paper-button{width:50%; display: inline-block; float:left; text-align: center; margin: 0px;}
             paper-button.red{background-color: var(--paper-red-200); border-radius: 0px;}
             paper-button.green{background-color: var(--paper-green-200); border-radius: 0px;}
+            .info{width: 60%; display: inline-block; max-height: 116px; float: left;padding: 20px;}
+            #card1[mobile-layout] .info{ padding: 10px; float: none;}
+            .percentage{width: 30%; display: inline-block;}
             .item .description{max-height: 72px; overflow: hidden; }
+            .item[mobile-layout]{height: 115px !important;}
         </style>
         <paper-toast id="test" duration="2000">U heeft een nieuwe match!</paper-toast>
 
         <paper-card id="card1" style="padding-top: 10px;" mobile-layout$="[[isMobilePhone]]">
-            <ul class="app-grid">
-                <li class="item">
-                    <div style="margin-left: 40px;">
+
+                    <div class="info">
                         <div class="basic"><b><span class="name">{{person.profiel.displayname}}</span> - <span class="bday">{{age}} Jaar</span> - <span class="sex">{{person.geslacht}}</span></b></div>
                         <div class="description">{{person.profiel.bio}}</div>
                     </div>
-                </li>
-                <li class="item" style="width: 20%; float:right;"><tys-percentage percentage="{{percentage}}"></tys-percentage></li>
-            </ul>
+                <div class="percentage"><tys-percentage percentage="{{percentage}}"></tys-percentage></div>
             <div>
                 <paper-button raised="" class="red" on-tap="ignore_match" onclick="openToast"><iron-icon icon="close"></iron-icon></paper-button>
                 <paper-button raised="" class="green" on-tap="accept_match"><iron-icon icon="favorite"></iron-icon></paper-button>
@@ -38640,6 +38641,10 @@ Z(Q.prototype,"ref",Q.prototype.na);Ib.STATE_CHANGED="state_changed";P.RUNNING="
 				overflow: hidden;
 				white-space: nowrap;
 			}
+			::-webkit-scrollbar {
+			    width: 0px;  /* remove scrollbar space */
+			    background: transparent;  /* optional: just make scrollbar invisible */
+			}
 
 			.user-list{margin-bottom: 50px;}
 			.message{border-bottom: 1px solid #eee; margin-bottom: 5px;}
@@ -38648,6 +38653,7 @@ Z(Q.prototype,"ref",Q.prototype.na);Ib.STATE_CHANGED="state_changed";P.RUNNING="
 			#messagefield{position: relative; width: 80%; display: inline-block;}
 			#sendButton{position: relative; display: inline-block;}
 
+			.wrapper .user-list{height: 65vh; overflow-x: scroll;}
 			.wrapper[tablet-small-layout] .user-list{max-height: 60vh; overflow-x: scroll;}
 			
 		</style>

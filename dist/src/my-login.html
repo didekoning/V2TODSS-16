@@ -46,8 +46,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
              <div class="form-wrap">
                 <div class="error" hidden$="[[!message]]">[[message]]</div>
                 <form is="iron-form" on-submit="signInWithEmailAndPassword">
-                    <paper-input value="{{email}}" type="email" placeholder="Email" tabindex="1"></paper-input>
-                    <paper-input value="{{password}}" type="password" placeholder="Password" tabindex="2"></paper-input>
+                    <paper-input value="{{email}}" type="email" placeholder="Email" tabindex="1"  on-keydown="_login"></paper-input>
+                    <paper-input value="{{password}}" type="password" placeholder="Password" tabindex="2"  on-keydown="_login"></paper-input>
                     <div class="password_reset"><a href="/pwreset">Wachtwoord vergeten?</a></div>
                     <paper-button raised on-tap="loginWithEmailAndPassword" tabindex="3">Inloggen</paper-button>
                     <paper-button raised on-tap="register" tabindex="4">Registreren</paper-button>
@@ -82,10 +82,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     notify: true,
                 },
             },
-            loginWithEmailAndPassword: function() {
-                this.error = null;
-                this.$.auth.signInWithEmailAndPassword(this.email, this.password);
-                this.password = null;        
+            loginWithEmailAndPassword: function(e) {
+                    this.error = null;
+                    this.$.auth.signInWithEmailAndPassword(this.email, this.password);
+                    this.password = null;        
+            },
+            _login: function(e){
+                if (e.keyCode === 13) {
+                    this.error = null;
+                    this.$.auth.signInWithEmailAndPassword(this.email, this.password);
+                    this.password = null;        
+                }
             },
             register: function(){
                  this.$.ironLocation.set('path', '/register');
