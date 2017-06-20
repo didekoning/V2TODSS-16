@@ -40,6 +40,10 @@
 				overflow: hidden;
 				white-space: nowrap;
 			}
+			::-webkit-scrollbar {
+			    width: 0px;  /* remove scrollbar space */
+			    background: transparent;  /* optional: just make scrollbar invisible */
+			}
 
 			.user-list{margin-bottom: 50px;}
 			.message{border-bottom: 1px solid #eee; margin-bottom: 5px;}
@@ -48,6 +52,7 @@
 			#messagefield{position: relative; width: 80%; display: inline-block;}
 			#sendButton{position: relative; display: inline-block;}
 
+			.wrapper .user-list{height: 65vh; overflow-x: scroll;}
 			.wrapper[tablet-small-layout] .user-list{max-height: 60vh; overflow-x: scroll;}
 			
 		</style>

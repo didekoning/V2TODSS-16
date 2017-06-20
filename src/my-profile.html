@@ -31,23 +31,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             paper-button{width: 100%; color: #FFF;}
             .number{display: inline-block;}
             .small-number{width: 24%;}
+
+
             .large-number{width: 49%;}
             h1{color: var(--app-primary-color); text-align: center; margin-top: 50px;}
             .wrapper{padding: 0px 10%;}
+            .wrapper[mobile-layout]{position: relative; padding: 10px;}
+            .wrapper[mobile-layout] h1{margin-top: 0px;}
+            .wrapper p.center{text-align: center;}
         </style>
 
         <firebase-auth id="auth" user="{{person}}" on-error="handleError" status-known="{{statusKnown}}"></firebase-auth>
         <iron-location id="ironLocation"></iron-location>
-        <div class="wrapper">
+        <div class="wrapper" mobile-layout$="[[isMobilePhone]]">
               <div class="form-wrap">
                  <tys-security access="{{custom.status}}" level="1">
                     <div class="error" hidden$="[[!message]]">[[message]]</div>
                     <form is="iron-form" id="form">
                         <h1>Profiel</h1>
+                        <p class="center">Vul hier je profielgegevens in, als je je naam niet aan ons wil geven kun je hier je displayname invullen. Je naam wordt overigens nergens getoont!</p>
                         <div class="personal"  mobile-layout$="[[isMobilePhone]]">
-                            <paper-input value="{{custom.voornaam}}" type="text" id="voornaam" placeholder="Voornaam" autoValidate="true" required error-message="needs some text!"></paper-input>
-                            <paper-input value="{{custom.achternaam}}" type="text" id="achternaam" placeholder="Achternaam" required error-message="needs some text!"></paper-input>
-                            <paper-input value="{{custom.profiel.displayname}}" readonly$="[[checkstatus(custom.status)]]" type="text" id="displayname" placeholder="Displayname" required error-message="needs some text!"></paper-input>
+                            <paper-input value="{{custom.voornaam}}" type="text" id="voornaam" placeholder="Voornaam" autoValidate="true" required error-message="Voornaam mag niet leeg zijn!"></paper-input>
+                            <paper-input value="{{custom.achternaam}}" type="text" id="achternaam" placeholder="Achternaam" required error-message="Achternaam mag niet leeg zijn!"></paper-input>
+                            <paper-input value="{{custom.profiel.displayname}}" readonly$="[[checkstatus(custom.status)]]" type="text" id="displayname" placeholder="Displayname" required error-message="Displayname mag niet leeg zijn!"></paper-input>
                             <div class="spacer"></div>
                             <label>Geslacht:</label><br>
                             <paper-radio-group selected="{{custom.geslacht}}" id="geslacht" fallback-selection="O" required>
@@ -61,8 +67,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             <paper-input class="small-number number" type="string" auto-validate pattern="(0[1-9]|[12]\d|3[01])" placeholder="Dag" type="string" maxlength="2" required error-message="Onjuiste dag" value="{{day}}"></paper-input>
                             <paper-input class="small-number number" type="string" auto-validate pattern="(0[1-9]|1[0-2])" placeholder="Maand" type="string" maxlength="2" required error-message="Onjuiste maand" value="{{month}}"></paper-input>
                             <paper-input class="large-number number" type="string" auto-validate pattern="\d{4}" placeholder="Jaar" type="string" maxlength="4" required error-message="Onjuist jaar" value="{{year}}"></paper-input>
-                            <paper-input value="{{custom.woonplaats}}" type="text" id="woonplaats" required error-message="needs some text!" placeholder="Woonplaats"></paper-input>
-                            <paper-textarea label="Bio" minlength="5" id="bio" value="{{custom.profiel.bio}}"></paper-textarea>
+                            <paper-input value="{{custom.woonplaats}}" type="text" id="woonplaats" required error-message="Woonplaats mag niet leeg zijn!" placeholder="Woonplaats"></paper-input>
+                            <paper-textarea label="Bio" minlength="5" id="bio" value="{{custom.profiel.bio}}" required error-message="Bio moet minimaal 5 tekens zijn en mag niet leeg zijn!"></paper-textarea>
                         </div>
                         <template is="dom-if" if="{{!checkstatus(custom.status)}}">
                             <paper-button raised on-tap="addProfile">Volgende stap</paper-button>
