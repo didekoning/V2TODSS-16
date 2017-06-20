@@ -41,7 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <template is="dom-if" if="{{message}}">
                     <div class="matchMessage">{{message}}</div>
                 </template>
-                <template is="dom-repeat" items="{{matches}}">
+                <template is="dom-repeat" items="{{matches}}" sort="_sortMatches">
                     <tys-match percentage="{{item.percentage}}" url="https://api.tys-chat.nl/persoon/{{item.partner}}"></tys-match> 
                 </template>
                 <paper-fab icon="refresh" on-tap="refresh" on-click="openToast"></paper-fab>
@@ -85,6 +85,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     type: Boolean,
                     value: false,
                 }
+            },
+            _sortMatches: function(a, b){
+                if(a.percentage == b.percentage){
+                    return 0;
+                }
+                return a.percentage > b.percentage ? -1 : 1;
             },
             _getMatches: function(){
                 if(this.idToken != undefined){
