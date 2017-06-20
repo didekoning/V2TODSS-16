@@ -18,7 +18,7 @@
         .wrapper .match{margin-bottom: 5px;}
 
         .wrapper[tablet-small-layout] .chat{width: 100%; padding-left: 0px; float: left; display: block; }
-        .wrapper[tablet-small-layout] {position: relative; padding: 40px 10px 10px 10px; }
+        .wrapper[tablet-small-layout] {position: relative; padding: 10px 10px 10px 10px; }
 
      </style>
      <div class="wrapper" mobile-layout$="[[isMobilePhone]]" tablet-layout$="[[isTablet]]" tablet-small-layout$="[[isTabletSmall]]">
@@ -67,7 +67,7 @@
     handle-as="json"
     on-response="setFUID">
 </iron-ajax>
-<iron-ajax id="DeclineMatch" method="put" content-type="application/json" url="https://api.tys-chat.nl/matching/status" body='{"action": "decline", "partner": {{personId}}}' handle-as="json"></iron-ajax>
+<iron-ajax id="DeclineMatch" method="put" content-type="application/json" url="https://api.tys-chat.nl/matching/status" body='{"action": "decline", "partner": {{personId}}}' handle-as="json" on-response="handleDelete"></iron-ajax>
 <iron-meta-query key="token" id="meta" value="{{idToken}}"></iron-meta-query>
 <iron-meta-query key="toast" id="meta" value="{{toast}}"></iron-meta-query>
 <iron-media-query query="(max-width:768px)" query-matches="{{isMobilePhone}}"></iron-media-query>
@@ -118,6 +118,11 @@
         handleResponse: function (data) {
             this.matches = data.detail.response;
         },
+        handleDelete: function(data){
+            this.matches = null;
+            this.$.AcceptedMatches.headers['authorization'] = this.idToken;
+            this.$.AcceptedMatches.generateRequest();
+        },
         setFUID: function(data){
             this.otherUID = data.detail.response.fuid;
         },
@@ -148,7 +153,6 @@
             this.$.DeclineMatch.headers['authorization'] = this.idToken;
             this.$.DeclineMatch.generateRequest();
             this.toast.show("Match verwijderd");
-            this.$.AcceptedMatches.generateRequest();
         }
     });
 </script>

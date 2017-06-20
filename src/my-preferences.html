@@ -27,11 +27,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       paper-button{width: 100%; color: #FFF;}
       h1{color: var(--app-primary-color); text-align: center; margin-top: 50px;}
       .wrapper{padding: 0px 10%;}
+      .wrapper[mobile-layout] p.center{text-align: center;}
     </style>
      <iron-location id="ironLocation"></iron-location>
     <div class="wrapper">
        <div class="form-wrap">
         <h1>Voorkeuren</h1>
+        <p class="center">Om een goede match te verzorgen is het belangrijk dat wij je hobbies en ziekte weten. Deze informatie wordt allemaal meegenomen in het matchingsproces!</p>
           <form is="iron-form" id="form">
               <div class="disease"  mobile-layout$="[[isMobilePhone]]">
                   <h2>Ziekte</h2>
